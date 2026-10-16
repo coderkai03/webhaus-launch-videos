@@ -1,0 +1,17 @@
+import fs from "node:fs";
+let s = fs.readFileSync("index.html", "utf8");
+const rep = (a, b) => { if (!s.includes(a)) throw new Error("missing " + a); s = s.replace(a, b); };
+rep('data-duration="15" data-width="1080"', 'data-duration="16.5" data-width="1080"');
+rep('id="s3" class="clip" data-start="9.6" data-duration="2.8"', 'id="s3" class="clip" data-start="9.6" data-duration="3.6"');
+rep("{ opacity: 0, duration: 0.3 }, 12.05);", "{ opacity: 0, duration: 0.3 }, 12.85);");
+rep('id="s4" class="clip" data-start="12.4" data-duration="2.6"', 'id="s4" class="clip" data-start="13.2" data-duration="3.3"');
+rep("{ opacity: 1, duration: 0.4 }, 13.6);", "{ opacity: 1, duration: 0.4 }, 14.6);");
+rep("{ opacity: 1, duration: 0.4 }, 13.2);", "{ opacity: 1, duration: 0.4 }, 14.0);");
+rep('ease: "power2.out" }, 12.9);', 'ease: "power2.out" }, 13.7);');
+rep('ease: "power3.out" }, 12.65);', 'ease: "power3.out" }, 13.45);');
+rep('ease: "power3.out" }, 12.45);', 'ease: "power3.out" }, 13.25);');
+const vo = [["vo1", "l1", 0.3, 2.39], ["vo2", "l2", 4.6, 1.43], ["vo3", "v3", 6.2, 2.54], ["vo5", "v5", 9.75, 3.41], ["vo7", "l7", 13.8, 2.15]];
+const tags = vo.map(([id, f, st, d]) => `      <audio id="${id}" src="assets/vo/${f}.wav" data-start="${st}" data-duration="${d}" data-track-index="5" data-volume="1"></audio>`).join("\n");
+rep('      <div class="bg"></div>', '      <div class="bg"></div>\n\n      <!-- Voiceover (Kokoro bm_george, local TTS) -->\n' + tags);
+fs.writeFileSync("index.html", s);
+console.log("ok");

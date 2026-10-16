@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>familylawriverside.com — Plain Words (vertical)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Book Serif"; src: url("assets/fonts/pala.ttf") format("truetype"); font-weight: 400; font-style: normal; }
+      @font-face { font-family: "Book Serif"; src: url("assets/fonts/palab.ttf") format("truetype"); font-weight: 700; font-style: normal; }
+      @font-face { font-family: "Book Serif"; src: url("assets/fonts/palai.ttf") format("truetype"); font-weight: 400; font-style: italic; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root { --burg: #5f2230; --ink: #1c2541; --rust: #9b3d1c; --parch: #f4efe4; --parch-2: #fbf8f1; --paper: #fffdf8; --mute: #5b6378; --line: #d9d1bf; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--parch); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; color: var(--ink); }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .bg { position: absolute; inset: 0; background: radial-gradient(1100px 1500px at 50% 45%, var(--parch-2) 0%, var(--parch) 70%, #ece5d6 100%); }
+      .abs { position: absolute; }
+      .serif { font-family: "Book Serif", "Palatino Linotype", Palatino, Georgia, serif; }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+      .eyebrow { font-size: 24px; color: var(--rust); }
+      .chip {
+        display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px; background: var(--burg); color: var(--parch-2);
+        font-family: "IBM Plex Mono", monospace; font-size: 21px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; border-radius: 4px;
+      }
+      .chip i { display: block; width: 26px; height: 26px; border-radius: 50%; background: var(--parch-2); position: relative; flex: none; }
+      .chip i::after { content: ""; position: absolute; left: 9px; top: 4px; width: 6px; height: 13px; border: solid var(--burg); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+
+      /* hook */
+      #jargon { left: 80px; top: 620px; width: 920px; font-size: 24px; line-height: 1.7; color: #6b6760; text-align: justify; transform-origin: 50% 50%; }
+      #s1-eyebrow { left: 0; width: 1080px; top: 730px; text-align: center; font-size: 24px; color: var(--rust); }
+      #plain { left: 0; width: 1080px; top: 790px; text-align: center; font-size: 108px; font-weight: 700; line-height: 1.1; color: var(--ink); }
+      #plain .ln { display: block; }
+      #s1-sub { left: 110px; width: 860px; top: 1310px; text-align: center; font-size: 38px; line-height: 1.45; color: var(--mute); }
+
+      /* headline: photo + masthead */
+      #s2-wrap { position: absolute; inset: 0; }
+      #photo-box { position: absolute; left: 0; top: 150px; width: 1080px; height: 910px; overflow: hidden; background: #2a2226; }
+      #photo { position: absolute; left: -430px; top: 0; width: 2080px; height: 910px; object-fit: cover; transform-origin: 45% 40%; }
+      #photo-shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(31, 20, 24, 0.35) 0%, rgba(31, 20, 24, 0) 35%); }
+      #masthead { position: absolute; left: 0; top: 0; width: 1080px; height: 150px; background: var(--burg); border-bottom: 3px solid #4a1a25; }
+      #mast-icon { position: absolute; left: 80px; top: 38px; width: 72px; height: 72px; }
+      #mast-name { position: absolute; left: 172px; top: 32px; font-size: 46px; font-weight: 700; color: var(--parch-2); white-space: nowrap; }
+      #mast-sub { position: absolute; left: 174px; top: 90px; font-size: 24px; color: #e8d6da; white-space: nowrap; }
+      #s2-lines { left: 80px; top: 1112px; width: 920px; font-size: 64px; font-weight: 700; line-height: 1.14; color: var(--ink); }
+      #s2-lines .ln { display: block; white-space: nowrap; }
+      #s2-chips { left: 80px; top: 1530px; display: flex; gap: 14px; }
+
+      /* proof: forms + fee */
+      #s3-bg { position: absolute; inset: 0; background: var(--parch); }
+      #s3-eyebrow { left: 80px; top: 170px; }
+      #s3-title { left: 80px; top: 210px; font-size: 86px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+      #s3-sub { left: 82px; top: 330px; width: 900px; font-size: 36px; line-height: 1.4; color: var(--mute); }
+      .card {
+        position: absolute; left: 370px; top: 500px; width: 340px; height: 450px; background: var(--paper); border: 1px solid var(--line); border-radius: 6px;
+        box-shadow: 0 28px 60px rgba(70, 40, 30, 0.16), 0 2px 6px rgba(70, 40, 30, 0.08); padding: 28px 26px; transform-origin: 50% 90%;
+      }
+      .card .num { display: inline-block; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 20px; letter-spacing: 0.08em; background: var(--burg); color: var(--parch-2); padding: 6px 12px; border-radius: 3px; }
+      .card .ttl { font-family: "Book Serif", Palatino, Georgia, serif; font-size: 31px; font-weight: 700; color: var(--ink); margin-top: 16px; white-space: nowrap; }
+      .card .rule { height: 2px; background: var(--ink); opacity: 0.8; margin-top: 14px; }
+      .card .f { display: flex; gap: 12px; align-items: center; margin-top: 17px; }
+      .card .lbl { height: 9px; border-radius: 2px; background: #cfc6b2; }
+      .card .box { height: 26px; flex: 1; border: 1.5px solid #cfc6b2; border-radius: 2px; }
+      .card .cb { width: 20px; height: 20px; border: 1.5px solid #b8ad96; border-radius: 2px; flex: none; position: relative; }
+      .card .cb.on::after { content: ""; position: absolute; left: 6px; top: 1px; width: 5px; height: 11px; border: solid var(--burg); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+      .card .sig { position: absolute; left: 26px; right: 26px; bottom: 42px; border-top: 1.5px solid #8f8670; }
+      .card .sigl { position: absolute; left: 26px; bottom: 20px; width: 110px; height: 8px; border-radius: 2px; background: #d8d0bd; }
+      #fee-label { left: 82px; top: 1090px; font-size: 24px; color: var(--mute); }
+      #fee { left: 72px; top: 1124px; font-size: 200px; font-weight: 700; color: var(--burg); line-height: 1; letter-spacing: -0.02em; }
+      #fee-waiver { left: 82px; top: 1342px; font-size: 44px; color: var(--rust); white-space: nowrap; }
+      #fee-chip { left: 82px; top: 1430px; }
+
+      /* close: band + end card */
+      #band { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: var(--burg); }
+      #band-text { left: 0; top: 830px; width: 1080px; height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+      #band-text .serif { font-size: 58px; font-weight: 700; color: var(--parch-2); line-height: 1.12; text-align: center; }
+      #band-text .serif span { display: block; }
+      #band-text .mono { font-size: 21px; color: var(--burg); background: var(--parch-2); padding: 10px 16px; border-radius: 3px; white-space: nowrap; }
+      #end-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1640px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #end-icon { width: 140px; height: 140px; }
+      #end-name { font-size: 80px; font-weight: 700; color: var(--parch-2); margin-top: 40px; line-height: 1; white-space: nowrap; }
+      #end-tag { font-size: 42px; font-style: italic; color: #ecdadd; margin-top: 30px; text-align: center; line-height: 1.3; }
+      #end-tag span { display: block; }
+      #end-mono { font-size: 22px; color: #d8b9c0; margin-top: 50px; white-space: nowrap; }
+      #webhaus { left: 0; width: 1080px; top: 1560px; text-align: center; font-size: 22px; color: #c79fa8; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="landmark" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 18v-7" /><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />
+            <path d="M14 18v-7" /><path d="M18 18v-7" /><path d="M3 22h18" /><path d="M6 18v-7" />
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="vertical" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/chime.mp3" data-start="2.75" data-duration="1.85" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/whoosh-short.mp3" data-start="4.35" data-duration="0.57" data-volume="0.25" data-track-index="11"></audio>
+      <audio id="sfx-3" src="assets/sfx/pop.mp3" data-start="5.9" data-duration="0.72" data-volume="0.18" data-track-index="10"></audio>
+      <audio id="sfx-4" src="assets/sfx/pop.mp3" data-start="6.08" data-duration="0.72" data-volume="0.18" data-track-index="11"></audio>
+      <audio id="sfx-5" src="assets/sfx/whoosh-short.mp3" data-start="7.55" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/click-soft.mp3" data-start="8.25" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/click-soft.mp3" data-start="8.6" data-duration="0.37" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-8" src="assets/sfx/click-soft.mp3" data-start="8.95" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-9" src="assets/sfx/pop.mp3" data-start="10.35" data-duration="0.72" data-volume="0.22" data-track-index="10"></audio>
+      <audio id="sfx-10" src="assets/sfx/whoosh.mp3" data-start="11.25" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/chime.mp3" data-start="12.75" data-duration="2.25" data-volume="0.45" data-track-index="10"></audio>
+      <!-- /Sound effects -->
+
+      <!-- Hook: jargon fades down to plain words -->
+      <section id="s1" class="clip" data-start="0" data-duration="4.4" data-track-index="1">
+        <div id="jargon" class="abs" data-layout-allow-overlap></div>
+        <div id="s1-eyebrow" class="abs mono">familylawriverside.com</div>
+        <div id="plain" class="abs serif"><span class="ln">Family court in</span><span class="ln">Riverside County,</span><span class="ln">explained in</span><span class="ln">plain words.</span></div>
+        <div id="s1-sub" class="abs">Which courthouse takes your case, which forms to file, what it costs, and where the free help is.</div>
+      </section>
+
+      <!-- Headline: Riverside photo + masthead -->
+      <section id="s2" class="clip" data-start="4.4" data-duration="3.2" data-track-index="2">
+        <div id="s2-wrap">
+          <div id="photo-box"><img id="photo" data-layout-allow-overflow src="assets/hero.jpg" alt="Riverside with snow on the mountains" /><div id="photo-shade"></div></div>
+          <div id="masthead">
+            <svg id="mast-icon" viewBox="0 0 24 24" color="#fbf8f1"><use href="#landmark" /></svg>
+            <div id="mast-name" class="serif">Family Law Riverside</div>
+            <div id="mast-sub">The Riverside County family court, explained</div>
+          </div>
+          <div id="s2-lines" class="abs serif">
+            <span class="ln">Which courthouse</span>
+            <span class="ln">takes your case.</span>
+            <span class="ln">Which forms to file.</span>
+            <span class="ln">What it costs.</span>
+            <span class="ln">Where the free help is.</span>
+          </div>
+          <div id="s2-chips" class="abs">
+            <div class="chip"><i></i>Cited to the court</div>
+            <div class="chip"><i></i>English · Español</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Proof: forms + fee -->
+      <section id="s3" class="clip" data-start="7.6" data-duration="3.6" data-track-index="1">
+        <div id="s3-bg"></div>
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="s3-eyebrow" class="abs mono eyebrow">Filing and Fees</div>
+          <div id="s3-title" class="abs serif">The forms, in order.</div>
+          <div id="s3-sub" class="abs">The petition, the summons and the UCCJEA declaration.</div>
+          <div class="card" id="c1">
+            <div class="num">FL-100</div><div class="ttl">Petition</div><div class="rule"></div>
+            <div class="f"><div class="lbl" style="width: 80px"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 56px"></div><div class="box"></div></div>
+            <div class="f"><div class="cb on"></div><div class="lbl" style="width: 140px"></div></div>
+            <div class="f"><div class="cb"></div><div class="lbl" style="width: 180px"></div></div>
+            <div class="f"><div class="cb on"></div><div class="lbl" style="width: 110px"></div></div>
+            <div class="sig"></div><div class="sigl"></div>
+          </div>
+          <div class="card" id="c2">
+            <div class="num">FL-110</div><div class="ttl">Summons</div><div class="rule"></div>
+            <div class="f"><div class="lbl" style="width: 64px"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 100px"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 230px"></div></div>
+            <div class="f"><div class="lbl" style="width: 270px"></div></div>
+            <div class="f"><div class="lbl" style="width: 200px"></div></div>
+            <div class="sig"></div><div class="sigl"></div>
+          </div>
+          <div class="card" id="c3">
+            <div class="num">FL-105</div><div class="ttl">UCCJEA Declaration</div><div class="rule"></div>
+            <div class="f"><div class="lbl" style="width: 72px"></div><div class="box"></div></div>
+            <div class="f"><div class="cb on"></div><div class="lbl" style="width: 160px"></div></div>
+            <div class="f"><div class="cb"></div><div class="lbl" style="width: 120px"></div></div>
+            <div class="f"><div class="lbl" style="width: 56px"></div><div class="box"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 56px"></div><div class="box"></div><div class="box"></div></div>
+            <div class="sig"></div><div class="sigl"></div>
+          </div>
+          <div id="fee-label" class="abs mono">Petition or response fee</div>
+          <div id="fee" class="abs serif">$450</div>
+          <div id="fee-waiver" class="abs">(fee waiver available)</div>
+          <div id="fee-chip" class="abs chip"><i></i>Effective Jan 1, 2026</div>
+        </div>
+      </section>
+
+      <!-- Close: burgundy band + end card -->
+      <section id="s4" class="clip" data-start="11.2" data-duration="3.8" data-track-index="2">
+        <div id="band"></div>
+        <div id="band-text" class="abs"><span class="mono">Not a law firm</span><div class="serif"><span>Legal information,</span><span>not legal advice.</span></div></div>
+        <div id="end-wrap">
+          <svg id="end-icon" viewBox="0 0 24 24" color="#fbf8f1"><use href="#landmark" /></svg>
+          <div id="end-name" class="serif">familylawriverside.com</div>
+          <div id="end-tag" class="serif"><span>The Riverside County</span><span>family court, explained</span></div>
+          <div id="end-mono" class="mono">Cited · dated · English and Spanish</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      const JARGON =
+        "WHEREAS the petitioner, appearing in propria persona, hereby avers that the within action for dissolution is properly venued, and that the respondent, having been duly served pursuant to the provisions governing service of process, shall be deemed to have notice thereof; NOTWITHSTANDING any prior stipulation, the [Family] [court] shall retain jurisdiction over all matters pendente lite, including but not limited to temporary orders, ex parte applications and requests for order as set forth [in] the moving papers, together with the declaration required under the Uniform Child Custody Jurisdiction and Enforcement Act; venue within [Riverside] [County,] having been determined by residence, the parties are hereinafter advised that the matters [explained] herein remain subject to further order, and that nothing contained [in] the foregoing shall be construed as a waiver of any right, remedy, privilege or defense; all terms, whether [plain] or technical, shall bear the meanings ascribed thereto, mutatis mutandis, and the court may, upon noticed motion and good cause shown, enter such further and other orders as are just, as more fully set forth in so many [words.]";
+      const jargon = document.getElementById("jargon");
+      JARGON.split(" ").forEach((tok) => {
+        const keep = tok.startsWith("[");
+        const s = document.createElement("span");
+        s.className = keep ? "w keep" : "w drop";
+        s.textContent = keep ? tok.slice(1, -1) : tok;
+        jargon.appendChild(s);
+        jargon.appendChild(document.createTextNode(" "));
+      });
+      function mulberry32(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+      const rnd = mulberry32(80808);
+      const order = Array.from(document.querySelectorAll("#jargon .drop")).map((el) => ({ el, k: rnd() })).sort((a, b) => a.k - b.k);
+
+      const tl = gsap.timeline({ paused: true });
+
+      // Hook
+      tl.fromTo("#jargon", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0);
+      tl.fromTo("#jargon", { scale: 1.04 }, { scale: 1, duration: 2.7, ease: "none" }, 0);
+      order.forEach((o, i) => {
+        tl.fromTo(o.el, { opacity: 1 }, { opacity: 0, duration: 0.35, ease: "power1.in" }, 0.65 + (i / order.length) * 1.5);
+      });
+      tl.fromTo("#jargon .keep", { color: "#6b6760" }, { color: "#1c2541", duration: 0.45, ease: "power1.inOut" }, 1.7);
+      tl.to("#jargon .keep", { opacity: 0, y: -8, duration: 0.35, ease: "power2.in", stagger: 0.02 }, 2.35);
+      tl.fromTo("#plain .ln", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.12 }, 2.75);
+      tl.fromTo("#s1-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 3.25);
+      tl.fromTo("#s1-sub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 3.4);
+      tl.to(["#plain", "#s1-eyebrow", "#s1-sub"], { opacity: 0, duration: 0.3 }, 4.1);
+
+      // Headline
+      tl.fromTo("#s2-wrap", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 4.4);
+      tl.fromTo("#photo", { scale: 1.08 }, { scale: 1, duration: 3.2, ease: "none" }, 4.4);
+      tl.fromTo("#masthead", { y: -150 }, { y: 0, duration: 0.55, ease: "power3.out" }, 4.5);
+      tl.fromTo("#s2-lines .ln", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.17 }, 4.85);
+      tl.fromTo("#s2-chips .chip", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.18 }, 5.9);
+      tl.to("#s2-wrap", { opacity: 0, duration: 0.3 }, 7.3);
+
+      // Proof: forms + fee
+      tl.fromTo("#s3-bg", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.45, ease: "power3.inOut" }, 7.6);
+      tl.fromTo("#s3-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 7.85);
+      tl.fromTo("#s3-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 7.85);
+      tl.fromTo("#s3-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 8.05);
+      [
+        ["#c1", -215, 26, -9],
+        ["#c2", 0, -4, 0],
+        ["#c3", 215, 26, 9],
+      ].forEach(([id, x, y, r], i) => {
+        tl.fromTo(id, { opacity: 0, x: 420, y: 160, rotation: 18 }, { opacity: 1, x, y, rotation: r, duration: 0.65, ease: "power3.out" }, 8.0 + i * 0.35);
+      });
+      tl.fromTo("#fee-label", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 9.15);
+      tl.fromTo("#fee", { opacity: 0, y: 24, scale: 0.94, transformOrigin: "0% 60%" }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 9.2);
+      tl.fromTo("#fee-waiver", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 9.85);
+      tl.fromTo("#fee-chip", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 10.35);
+      tl.to("#s3-inner", { opacity: 0, duration: 0.3 }, 10.9);
+
+      // Close: band -> end card
+      tl.fromTo("#band", { scaleX: 0, scaleY: 260 / 1920, transformOrigin: "0% 50%" }, { scaleX: 1, scaleY: 260 / 1920, duration: 0.55, ease: "power3.inOut" }, 11.25);
+      tl.fromTo("#band-text > *", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", stagger: 0.1 }, 11.6);
+      tl.to("#band-text", { opacity: 0, duration: 0.25 }, 12.35);
+      tl.fromTo("#band", { scaleY: 260 / 1920 }, { scaleY: 1, duration: 0.6, ease: "power3.inOut", immediateRender: false }, 12.4);
+      tl.fromTo("#end-icon", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 12.65);
+      tl.fromTo("#end-name", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 12.75);
+      tl.fromTo("#end-tag", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 13.0);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.25);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.55);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["vertical"] = tl;
+    </script>
+  </body>
+</html>

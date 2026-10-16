@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>bavarianbistro.com — Served Warm (vertical)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Nunito Sans"; src: url("assets/fonts/nunito-sans.woff2") format("woff2"); font-weight: 200 1000; }
+      @font-face { font-family: "UnifrakturCook"; src: url("assets/fonts/unifraktur-cook.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Lora"; src: url("assets/fonts/lora.woff2") format("woff2"); font-weight: 400 700; font-style: normal; }
+      @font-face { font-family: "Lora"; src: url("assets/fonts/lora-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root {
+        --blue: #2f5fa8; --blue-ink: #244b85; --sky: #8fb0e6; --amber: #d9a441; --amber-ink: #8a5f12;
+        --dark: #1f2a24; --dark-2: #141a16; --ink: #1f2430; --ink-2: #4f5868; --foam: #fffaf0; --soft: #bfcbc2;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--dark-2); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Nunito Sans", "Helvetica Neue", Arial, sans-serif; color: #ffffff; }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .bg { position: absolute; inset: 0; background: var(--dark-2); }
+      .abs { position: absolute; }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+      .frak { font-family: "UnifrakturCook", "Lora", serif; font-weight: 700; }
+
+      /* hook */
+      #loz { position: absolute; left: 0; top: 0; }
+      #s1-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,26,22,0.97) 0%, rgba(20,26,22,0.93) 36%, rgba(20,26,22,0.5) 62%, rgba(20,26,22,0.7) 100%); }
+      #mug-zoom { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 518px 835px; }
+      #mug-wrap { position: absolute; left: 270px; top: 770px; width: 560px; height: 764px; }
+      #mug-shadow { position: absolute; left: 290px; top: 1488px; width: 500px; height: 64px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,0.55), rgba(0,0,0,0)); }
+      #hook-eyebrow { left: 80px; top: 190px; font-size: 24px; color: var(--sky); }
+      #hook { left: 80px; top: 240px; width: 920px; font-size: 104px; font-weight: 800; line-height: 1.04; letter-spacing: -0.03em; }
+      #hook span { display: block; }
+      #hook .amber { color: var(--amber); }
+      #fill-label { left: 80px; top: 710px; font-size: 24px; color: var(--soft); display: flex; gap: 18px; align-items: center; }
+      #fill-num { font-family: "IBM Plex Mono", monospace; font-size: 64px; color: var(--amber); letter-spacing: -0.02em; text-transform: none; }
+
+      /* headline */
+      #s2-bg { position: absolute; inset: 0; background: radial-gradient(1200px 1500px at 50% 35%, #fffdf7 0%, var(--foam) 55%, #f6ecd6 100%); }
+      #s2-band { position: absolute; left: 0; top: 0; width: 1080px; height: 40px; overflow: hidden; }
+      #s2-eyebrow { left: 80px; top: 300px; width: 900px; font-size: 24px; line-height: 1.6; color: var(--blue-ink); }
+      #s2-title { left: 76px; top: 400px; font-size: 156px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; color: var(--ink); }
+      #s2-title span { display: block; }
+      #s2-stamp { left: 80px; top: 750px; font-size: 156px; line-height: 1.1; color: var(--amber-ink); white-space: nowrap; transform-origin: 30% 60%; }
+      #s2-chip { left: 740px; top: 1330px; width: 250px; height: 250px; border-radius: 50%; border: 4px solid var(--blue); color: var(--blue-ink); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
+      #s2-chip .big { font-family: "UnifrakturCook", serif; font-weight: 700; font-size: 64px; line-height: 1; letter-spacing: 0; text-transform: none; }
+      #s2-chip .sm { font-size: 18px; line-height: 1.4; }
+      #s2-sub { left: 80px; top: 1000px; width: 920px; font-family: "Lora", Georgia, serif; font-size: 40px; line-height: 1.45; color: var(--ink-2); }
+
+      /* proof: card flips */
+      #s3-bg { position: absolute; inset: 0; background: radial-gradient(1200px 1500px at 50% 40%, #223028 0%, var(--dark-2) 75%); }
+      #s3-eyebrow { left: 80px; top: 200px; font-size: 24px; color: var(--sky); }
+      #s3-count { right: 80px; top: 200px; font-size: 24px; color: var(--soft); }
+      #s3-count b { color: var(--amber); font-weight: 500; }
+      #stage { position: absolute; left: 80px; top: 270px; width: 920px; height: 1180px; perspective: 2600px; }
+      .card { position: absolute; left: 0; top: 0; width: 920px; height: 1180px; border-radius: 26px; overflow: hidden; background: var(--dark); border: 1px solid #2c3a32; display: flex; flex-direction: column; box-shadow: 0 40px 120px rgba(0,0,0,0.5); opacity: 0; }
+      .card .ph { width: 920px; height: 640px; flex: none; overflow: hidden; }
+      .card .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .card .tx { flex: 1; padding: 54px 60px 56px; display: flex; flex-direction: column; }
+      .card .cat { font-size: 24px; color: var(--sky); }
+      .card .ttl { font-size: 62px; font-weight: 800; line-height: 1.12; letter-spacing: -0.02em; margin-top: 22px; }
+      .card .meta { margin-top: auto; display: flex; align-items: center; justify-content: space-between; }
+      .card .by { font-family: "Lora", Georgia, serif; font-style: italic; font-size: 30px; color: var(--soft); }
+      .chip { display: flex; align-items: center; gap: 12px; padding: 12px 18px; background: var(--blue); color: #ffffff; font-family: "IBM Plex Mono", monospace; font-size: 20px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 6px; }
+      .chip i { display: block; width: 24px; height: 24px; border-radius: 50%; background: var(--sky); position: relative; }
+      .chip i::after { content: ""; position: absolute; left: 8px; top: 3px; width: 6px; height: 12px; border: solid var(--blue-ink); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+
+      /* end card */
+      #s4-bg { position: absolute; inset: 0; background: radial-gradient(1200px 1500px at 50% 40%, #223028 0%, var(--dark-2) 75%); }
+      #s4-band { position: absolute; left: 0; top: 0; width: 1080px; height: 36px; overflow: hidden; }
+      #end-wrap { position: absolute; left: 0; top: 230px; width: 1080px; display: flex; flex-direction: column; align-items: center; }
+      #end-mark { width: 150px; height: 150px; border-radius: 50%; background: var(--blue); border: 6px solid var(--sky); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 104px; line-height: 1; padding-bottom: 6px; }
+      #end-name { font-size: 150px; line-height: 1.05; margin-top: 30px; text-align: center; }
+      #end-url { font-size: 48px; font-weight: 800; color: var(--sky); margin-top: 10px; }
+      #end-tag { font-size: 50px; font-weight: 800; color: #e9efe9; margin-top: 34px; text-align: center; line-height: 1.25; }
+      #end-tag .frak { color: var(--amber); font-size: 62px; display: block; }
+      .pill { width: 860px; border-radius: 22px; padding: 30px 40px; margin-top: 24px; }
+      .pill .t { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; }
+      .pill .d { font-size: 28px; line-height: 1.35; margin-top: 8px; }
+      #pill-a { background: var(--amber); color: #2b1d05; margin-top: 56px; }
+      #pill-b { background: var(--blue); color: #ffffff; }
+      #end-mono { font-size: 20px; color: var(--soft); margin-top: 40px; }
+      #webhaus { left: 0; width: 1080px; top: 1600px; text-align: center; font-size: 24px; color: #8e9c93; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="vertical" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/whoosh-short.mp3" data-start="0.05" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/whoosh.mp3" data-start="0.7" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/riser.mp3" data-start="1.25" data-duration="4.2" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="sfx-4" src="assets/sfx/whoosh.mp3" data-start="4.15" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-5" src="assets/sfx/impact-bass-1.mp3" data-start="5.6" data-duration="2.12" data-volume="0.55" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/pop.mp3" data-start="6.8" data-duration="0.72" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-7" src="assets/sfx/whoosh.mp3" data-start="8.25" data-duration="0.57" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-8" src="assets/sfx/whoosh-short.mp3" data-start="8.6" data-duration="0.57" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-9" src="assets/sfx/whoosh-short.mp3" data-start="9.85" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-10" src="assets/sfx/whoosh-short.mp3" data-start="11.1" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/impact-bass-1.mp3" data-start="12.2" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-12" src="assets/sfx/chime.mp3" data-start="12.6" data-duration="2.4" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+
+
+      <section id="s1" class="clip" data-start="0" data-duration="5" data-track-index="0">
+        <svg id="loz" width="1080" height="1920" viewBox="0 0 1080 1920"><g id="loz-g"></g></svg>
+        <div id="s1-shade"></div>
+        <div id="hook-eyebrow" class="abs mono">Bavarian Bistro · for non-Germans</div>
+        <div id="hook" class="abs"><span>Your first</span><span>Oktoberfest,</span><span class="amber">minus the rookie</span><span class="amber">mistakes.</span></div>
+        <div id="fill-label" class="abs mono"><span id="fill-num">0.00 l</span><span>one Maß</span></div>
+        <div id="mug-zoom">
+          <div id="mug-shadow"></div>
+          <div id="mug-wrap">
+            <svg id="mug" width="560" height="764" viewBox="0 0 440 600">
+              <defs>
+                <linearGradient id="beer-h" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#7a4a0e" /><stop offset="0.12" stop-color="#b9771c" />
+                  <stop offset="0.38" stop-color="#e2a636" /><stop offset="0.55" stop-color="#eeb846" />
+                  <stop offset="0.8" stop-color="#c98a24" /><stop offset="1" stop-color="#6e420c" />
+                </linearGradient>
+                <linearGradient id="beer-v" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#ffd772" stop-opacity="0.55" /><stop offset="0.25" stop-color="#ffd772" stop-opacity="0" />
+                  <stop offset="0.8" stop-color="#5a3308" stop-opacity="0" /><stop offset="1" stop-color="#5a3308" stop-opacity="0.45" />
+                </linearGradient>
+                <linearGradient id="stream-g" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#b9771c" /><stop offset="0.45" stop-color="#f3c25a" /><stop offset="1" stop-color="#a8681a" />
+                </linearGradient>
+                <linearGradient id="foam-g" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#ffffff" /><stop offset="0.55" stop-color="#fbf4e4" /><stop offset="1" stop-color="#ead8b0" />
+                </linearGradient>
+                <linearGradient id="foam-side" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#b89a66" stop-opacity="0.45" /><stop offset="0.18" stop-color="#ffffff" stop-opacity="0" />
+                  <stop offset="0.82" stop-color="#ffffff" stop-opacity="0" /><stop offset="1" stop-color="#b89a66" stop-opacity="0.5" />
+                </linearGradient>
+                <linearGradient id="glass-wall" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#cfe0e6" stop-opacity="0.55" /><stop offset="0.06" stop-color="#e8f2f5" stop-opacity="0.18" />
+                  <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.04" /><stop offset="0.94" stop-color="#e8f2f5" stop-opacity="0.16" />
+                  <stop offset="1" stop-color="#cfe0e6" stop-opacity="0.5" />
+                </linearGradient>
+                <linearGradient id="hl-l" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity="0" /><stop offset="0.45" stop-color="#ffffff" stop-opacity="0.75" /><stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="base-g" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#e9f3f6" stop-opacity="0.55" /><stop offset="0.5" stop-color="#cfe0e6" stop-opacity="0.3" /><stop offset="1" stop-color="#ffffff" stop-opacity="0.6" />
+                </linearGradient>
+                <linearGradient id="handle-g" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0" stop-color="#d9e8ec" stop-opacity="0.35" /><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.12" /><stop offset="1" stop-color="#cfe0e6" stop-opacity="0.55" />
+                </linearGradient>
+                <clipPath id="cavity">
+                  <path d="M76 66 L76 504 Q76 520 196 520 Q316 520 316 504 L316 66 Z" />
+                </clipPath>
+                <clipPath id="beer-clip"><rect id="beer-clip-rect" x="60" y="520" width="280" height="10" /></clipPath>
+              </defs>
+
+              <!-- back of glass: rim back edge and inner wall -->
+              <ellipse cx="196" cy="66" rx="136" ry="17" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="2" />
+              <path d="M76 66 L76 504 Q76 520 196 520 Q316 520 316 504 L316 66" fill="#dcebf0" fill-opacity="0.06" />
+
+              <!-- handle (thick glass loop) -->
+              <path id="handle" d="M326 132 C 420 128, 426 160, 426 286 C 426 420, 412 446, 326 450 L326 412 C 382 410, 388 392, 388 286 C 388 184, 384 170, 326 170 Z" fill="url(#handle-g)" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2" />
+              <path d="M340 142 C 404 142, 412 170, 413 286" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="4" stroke-linecap="round" />
+              <path d="M398 300 C 398 380, 392 412, 350 424" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="3" stroke-linecap="round" />
+
+              <!-- pour stream (behind the beer, enters through the mouth) -->
+              <linearGradient id="fade-v" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0" /><stop offset="0.12" stop-color="#fff" stop-opacity="1" /></linearGradient><mask id="stream-fade" maskUnits="userSpaceOnUse" x="140" y="-60" width="80" height="640"><rect x="140" y="-60" width="80" height="640" fill="url(#fade-v)" /></mask>
+              <rect id="stream" x="168" y="-520" width="22" height="1040" rx="11" fill="url(#stream-g)" opacity="0" mask="url(#stream-fade)" />
+
+              <!-- beer -->
+              <g clip-path="url(#cavity)">
+                <g clip-path="url(#beer-clip)">
+                  <rect x="60" y="40" width="280" height="500" fill="url(#beer-h)" />
+                  <rect x="60" y="40" width="280" height="500" fill="url(#beer-v)" />
+                  <g id="bubbles"></g>
+                </g>
+                <!-- foam rides on the beer surface; drawn with its base at y=0 -->
+                <g id="foam-pos" transform="translate(0,520)">
+                  <g id="foam">
+                    <path d="M70 0 L70 -66 C 92 -98, 146 -114, 196 -113 C 248 -112, 300 -100, 322 -68 L322 0 Z" fill="url(#foam-g)" />
+                    <path d="M70 0 L70 -66 C 92 -98, 146 -114, 196 -113 C 248 -112, 300 -100, 322 -68 L322 0 Z" fill="url(#foam-side)" />
+                    <path d="M76 -2 Q196 -16 316 -2 L316 4 L76 4 Z" fill="#e3c27a" opacity="0.7" />
+                    <g id="pores" fill="#d9c49a" opacity="0.55"></g>
+                  </g>
+                </g>
+              </g>
+
+              <!-- foam cap above the rim (only visible once the glass is full) -->
+              <g id="cap" opacity="0">
+                <path d="M58 72 C 54 50, 70 34, 100 28 C 128 14, 166 9, 200 10 C 238 9, 274 16, 300 27 C 326 34, 342 50, 336 74 Q196 94 58 72 Z" fill="url(#foam-g)" />
+                <path d="M58 72 C 54 50, 70 34, 100 28 C 128 14, 166 9, 200 10 C 238 9, 274 16, 300 27 C 326 34, 342 50, 336 74 Q196 94 58 72 Z" fill="url(#foam-side)" />
+                <path d="M86 42 C 110 26, 150 20, 190 20" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.9" /><path d="M70 66 Q196 84 326 66" fill="none" stroke="#c9ad78" stroke-width="3" opacity="0.35" />
+                <path d="M300 62 C 312 76, 318 96, 314 128 C 312 140, 304 140, 303 128 C 302 104, 298 86, 292 74 Z" fill="#fbf4e4" />
+                <g id="cap-pores" fill="#d9c49a" opacity="0.5"></g>
+              </g>
+
+              <!-- glass front: wall, base, highlights, rim -->
+              <path d="M62 66 L62 548 Q62 576 196 576 Q330 576 330 548 L330 66 Q196 88 62 66 Z" fill="url(#glass-wall)" />
+              <path d="M76 520 Q196 534 316 520 L330 548 Q330 576 196 576 Q62 576 62 548 Z" fill="url(#base-g)" />
+              <path id="base-amber" d="M80 522 Q196 536 312 522 L318 540 Q196 556 74 540 Z" fill="#d9a441" opacity="0" />
+              <ellipse cx="196" cy="560" rx="122" ry="10" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="2" />
+              <rect x="88" y="84" width="22" height="430" rx="11" fill="url(#hl-l)" opacity="0.8" />
+              <rect x="120" y="96" width="6" height="400" rx="3" fill="#ffffff" opacity="0.28" />
+              <rect x="292" y="90" width="9" height="420" rx="4.5" fill="#ffffff" opacity="0.32" />
+              <path d="M77 70 L77 512" stroke="#ffffff" stroke-opacity="0.22" stroke-width="2" /><path d="M315 70 L315 512" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2" /><path d="M62 66 L62 548" stroke="#ffffff" stroke-opacity="0.6" stroke-width="3" />
+              <path d="M330 66 L330 548" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" />
+              <path d="M62 66 Q196 88 330 66" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="4" />
+              <path d="M62 548 Q62 576 196 576 Q330 576 330 548" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="2.5" />
+              <!-- fill line (Eichstrich) -->
+              <path d="M96 122 L140 124" stroke="#ffffff" stroke-opacity="0.85" stroke-width="3" />
+              <text x="146" y="131" font-family="Nunito Sans" font-weight="800" font-size="20" fill="#ffffff" fill-opacity="0.85">1 l</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section id="s2" class="clip" data-start="4.5" data-duration="3.9" data-track-index="1">
+        <div id="s2-bg"></div>
+        <div id="s2-inner" class="abs" style="inset: 0">
+          <svg id="s2-band" data-layout-allow-overflow viewBox="0 0 1080 40" width="1080" height="40"><g class="band-g"></g></svg>
+          <div id="s2-eyebrow" class="abs mono">A personal recommendation of all things Bavarian, for non-Germans</div>
+          <div id="s2-title" class="abs"><span>Bavaria,</span><span>explained.</span></div>
+          <div id="s2-stamp" class="abs frak">Served warm.</div>
+          <div id="s2-sub" class="abs">What a Maß is, why the Weißwurst skin comes off, which beer hall is worth your one evening, and how to throw an Oktoberfest at home without a Bavarian rolling her eyes.</div>
+          <div id="s2-chip" class="abs mono"><span class="sm">Written by</span><span class="big">Resi</span><span class="sm">for non-Germans</span></div>
+        </div>
+      </section>
+
+      <section id="s3" class="clip" data-start="8.3" data-duration="3.9" data-track-index="2">
+        <div id="s3-bg"></div>
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="s3-eyebrow" class="abs mono">Start here · real guides</div>
+          <div id="s3-count" class="abs mono">Guide <b id="s3-n">01</b> / 03</div>
+          <div id="stage">
+            <div class="card" id="c1">
+              <div class="ph"><img src="assets/img/weisswurst.jpg" alt="Weißwurst in a tureen" style="object-position: 40% 50%" /></div>
+              <div class="tx"><div class="cat mono">Food</div><div class="ttl">Weißwurst: How to Eat Bavaria's White Sausage (Skin, Mustard and the Noon Rule)</div><div class="meta"><div class="by">by Resi Zauber</div><div class="chip"><i></i>Cited · date-checked</div></div></div>
+            </div>
+            <div class="card" id="c2">
+              <div class="ph"><img src="assets/img/hofbrauhaus.jpg" alt="The Hofbräuhaus facade, Munich" style="object-position: 50% 28%" /></div>
+              <div class="tx"><div class="cat mono">Beer</div><div class="ttl">Is the Hofbräuhaus Worth It? An Honest Look at Munich's Most Famous Beer Hall</div><div class="meta"><div class="by">by Resi Zauber</div><div class="chip"><i></i>Cited · date-checked</div></div></div>
+            </div>
+            <div class="card" id="c3">
+              <div class="ph"><img src="assets/img/okt-barrel.jpg" alt="A beer barrel at the Oktoberfest" style="object-position: 50% 50%" /></div>
+              <div class="tx"><div class="cat mono">Oktoberfest</div><div class="ttl">Oktoberfest Without a Reservation: How the Unreserved Seats Work and When to Show Up</div><div class="meta"><div class="by">by Resi Zauber</div><div class="chip"><i></i>Cited · date-checked</div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="s4" class="clip" data-start="12.2" data-duration="2.8" data-track-index="2">
+        <div id="s4-bg"></div>
+        <svg id="s4-band" data-layout-allow-overflow viewBox="0 0 1080 36" width="1080" height="36"><g class="band-g"></g></svg>
+        <div id="end-wrap">
+          <div id="end-mark" class="frak">B</div>
+          <div id="end-name" class="frak">Bavarian Bistro</div>
+          <div id="end-url">bavarianbistro.com</div>
+          <div id="end-tag">Bavaria, explained. <span class="frak">Served warm.</span></div>
+          <div class="pill" id="pill-a"><div class="t">Throw an Oktoberfest</div><div class="d">The plan, the menu for twelve, the beer from US shelves</div></div>
+          <div class="pill" id="pill-b"><div class="t">Go to Munich</div><div class="d">Oktoberfest without a reservation, Bavaria by train</div></div>
+          <div id="end-mono" class="mono">Not affiliated with the City of Munich or the Oktoberfest</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      let seed = 1069;
+      const rnd = () => {
+        seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+      const NS = "http://www.w3.org/2000/svg";
+      const el = (tag, attrs, parent) => {
+        const n = document.createElementNS(NS, tag);
+        for (const k in attrs) n.setAttribute(k, attrs[k]);
+        parent.appendChild(n);
+        return n;
+      };
+      const A = [56, -16], B = [12, 74];
+      const buildLozenges = (g, w, h, white, blue) => {
+        const tiles = [];
+        const P = [A[0] + B[0], A[1] + B[1]], Q = [A[0] - B[0], A[1] - B[1]];
+        for (let i = -40; i < 50; i++) {
+          for (let j = -40; j < 50; j++) {
+            const cx = i * P[0] + j * Q[0], cy = i * P[1] + j * Q[1];
+            if (cx < -80 || cx > w + 80 || cy < -100 || cy > h + 100) continue;
+            const pts = [[cx + A[0], cy + A[1]], [cx + B[0], cy + B[1]], [cx - A[0], cy - A[1]], [cx - B[0], cy - B[1]]]
+              .map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+            const isBlue = ((i + j) % 2 + 2) % 2 === 0;
+            tiles.push({ node: el("polygon", { points: pts, fill: isBlue ? blue : white }, g), cx, cy });
+          }
+        }
+        return tiles;
+      };
+      const tiles = buildLozenges(document.getElementById("loz-g"), 1080, 1920, "#ffffff", "#2f5fa8");
+      document.querySelectorAll(".band-g").forEach((g) => buildLozenges(g, 1080, 40, "#ffffff", "#2f5fa8"));
+
+      const bubbleG = document.getElementById("bubbles");
+      const bubbles = [];
+      for (let s = 0; s < 9; s++) {
+        const x = 92 + s * 26 + rnd() * 14;
+        const speed = 70 + rnd() * 60;
+        for (let k = 0; k < 7; k++) {
+          const r = 1.1 + rnd() * 1.9;
+          const c = el("circle", { cx: x, cy: 500, r: r.toFixed(2), fill: "#fff6d8", "fill-opacity": (0.45 + rnd() * 0.4).toFixed(2) }, bubbleG);
+          bubbles.push({ c, x, speed, off: k / 7 + rnd() * 0.06, wob: rnd() * 6.28 });
+        }
+      }
+      const pores = (g, x0, x1, y0, y1, n) => {
+        for (let k = 0; k < n; k++) el("ellipse", { cx: (x0 + rnd() * (x1 - x0)).toFixed(1), cy: (y0 + rnd() * (y1 - y0)).toFixed(1), rx: (0.8 + rnd() * 2.2).toFixed(1), ry: (0.6 + rnd() * 1.4).toFixed(1) }, g);
+      };
+      pores(document.getElementById("pores"), 84, 310, -80, -8, 70);
+      pores(document.getElementById("cap-pores"), 80, 320, 36, 74, 50);
+
+      const tl = gsap.timeline({ paused: true });
+
+      // Hook: lozenges, the Maß, the pour
+      tiles.forEach((t) => {
+        const d = Math.hypot(t.cx - 540, t.cy - 960) / 1100;
+        tl.fromTo(t.node, { scale: 0, rotation: -40, transformOrigin: "50% 50%" }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.6)" }, 0.05 + d * 0.6);
+      });
+      tl.fromTo("#s1-shade", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 0.8);
+      tl.fromTo("#hook-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.95);
+      tl.fromTo("#hook span", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.15 }, 1.0);
+      tl.fromTo("#mug-wrap", { y: 900, rotation: 4 }, { y: 0, rotation: 0, duration: 0.8, ease: "power3.out" }, 0.75);
+      tl.fromTo("#mug-shadow", { opacity: 0, scaleX: 0.5 }, { opacity: 1, scaleX: 1, duration: 0.6 }, 1.05);
+
+      const FILL0 = 1.55, FILL = 1.9;
+      tl.fromTo("#stream", { opacity: 0, attr: { y: -620 } }, { opacity: 1, attr: { y: -520 }, duration: 0.25, ease: "power2.out" }, FILL0 - 0.2);
+      tl.to("#stream", { attr: { y: 120, height: 0 }, duration: 0.35, ease: "power2.in" }, FILL0 + FILL - 0.15);
+      const lvl = { y: 520, f: 0.15 };
+      const beerClip = document.getElementById("beer-clip-rect");
+      const foamPos = document.getElementById("foam-pos");
+      const foam = document.getElementById("foam");
+      const fillNum = document.getElementById("fill-num");
+      const applyLevel = () => {
+        beerClip.setAttribute("y", lvl.y.toFixed(2));
+        beerClip.setAttribute("height", (530 - lvl.y).toFixed(2));
+        foamPos.setAttribute("transform", "translate(0," + lvl.y.toFixed(2) + ")");
+        foam.setAttribute("transform", "scale(1," + lvl.f.toFixed(3) + ")");
+        const litres = Math.max(0, Math.min(1, (520 - lvl.y) / (520 - 128)));
+        fillNum.textContent = litres.toFixed(2) + " l";
+      };
+      tl.fromTo(lvl, { y: 520, f: 0.15 }, { y: 128, f: 1.12, duration: FILL, ease: "power1.inOut", onUpdate: applyLevel }, FILL0);
+      tl.fromTo(lvl, { f: 1.12 }, { f: 0.9, duration: 0.5, ease: "power2.out", onUpdate: applyLevel, immediateRender: false }, FILL0 + FILL);
+      tl.fromTo("#cap", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, FILL0 + FILL - 0.35);
+      tl.fromTo("#base-amber", { opacity: 0 }, { opacity: 0.35, duration: 0.5 }, FILL0 + 0.3);
+      tl.fromTo("#fill-label", { opacity: 0 }, { opacity: 1, duration: 0.4 }, FILL0);
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, {
+        t: 5, duration: 5, ease: "none",
+        onUpdate: () => {
+          const T = clock.t;
+          bubbles.forEach((b) => {
+            const p = ((T * b.speed) / 360 + b.off) % 1;
+            b.c.setAttribute("cy", (512 - p * 360).toFixed(1));
+            b.c.setAttribute("cx", (b.x + Math.sin(T * 3 + b.wob + p * 6) * 1.6).toFixed(1));
+          });
+        },
+      }, 0);
+      applyLevel();
+
+      tl.to(["#hook", "#hook-eyebrow", "#fill-label"], { opacity: 0, y: -30, duration: 0.35, ease: "power2.in" }, 4.05);
+      tl.fromTo("#mug-zoom", { scale: 1 }, { scale: 22, duration: 0.8, ease: "power3.in" }, 4.15);
+
+      // Headline
+      tl.fromTo("#s2-bg", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.in" }, 4.55);
+      tl.fromTo("#s2-band", { y: -44 }, { y: 0, duration: 0.5, ease: "power3.out" }, 4.95);
+      tl.fromTo("#s2-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 5.0);
+      tl.fromTo("#s2-title span", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.7, ease: "power4.out", stagger: 0.12 }, 5.0);
+      tl.fromTo("#s2-stamp", { opacity: 0, scale: 2.4, rotation: -12 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.4, ease: "power4.in" }, 5.45);
+      tl.fromTo("#s2-inner", { x: 0, y: 0 }, { keyframes: [{ x: -6, y: 4, duration: 0.05 }, { x: 4, y: -3, duration: 0.05 }, { x: 0, y: 0, duration: 0.08 }] }, 5.85);
+      tl.fromTo("#s2-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 6.3);
+      tl.fromTo("#s2-chip", { opacity: 0, scale: 1.6, rotation: 20 }, { opacity: 1, scale: 1, rotation: 8, duration: 0.4, ease: "back.out(2)" }, 6.8);
+      tl.to("#s2-inner", { opacity: 0, y: -30, duration: 0.3, ease: "power2.in" }, 7.95);
+
+      // Proof: three real guides, card flips
+      tl.fromTo("#s3-bg", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.45, ease: "power3.inOut" }, 8.3);
+      tl.fromTo(["#s3-eyebrow", "#s3-count"], { opacity: 0 }, { opacity: 1, duration: 0.35 }, 8.6);
+      const cardT = [8.65, 9.9, 11.15];
+      const n3 = document.getElementById("s3-n");
+      cardT.forEach((t, i) => {
+        const id = "#c" + (i + 1);
+        tl.fromTo(id, { opacity: 1, rotationY: -90 }, { opacity: 1, rotationY: 0, duration: 0.45, ease: "power3.out" }, t);
+        tl.fromTo(id + " .ph img", { scale: 1.18 }, { scale: 1.02, duration: 1.3, ease: "power1.out" }, t);
+        tl.fromTo(id + " .chip", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, t + 0.45);
+        if (i < cardT.length - 1) tl.to(id, { rotationY: 90, duration: 0.25, ease: "power2.in" }, cardT[i + 1] - 0.25);
+      });
+      const nFlip = { t: 8.65 };
+      tl.fromTo(nFlip, { t: 8.65 }, { t: 12.2, duration: 3.55, ease: "none", onUpdate: () => { n3.textContent = "0" + Math.max(1, cardT.filter((x) => x <= nFlip.t + 0.22).length); } }, 8.65);
+      tl.to("#s3-inner", { opacity: 0, duration: 0.3 }, 11.9);
+
+      // End card
+      tl.fromTo("#s4-band", { y: -40 }, { y: 0, duration: 0.5, ease: "power3.out" }, 12.25);
+      tl.fromTo("#end-mark", { opacity: 0, scale: 0.4, rotation: -20 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.5, ease: "back.out(1.8)" }, 12.25);
+      tl.fromTo("#end-name", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 12.4);
+      tl.fromTo("#end-url", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45 }, 12.6);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45 }, 12.8);
+      tl.fromTo("#pill-a", { opacity: 0, x: -120 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 13.05);
+      tl.fromTo("#pill-b", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 13.2);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.6);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["vertical"] = tl;
+    </script>
+  </body>
+</html>

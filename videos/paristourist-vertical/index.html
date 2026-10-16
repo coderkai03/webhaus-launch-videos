@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>paristourist.info — Next Stop: The Answer (vertical)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root {
+        --blue: #173f8f; --blue-deep: #0e2a63; --yellow: #ffcd00; --go: #1b7a4b;
+        --tri-blue: #0064b0; --tri-red: #ef4135;
+        --tint: #f2f5fb; --ink: #111827; --muted: #5b6472; --rule: #dfe3ea; --pale: #c9d6f2;
+        --l1: #ffcd00; --l2: #0064b0; --l3: #9f9825; --l4: #c04191; --l5: #f28e42; --l6: #6eca97;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--blue); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; color: #ffffff; }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+      .bg {
+        position: absolute; inset: 0;
+        background:
+          repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 80px),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 80px),
+          radial-gradient(1200px 1500px at 40% 35%, #1d4aa3 0%, var(--blue) 55%, var(--blue-deep) 100%);
+      }
+      .sign { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; }
+      .mono { font-family: "IBM Plex Mono", monospace; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+      .tri { background: linear-gradient(90deg, var(--tri-blue) 0 33.34%, #ffffff 33.34% 66.67%, var(--tri-red) 66.67% 100%); }
+      #toprule { left: 0; top: 0; width: 1080px; height: 10px; z-index: 50; }
+
+      .dot {
+        position: absolute; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%;
+        border: 6px solid #ffffff; display: flex; align-items: center; justify-content: center;
+        font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 36px; color: #ffffff;
+        box-shadow: 0 6px 18px rgba(8, 20, 50, 0.25);
+      }
+      .dot.dk { color: var(--ink); }
+      .c1 { background: var(--l1); } .c2 { background: var(--l2); } .c3 { background: var(--l3); }
+      .c4 { background: var(--l4); } .c5 { background: var(--l5); } .c6 { background: var(--l6); }
+
+      /* line on blue (hook + headline) */
+      .hl-label { position: absolute; left: 250px; height: 60px; margin-top: -30px; line-height: 60px; font-size: 50px; font-weight: 600; font-family: "Barlow Semi Condensed", sans-serif; color: #ffffff; white-space: nowrap; }
+      #hook-eyebrow { left: 80px; top: 190px; font-size: 24px; color: var(--pale); }
+      #hook1 { left: 80px; top: 240px; width: 920px; font-size: 150px; line-height: 0.96; }
+      #hook2 { left: 80px; top: 260px; width: 920px; font-size: 160px; line-height: 0.96; }
+      #hook1 span, #hook2 span { display: block; }
+      #hook2 .y { color: var(--yellow); }
+
+      #s2-eyebrow { left: 80px; top: 200px; font-size: 24px; color: var(--yellow); }
+      #s2-title { left: 80px; top: 250px; width: 940px; font-size: 128px; line-height: 0.95; }
+      #s2-title .line { display: block; }
+      #s2-sub { left: 80px; top: 660px; width: 900px; font-size: 36px; line-height: 1.4; color: #dbe4f7; }
+
+      /* proof beat */
+      #s3-bg { position: absolute; inset: 0; background: var(--tint); }
+      #band { left: 0; top: 0; width: 1080px; height: 400px; background: #ffffff; overflow: hidden; }
+      #band-rule { left: 0; top: 394px; width: 1080px; height: 6px; }
+      #next-stop { left: 230px; top: 120px; width: 400px; margin-left: -200px; text-align: center; font-size: 24px; color: var(--blue); }
+      #strip { left: 0; top: 0; width: 2400px; height: 400px; }
+      #strip-line { left: -600px; top: 232px; width: 3600px; height: 16px; background: var(--blue); border-radius: 8px; }
+      #strip .dot { top: 240px; width: 90px; height: 90px; margin: -45px 0 0 -45px; font-size: 42px; border-width: 7px; box-shadow: 0 0 0 4px var(--blue); }
+      .halo { position: absolute; top: 240px; left: 230px; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 5px solid #c9a400; opacity: 0; }
+      .st-label { position: absolute; top: 298px; width: 400px; margin-left: -200px; text-align: center; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 48px; color: var(--ink); white-space: nowrap; }
+
+      #search { left: 80px; top: 470px; width: 920px; height: 110px; background: #ffffff; border: 3px solid var(--blue); border-radius: 14px; display: flex; align-items: center; padding: 0 10px 0 28px; box-shadow: 0 14px 40px rgba(23, 63, 143, 0.12); }
+      #q-text { flex: 1; font-size: 37px; color: var(--ink); white-space: nowrap; overflow: hidden; }
+      #q-text.ph { color: #8a93a3; }
+      #caret { display: inline-block; width: 3px; height: 42px; background: var(--blue); vertical-align: -8px; margin-left: 3px; }
+      #search-btn { width: 170px; height: 86px; border-radius: 10px; background: var(--yellow); color: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 30px; letter-spacing: 0.06em; }
+
+      #card { position: absolute; left: 80px; top: 640px; width: 920px; height: 900px; background: #ffffff; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(14, 42, 99, 0.16); border: 1px solid var(--rule); }
+      #card .media { position: absolute; left: 0; top: 0; width: 920px; height: 360px; overflow: hidden; }
+      #card .media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block; }
+      #card .edge { position: absolute; left: 0; top: 360px; width: 920px; height: 10px; }
+      #card .body { position: absolute; left: 50px; top: 410px; width: 820px; }
+      .slug { font-size: 19px; color: var(--muted); letter-spacing: 0.03em; text-transform: none; }
+      #card h2 { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 62px; line-height: 1.0; color: var(--ink); margin-top: 16px; }
+      .rows { margin-top: 26px; }
+      .rowi { display: flex; align-items: center; gap: 18px; font-size: 32px; color: #2b3445; height: 54px; }
+      .tick { width: 34px; height: 34px; border-radius: 50%; background: #e3f1e9; position: relative; flex: none; }
+      .tick::after { content: ""; position: absolute; left: 12px; top: 6px; width: 8px; height: 15px; border: solid var(--go); border-width: 0 4px 4px 0; transform: rotate(45deg); }
+      .chip {
+        position: absolute; left: 50px; bottom: 44px; display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-radius: 8px;
+        background: var(--go); color: #ffffff; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 21px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
+      }
+      .chip i { display: block; width: 26px; height: 26px; border-radius: 50%; background: #ffffff; position: relative; }
+      .chip i::after { content: ""; position: absolute; left: 9px; top: 4px; width: 6px; height: 12px; border: solid var(--go); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+
+      /* end card */
+      #end-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1640px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #badge { border: 4px solid #2e9a62; background: var(--blue); padding: 10px 26px 12px; display: flex; flex-direction: column; align-items: center; }
+      #badge small { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.12em; color: #ffffff; line-height: 1; }
+      #badge span { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 46px; letter-spacing: 0.04em; color: #ffffff; line-height: 1; margin-top: 2px; }
+      #end-name { font-size: 132px; line-height: 1; margin-top: 50px; }
+      #end-stripe { width: 900px; height: 18px; margin-top: 28px; }
+      #end-tag { width: 900px; text-align: center; font-size: 50px; line-height: 1.2; font-weight: 500; color: #dbe4f7; margin-top: 40px; }
+      #end-mono { font-size: 22px; color: var(--yellow); margin-top: 40px; }
+      #webhaus { left: 0; width: 1080px; top: 1560px; text-align: center; font-size: 22px; color: #9fb2da; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="vertical" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/whoosh-short.mp3" data-start="0.25" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/impact-bass-1.mp3" data-start="2.6" data-duration="2.12" data-volume="0.55" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/whoosh-short.mp3" data-start="4.15" data-duration="0.57" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="sfx-4" src="assets/sfx/whoosh.mp3" data-start="7.55" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-5" src="assets/sfx/typing.mp3" data-start="8.65" data-duration="1.1" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/click.mp3" data-start="9.85" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/pop.mp3" data-start="10.75" data-duration="0.72" data-volume="0.32" data-track-index="10"></audio>
+      <audio id="sfx-8" src="assets/sfx/riser.mp3" data-start="9.3" data-duration="3.2" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-9" src="assets/sfx/impact-bass-1.mp3" data-start="12.15" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-10" src="assets/sfx/chime.mp3" data-start="12.85" data-duration="2.15" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+      <div id="toprule" class="abs tri"></div>
+
+      <!-- Hook + headline: a vertical metro line of the six sections -->
+      <section id="s-line" class="clip" data-start="0" data-duration="7.6" data-track-index="0">
+        <div id="hl-wrap" class="abs" style="inset: 0">
+          <svg class="abs" style="left: 0; top: 0" width="1080" height="1920" viewBox="0 0 1080 1920">
+            <line id="hl-line" x1="170" y1="860" x2="170" y2="1600" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-dasharray="740" stroke-dashoffset="740" />
+          </svg>
+          <div class="dot c1 dk hl-dot" style="left: 170px; top: 900px">1</div>
+          <div class="dot c2 hl-dot" style="left: 170px; top: 1032px">2</div>
+          <div class="dot c3 hl-dot" style="left: 170px; top: 1164px">3</div>
+          <div class="dot c4 hl-dot" style="left: 170px; top: 1296px">4</div>
+          <div class="dot c5 dk hl-dot" style="left: 170px; top: 1428px">5</div>
+          <div class="dot c6 dk hl-dot" style="left: 170px; top: 1560px">6</div>
+          <div class="hl-label" style="top: 900px">Sights</div>
+          <div class="hl-label" style="top: 1032px">Getting around</div>
+          <div class="hl-label" style="top: 1164px">Which one?</div>
+          <div class="hl-label" style="top: 1296px">Planning</div>
+          <div class="hl-label" style="top: 1428px">Day trips</div>
+          <div class="hl-label" style="top: 1560px">Kids &amp; school</div>
+        </div>
+      </section>
+
+      <section id="s1" class="clip" data-start="0" data-duration="4.2" data-track-index="1">
+        <div id="hook-eyebrow" class="abs mono">Paris · one question at a time</div>
+        <div id="hook1" class="abs sign"><span>Paris has a</span><span>thousand</span><span>opinions.</span></div>
+        <div id="hook2" class="abs sign"><span>This site</span><span>has</span><span class="y">sources.</span></div>
+      </section>
+
+      <section id="s2" class="clip" data-start="4.2" data-duration="3.4" data-track-index="1">
+        <div id="s2-eyebrow" class="abs mono">Independent reference · Every answer cited</div>
+        <div id="s2-title" class="abs sign"><span class="line">Straight answers</span><span class="line">about Paris,</span><span class="line">with sources.</span></div>
+        <div id="s2-sub" class="abs">One question per page, answered from the official pages, with the date each was checked.</div>
+      </section>
+
+      <!-- Proof: next stop, the answer -->
+      <section id="s3" class="clip" data-start="7.6" data-duration="4.7" data-track-index="2">
+        <div id="s3-bg"></div>
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="band" class="abs">
+            <div id="strip" class="abs" data-layout-allow-overflow>
+              <div id="strip-line" class="abs"></div>
+              <div class="halo" id="halo1"></div>
+              <div class="dot c1 dk" id="sd1" style="left: 230px">1</div>
+              <div class="dot c2" id="sd2" style="left: 670px">2</div>
+              <div class="dot c3" id="sd3" style="left: 1110px">3</div>
+              <div class="dot c4" id="sd4" style="left: 1550px">4</div>
+              <div class="st-label" style="left: 230px">Sights</div>
+              <div class="st-label" style="left: 670px">Getting around</div>
+              <div class="st-label" style="left: 1110px">Which one?</div>
+              <div class="st-label" style="left: 1550px">Planning</div>
+            </div>
+            <div id="next-stop" class="abs mono">Next stop</div>
+          </div>
+          <div id="band-rule" class="abs tri"></div>
+
+          <div id="search" class="abs">
+            <div id="q-text" class="ph">Ask about Paris</div>
+            <div id="search-btn" class="sign">SEARCH</div>
+          </div>
+
+          <div id="card">
+            <div class="media"><img id="img1" src="assets/img/notre-dame.jpg" alt="Notre-Dame interior" /></div>
+            <div class="edge c1"></div>
+            <div class="body">
+              <div class="slug mono">paristourist.info/notre-dame-tickets-needed/</div>
+              <h2>Do You Need Tickets for <span style="white-space: nowrap">Notre-Dame?</span></h2>
+              <div class="rows">
+                <div class="rowi"><div class="tick"></div>Answered from the official page</div>
+                <div class="rowi"><div class="tick"></div>Source cited on the page</div>
+                <div class="rowi"><div class="tick"></div>Date checked, shown with the answer</div>
+              </div>
+            </div>
+            <div class="chip"><i></i>Answered · source cited · date checked</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="s4" class="clip" data-start="12.3" data-duration="2.7" data-track-index="2">
+        <div id="end-wrap">
+          <div id="badge"><small>.INFO</small><span>PARIS TOURIST</span></div>
+          <div id="end-name" class="sign">paristourist.info</div>
+          <div id="end-stripe" class="tri"></div>
+          <div id="end-tag"><span style="display: block">Straight answers about Paris,</span><span style="display: block">with sources.</span></div>
+          <div id="end-mono" class="mono">Every answer cited · Every date checked</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Hook: the line draws down, stations pop
+      tl.fromTo("#hl-line", { strokeDashoffset: 740 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, 0.25);
+      document.querySelectorAll(".hl-dot").forEach((d, i) => {
+        tl.fromTo(d, { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2.4)" }, 0.35 + i * 0.24);
+      });
+      tl.fromTo(".hl-label", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out", stagger: 0.24 }, 0.45);
+      tl.fromTo("#hook-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.15);
+      tl.fromTo("#hook1 span", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out", stagger: 0.18 }, 0.2);
+      tl.to(["#hook1", "#hook-eyebrow"], { opacity: 0, y: -24, duration: 0.3, ease: "power2.in" }, 2.3);
+      tl.fromTo("#hook2 span", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.55, ease: "power4.out", stagger: 0.14 }, 2.6);
+      tl.to("#hook2", { opacity: 0, y: -24, duration: 0.3, ease: "power2.in" }, 3.95);
+
+      // Headline
+      tl.fromTo("#s2-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 4.25);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.75, ease: "power4.out", stagger: 0.15 }, 4.3);
+      tl.fromTo("#s2-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 5.0);
+      tl.to(["#s2-eyebrow", "#s2-title", "#s2-sub", "#hl-wrap"], { opacity: 0, duration: 0.3 }, 7.25);
+
+      // Proof beat
+      tl.fromTo("#s3-bg", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.45, ease: "power3.inOut" }, 7.6);
+      tl.fromTo("#band", { y: -420 }, { y: 0, duration: 0.5, ease: "power3.out" }, 7.8);
+      tl.fromTo("#band-rule", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.55, ease: "power2.inOut" }, 7.95);
+      tl.fromTo("#next-stop", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 8.3);
+      tl.fromTo("#search", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 8.0);
+      tl.fromTo("#strip", { x: 700 }, { x: 0, duration: 0.7, ease: "power3.inOut" }, 7.8);
+      tl.fromTo("#sd1", { scale: 1 }, { scale: 1.2, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 8.45);
+      tl.fromTo("#halo1", { scale: 1, opacity: 0.9 }, { scale: 2.1, opacity: 0, duration: 0.8, ease: "power2.out" }, 8.5);
+
+      const Q = "Do I need a ticket for Notre-Dame?";
+      const T0 = 8.65, T1 = 9.75;
+      const qEl = document.getElementById("q-text");
+      const typer = { t: 7.6 };
+      const renderQ = (t) => {
+        if (t < T0) { qEl.className = "ph"; qEl.textContent = "Ask about Paris"; return; }
+        const k = Math.max(0, Math.min(1, (t - T0) / (T1 - T0)));
+        const text = Q.slice(0, Math.round(k * Q.length));
+        if (!text) { qEl.className = "ph"; qEl.textContent = "Ask about Paris"; return; }
+        qEl.className = "";
+        qEl.innerHTML = "";
+        qEl.appendChild(document.createTextNode(text));
+        if (k < 1 || Math.floor(t * 2.5) % 2 === 0) { const c = document.createElement("span"); c.id = "caret"; qEl.appendChild(c); }
+      };
+      tl.fromTo(typer, { t: 7.6 }, { t: 12.3, duration: 4.7, ease: "none", onUpdate: () => renderQ(typer.t) }, 7.6);
+      tl.fromTo("#search-btn", { scale: 1 }, { scale: 0.92, duration: 0.08, ease: "power1.in", yoyo: true, repeat: 1, immediateRender: false }, 9.85);
+      tl.fromTo("#card", { opacity: 0, y: 50, clipPath: "inset(0% 0% 100% 0%)" }, { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 0.55, ease: "power3.out" }, 10.0);
+      tl.fromTo("#img1", { scale: 1.12 }, { scale: 1, duration: 2.0, ease: "power2.out" }, 10.0);
+      tl.fromTo("#card .slug", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 10.2);
+      tl.fromTo("#card h2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 10.22);
+      tl.fromTo("#card .rowi", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out", stagger: 0.09 }, 10.38);
+      tl.fromTo("#card .chip", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 10.75);
+      tl.to("#s3-inner", { opacity: 0, duration: 0.3 }, 12.0);
+      tl.to("#s3-bg", { opacity: 0, duration: 0.3 }, 12.05);
+
+      // End card: tricolore wipes in the URL
+      tl.fromTo("#badge", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 12.3);
+      tl.fromTo("#end-stripe", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.7, ease: "power3.inOut" }, 12.4);
+      tl.fromTo("#end-name", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power3.inOut" }, 12.4);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 12.95);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.25);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.6);
+
+      window.__timelines["vertical"] = tl;
+    </script>
+  </body>
+</html>

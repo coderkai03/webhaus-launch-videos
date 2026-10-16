@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>familylawriverside.com — Plain Words</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Book Serif"; src: url("assets/fonts/pala.ttf") format("truetype"); font-weight: 400; font-style: normal; }
+      @font-face { font-family: "Book Serif"; src: url("assets/fonts/palab.ttf") format("truetype"); font-weight: 700; font-style: normal; }
+      @font-face { font-family: "Book Serif"; src: url("assets/fonts/palai.ttf") format("truetype"); font-weight: 400; font-style: italic; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root {
+        --burg: #5f2230;
+        --burg-dk: #4a1a25;
+        --navy: #22325a;
+        --ink: #1c2541;
+        --rust: #9b3d1c;
+        --parch: #f4efe4;
+        --parch-2: #fbf8f1;
+        --paper: #fffdf8;
+        --mute: #5b6378;
+        --line: #d9d1bf;
+        --night: #1f1418;
+        --night-2: #261a1f;
+        --night-text: #ede4dc;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--parch); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; color: var(--ink); }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .bg { position: absolute; inset: 0; background: radial-gradient(1500px 900px at 50% 45%, var(--parch-2) 0%, var(--parch) 70%, #ece5d6 100%); }
+      .abs { position: absolute; }
+      .serif { font-family: "Book Serif", "Palatino Linotype", Palatino, Georgia, serif; }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+      .eyebrow { font-size: 20px; color: var(--rust); }
+
+      /* cited · dated chip (network motif) */
+      .chip {
+        display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px; background: var(--burg); color: var(--parch-2);
+        font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; border-radius: 4px;
+      }
+      .chip i { display: block; width: 24px; height: 24px; border-radius: 50%; background: var(--parch-2); position: relative; flex: none; }
+      .chip i::after { content: ""; position: absolute; left: 8px; top: 4px; width: 6px; height: 12px; border: solid var(--burg); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+      .chip.light { background: var(--parch-2); color: var(--burg); }
+      .chip.light i { background: var(--burg); }
+      .chip.light i::after { border-color: var(--parch-2); }
+
+      /* ---------- scene 1: jargon -> plain words ---------- */
+      #jargon {
+        left: 320px; top: 300px; width: 1280px; font-size: 21px; line-height: 1.75; color: #6b6760; text-align: justify; hyphens: none;
+        transform-origin: 50% 50%;
+      }
+      #jargon span { display: inline; }
+      #s1-eyebrow { left: 0; width: 1920px; top: 318px; text-align: center; font-size: 20px; color: var(--rust); }
+      #plain { left: 0; width: 1920px; top: 372px; text-align: center; font-size: 92px; font-weight: 700; line-height: 1.12; letter-spacing: -0.01em; color: var(--ink); }
+      #plain .ln { display: block; }
+      #s1-sub { left: 360px; width: 1200px; top: 640px; text-align: center; font-size: 32px; line-height: 1.45; color: var(--mute); }
+
+      /* ---------- scene 2: Riverside photo + masthead ---------- */
+      #s2-wrap { position: absolute; inset: 0; }
+      #photo-box { position: absolute; left: 0; top: 118px; width: 1920px; height: 962px; overflow: hidden; background: #2a2226; }
+      #photo { position: absolute; left: -140px; top: 0; width: 2200px; height: 962px; object-fit: cover; transform-origin: 60% 40%; }
+      #photo-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(31, 20, 24, 0.82) 0%, rgba(31, 20, 24, 0.55) 42%, rgba(31, 20, 24, 0.05) 78%), linear-gradient(0deg, rgba(31, 20, 24, 0.5) 0%, rgba(31, 20, 24, 0) 40%); }
+      #masthead { position: absolute; left: 0; top: 0; width: 1920px; height: 118px; background: var(--burg); border-bottom: 3px solid #4a1a25; }
+      #mast-icon { position: absolute; left: 120px; top: 26px; width: 64px; height: 64px; }
+      #mast-name { position: absolute; left: 204px; top: 22px; font-size: 40px; font-weight: 700; color: var(--parch-2); white-space: nowrap; }
+      #mast-sub { position: absolute; left: 206px; top: 72px; font-size: 20px; color: #e8d6da; white-space: nowrap; }
+      #mast-lang { position: absolute; right: 120px; top: 44px; font-size: 18px; color: #e8d6da; }
+      #mast-lang b { color: var(--parch-2); font-weight: 500; }
+      #s2-lines { left: 160px; top: 340px; width: 1200px; font-size: 74px; font-weight: 700; line-height: 1.14; color: var(--parch-2); }
+      #s2-lines .ln { display: block; white-space: nowrap; }
+      #s2-chips { left: 160px; top: 740px; display: flex; gap: 16px; }
+
+      /* ---------- scene 3: the four courthouses ---------- */
+      #s3-bg { position: absolute; inset: 0; background: var(--parch-2); }
+      #s3-eyebrow { left: 140px; top: 120px; }
+      #s3-title { left: 140px; top: 158px; font-size: 76px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+      #s3-sub { left: 142px; top: 268px; font-size: 32px; color: var(--mute); white-space: nowrap; }
+      #s3-chip { right: 140px; top: 140px; }
+      #map { left: 0; top: 0; }
+      .pin { position: absolute; width: 62px; height: 83px; }
+      .pin-shadow { position: absolute; width: 44px; height: 12px; border-radius: 50%; background: rgba(60, 30, 30, 0.28); filter: blur(2px); }
+      .pin-label { position: absolute; white-space: nowrap; }
+      .pin-label .nm { font-family: "Book Serif", Palatino, Georgia, serif; font-size: 34px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+      .pin-label .sm { font-size: 19px; color: var(--mute); margin-top: 4px; }
+      .pin-label.right { text-align: right; }
+      #county-label { left: 1100px; top: 520px; width: 320px; text-align: center; font-size: 17px; color: #a2977f; letter-spacing: 0.32em; }
+      #az-label { left: 1748px; top: 618px; font-size: 15px; color: #b3a990; letter-spacing: 0.3em; }
+
+      /* ---------- scene 4: forms + fee ---------- */
+      #s4-bg { position: absolute; inset: 0; background: var(--parch); }
+      #s4-eyebrow { left: 140px; top: 150px; }
+      #s4-title { left: 140px; top: 188px; font-size: 76px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+      #s4-sub { left: 142px; top: 298px; width: 720px; font-size: 32px; line-height: 1.4; color: var(--mute); }
+      #fee-label { left: 142px; top: 520px; font-size: 20px; color: var(--mute); }
+      #fee { left: 132px; top: 548px; font-size: 180px; font-weight: 700; color: var(--burg); line-height: 1; letter-spacing: -0.02em; }
+      #fee-waiver { left: 142px; top: 748px; font-size: 38px; color: var(--rust); white-space: nowrap; }
+      #fee-chip { left: 142px; top: 830px; }
+      .card {
+        position: absolute; left: 1150px; top: 330px; width: 380px; height: 500px; background: var(--paper); border: 1px solid var(--line); border-radius: 6px;
+        box-shadow: 0 28px 60px rgba(70, 40, 30, 0.16), 0 2px 6px rgba(70, 40, 30, 0.08); padding: 30px 30px; transform-origin: 50% 90%;
+      }
+      .card .num { display: inline-block; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 20px; letter-spacing: 0.08em; background: var(--burg); color: var(--parch-2); padding: 6px 12px; border-radius: 3px; }
+      .card .ttl { font-family: "Book Serif", Palatino, Georgia, serif; font-size: 34px; font-weight: 700; color: var(--ink); margin-top: 18px; white-space: nowrap; }
+      .card .rule { height: 2px; background: var(--ink); opacity: 0.8; margin-top: 16px; }
+      .card .f { display: flex; gap: 12px; align-items: center; margin-top: 18px; }
+      .card .lbl { height: 9px; border-radius: 2px; background: #cfc6b2; }
+      .card .box { height: 28px; flex: 1; border: 1.5px solid #cfc6b2; border-radius: 2px; }
+      .card .cb { width: 20px; height: 20px; border: 1.5px solid #b8ad96; border-radius: 2px; flex: none; position: relative; }
+      .card .cb.on::after { content: ""; position: absolute; left: 6px; top: 1px; width: 5px; height: 11px; border: solid var(--burg); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); }
+      .card .sig { position: absolute; left: 30px; right: 30px; bottom: 44px; border-top: 1.5px solid #8f8670; }
+      .card .sigl { position: absolute; left: 30px; bottom: 22px; width: 120px; height: 8px; border-radius: 2px; background: #d8d0bd; }
+
+      /* ---------- scene 5: EN <-> ES ---------- */
+      #s5-bg { position: absolute; inset: 0; background: radial-gradient(1400px 900px at 50% 40%, var(--night-2) 0%, var(--night) 75%); }
+      #toggle { left: 830px; top: 150px; width: 260px; height: 76px; border-radius: 38px; background: #2c1e24; border: 2px solid #4a343b; }
+      #knob { position: absolute; left: 6px; top: 6px; width: 120px; height: 60px; border-radius: 30px; background: var(--burg); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); }
+      .tg { position: absolute; top: 0; width: 130px; height: 72px; line-height: 72px; text-align: center; font-size: 26px; font-weight: 500; }
+      #tg-en { left: 0; color: var(--parch-2); }
+      #tg-es { left: 128px; color: #8f7c83; }
+      #tg-arrows { left: 1110px; top: 168px; font-size: 34px; color: #8f7c83; font-family: "IBM Plex Mono", monospace; }
+      .lang { left: 260px; top: 330px; width: 1400px; text-align: center; }
+      .lang .eb { font-size: 20px; color: #e0a387; }
+      .lang .h { font-family: "Book Serif", Palatino, Georgia, serif; font-size: 66px; font-weight: 700; line-height: 1.14; color: var(--night-text); margin-top: 20px; }
+      .lang .d { font-size: 32px; line-height: 1.45; color: #c9bcc0; margin: 30px auto 0; width: 1240px; }
+      .lang .m { margin-top: 40px; }
+      .lang .chip { background: var(--parch-2); color: var(--burg); }
+      .lang .chip i { background: var(--burg); }
+      .lang .chip i::after { border-color: var(--parch-2); }
+      #s5-foot { left: 0; width: 1920px; top: 930px; text-align: center; font-size: 19px; color: #9c8a90; }
+
+      /* ---------- scene 6: the site ---------- */
+      #s6-bg { position: absolute; inset: 0; background: var(--burg); }
+      #browser { position: absolute; left: 260px; top: 100px; width: 1400px; height: 880px; background: var(--parch); border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.45); }
+      #browser-bar { height: 64px; background: #ece5d6; display: flex; align-items: center; padding: 0 24px; gap: 10px; }
+      #browser-bar .dot { width: 16px; height: 16px; border-radius: 50%; background: #cbc1ad; }
+      #url { margin-left: 30px; flex: 1; height: 40px; border-radius: 20px; background: #ffffff; display: flex; align-items: center; padding: 0 22px; font-size: 22px; color: var(--ink); font-weight: 500; }
+      #viewport { position: absolute; left: 0; top: 64px; width: 1400px; height: 816px; overflow: hidden; }
+      #site-img { position: absolute; left: 0; top: 0; width: 1400px; height: auto; display: block; }
+
+      /* ---------- scene 7: band + end card ---------- */
+      #band { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: var(--burg); }
+      #band-text { left: 0; top: 450px; width: 1920px; height: 180px; display: flex; align-items: center; justify-content: center; gap: 34px; }
+      #band-text .serif { font-size: 58px; font-weight: 700; color: var(--parch-2); white-space: nowrap; }
+      #band-text .mono { font-size: 18px; color: var(--burg); background: var(--parch-2); padding: 10px 16px; border-radius: 3px; white-space: nowrap; }
+      #end-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #end-icon { width: 120px; height: 120px; }
+      #end-name { font-size: 120px; font-weight: 700; color: var(--parch-2); margin-top: 30px; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; }
+      #end-tag { font-size: 46px; font-style: italic; color: #ecdadd; margin-top: 26px; white-space: nowrap; }
+      #end-mono { font-size: 19px; color: #d8b9c0; margin-top: 44px; white-space: nowrap; }
+      #webhaus { left: 0; width: 1920px; top: 975px; text-align: center; font-size: 18px; color: #c79fa8; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <!-- classical courthouse columns (the site's own logo glyph) -->
+        <symbol id="landmark" viewBox="0 0 24 24">
+          <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 18v-7" /><path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />
+            <path d="M14 18v-7" /><path d="M18 18v-7" /><path d="M3 22h18" /><path d="M6 18v-7" />
+          </g>
+        </symbol>
+        <linearGradient id="pin-grad" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stop-color="#7d3343" /><stop offset="0.55" stop-color="#5f2230" /><stop offset="1" stop-color="#3f141e" />
+        </linearGradient>
+        <symbol id="pin" viewBox="0 0 48 64">
+          <path d="M24 2C11.8 2 3 11 3 23c0 15.5 18.2 36.6 20 38.6a1.4 1.4 0 0 0 2 0C26.8 59.6 45 38.5 45 23 45 11 36.2 2 24 2z" fill="url(#pin-grad)" stroke="#3a121b" stroke-width="1" />
+          <path d="M12 12c3-4 7-6 12-6" stroke="#ffffff" stroke-opacity="0.28" stroke-width="2.5" fill="none" stroke-linecap="round" />
+          <circle cx="24" cy="23" r="13" fill="#fbf8f1" />
+          <g transform="translate(15.6 14.6) scale(0.7)" color="#5f2230"><use href="#landmark" width="24" height="24" /></g>
+        </symbol>
+        <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+          <line x1="0" y1="0" x2="0" y2="14" stroke="#e4dac6" stroke-width="1.4" />
+        </pattern>
+        <filter id="soft" x="-5%" y="-10%" width="110%" height="130%">
+          <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#5f2230" flood-opacity="0.12" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/chime.mp3" data-start="3.3" data-duration="2" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/whoosh-short.mp3" data-start="5.55" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/pop.mp3" data-start="7.6" data-duration="0.72" data-volume="0.18" data-track-index="10"></audio>
+      <audio id="sfx-4" src="assets/sfx/pop.mp3" data-start="7.78" data-duration="0.72" data-volume="0.18" data-track-index="11"></audio>
+      <audio id="sfx-5" src="assets/sfx/pop.mp3" data-start="7.96" data-duration="0.72" data-volume="0.18" data-track-index="12"></audio>
+      <audio id="sfx-6" src="assets/sfx/whoosh-short.mp3" data-start="10.15" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/click-soft.mp3" data-start="11.85" data-duration="0.37" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-8" src="assets/sfx/click-soft.mp3" data-start="12.3" data-duration="0.37" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-9" src="assets/sfx/click-soft.mp3" data-start="12.75" data-duration="0.37" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-10" src="assets/sfx/click-soft.mp3" data-start="13.2" data-duration="0.37" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/whoosh-short.mp3" data-start="14.78" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-12" src="assets/sfx/click-soft.mp3" data-start="15.75" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-13" src="assets/sfx/click-soft.mp3" data-start="16.2" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-14" src="assets/sfx/click-soft.mp3" data-start="16.65" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-15" src="assets/sfx/pop.mp3" data-start="18" data-duration="0.72" data-volume="0.22" data-track-index="10"></audio>
+      <audio id="sfx-16" src="assets/sfx/whoosh.mp3" data-start="19.55" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-17" src="assets/sfx/click.mp3" data-start="21" data-duration="0.37" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-18" src="assets/sfx/whoosh.mp3" data-start="23.35" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-19" src="assets/sfx/whoosh-short.mp3" data-start="23.95" data-duration="0.57" data-volume="0.2" data-track-index="10"></audio>
+      <audio id="sfx-20" src="assets/sfx/whoosh.mp3" data-start="26.4" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-21" src="assets/sfx/chime.mp3" data-start="28.15" data-duration="1.85" data-volume="0.45" data-track-index="10"></audio>
+      <!-- /Sound effects -->
+
+      <!-- Scene 1: legal jargon fades down to plain words -->
+      <section id="s1" class="clip" data-start="0" data-duration="5.6" data-track-index="1">
+        <div id="jargon" class="abs" data-layout-allow-overlap></div>
+        <div id="s1-eyebrow" class="abs mono">familylawriverside.com</div>
+        <div id="plain" class="abs serif"><span class="ln">Family court in Riverside County,</span><span class="ln">explained in plain words.</span></div>
+        <div id="s1-sub" class="abs">Which courthouse takes your case, which forms to file, what it costs, and where the free help is.</div>
+      </section>
+
+      <!-- Scene 2: Riverside photo + masthead -->
+      <section id="s2" class="clip" data-start="5.6" data-duration="4.6" data-track-index="2">
+        <div id="s2-wrap">
+          <div id="photo-box"><img id="photo" data-layout-allow-overflow src="assets/hero.jpg" alt="Riverside with snow on the mountains" /><div id="photo-shade"></div></div>
+          <div id="masthead">
+            <svg id="mast-icon" viewBox="0 0 24 24" color="#fbf8f1"><use href="#landmark" /></svg>
+            <div id="mast-name" class="serif">Family Law Riverside</div>
+            <div id="mast-sub">The Riverside County family court, explained</div>
+            <div id="mast-lang" class="mono"><b>EN</b> | ES</div>
+          </div>
+          <div id="s2-lines" class="abs serif">
+            <span class="ln">Which courthouse takes your case.</span>
+            <span class="ln">Which forms to file. What it costs.</span>
+            <span class="ln">Where the free help is.</span>
+          </div>
+          <div id="s2-chips" class="abs">
+            <div class="chip light"><i></i>Cited to the court</div>
+            <div class="chip light"><i></i>Dated</div>
+            <div class="chip light"><i></i>English · Español</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 3: four courthouses -->
+      <section id="s3" class="clip" data-start="10.2" data-duration="4.6" data-track-index="1">
+        <div id="s3-bg"></div>
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="s3-eyebrow" class="abs mono eyebrow">The Court</div>
+          <div id="s3-title" class="abs serif">Four family-law courthouses.</div>
+          <div id="s3-sub" class="abs">Your case goes to one of them, by zip code.</div>
+          <div id="s3-chip" class="abs chip"><i></i>Cited · checked Oct 2026</div>
+          <svg id="map" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+            <g id="county" filter="url(#soft)">
+              <path id="county-fill" d="M252 432 L1660 420 C1688 468 1670 520 1698 570 C1722 618 1690 680 1710 738 C1728 790 1700 830 1714 862 L476 862 L384 802 L302 762 L244 690 L210 602 L232 520 Z" fill="#f1e9d9" />
+              <path d="M252 432 L1660 420 C1688 468 1670 520 1698 570 C1722 618 1690 680 1710 738 C1728 790 1700 830 1714 862 L476 862 L384 802 L302 762 L244 690 L210 602 L232 520 Z" fill="url(#hatch)" opacity="0.7" />
+            </g>
+            <path id="county-line" d="M252 432 L1660 420 C1688 468 1670 520 1698 570 C1722 618 1690 680 1710 738 C1728 790 1700 830 1714 862 L476 862 L384 802 L302 762 L244 690 L210 602 L232 520 Z" fill="none" stroke="#b9ab8e" stroke-width="2.5" stroke-linejoin="round" />
+            <path id="river" d="M1660 420 C1688 468 1670 520 1698 570 C1722 618 1690 680 1710 738 C1728 790 1700 830 1714 862" fill="none" stroke="#7d93ad" stroke-width="4" stroke-linecap="round" opacity="0.55" />
+          </svg>
+          <div id="county-label" class="abs mono">Riverside County</div>
+          <div id="az-label" class="abs mono">AZ</div>
+
+          <div class="pin-shadow" id="sh1" style="left: 305px; top: 502px"></div>
+          <div class="pin-shadow" id="sh2" style="left: 422px; top: 685px"></div>
+          <div class="pin-shadow" id="sh3" style="left: 858px; top: 658px"></div>
+          <div class="pin-shadow" id="sh4" style="left: 1618px; top: 732px"></div>
+          <svg class="pin" id="p1" style="left: 296px; top: 425px" viewBox="0 0 48 64"><use href="#pin" /></svg>
+          <svg class="pin" id="p2" style="left: 413px; top: 608px" viewBox="0 0 48 64"><use href="#pin" /></svg>
+          <svg class="pin" id="p3" style="left: 849px; top: 581px" viewBox="0 0 48 64"><use href="#pin" /></svg>
+          <svg class="pin" id="p4" style="left: 1609px; top: 655px" viewBox="0 0 48 64"><use href="#pin" /></svg>
+          <div class="pin-label" id="l1" style="left: 370px; top: 444px"><div class="nm">Riverside</div></div>
+          <div class="pin-label" id="l2" style="left: 488px; top: 626px"><div class="nm">Menifee</div></div>
+          <div class="pin-label" id="l3" style="left: 924px; top: 588px"><div class="nm">Indio</div><div class="sm">Larson Justice Center</div></div>
+          <div class="pin-label right" id="l4" style="left: 1330px; width: 262px; top: 672px"><div class="nm">Blythe</div></div>
+        </div>
+      </section>
+
+      <!-- Scene 4: forms + fee -->
+      <section id="s4" class="clip" data-start="14.8" data-duration="4.8" data-track-index="2">
+        <div id="s4-bg"></div>
+        <div id="s4-inner" class="abs" style="inset: 0">
+          <div id="s4-eyebrow" class="abs mono eyebrow">Filing and Fees</div>
+          <div id="s4-title" class="abs serif">The forms, in order.</div>
+          <div id="s4-sub" class="abs">The petition, the summons and the UCCJEA declaration.</div>
+
+          <div class="card" id="c1">
+            <div class="num">FL-100</div><div class="ttl">Petition</div><div class="rule"></div>
+            <div class="f"><div class="lbl" style="width: 90px"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 60px"></div><div class="box"></div></div>
+            <div class="f"><div class="cb on"></div><div class="lbl" style="width: 150px"></div></div>
+            <div class="f"><div class="cb"></div><div class="lbl" style="width: 200px"></div></div>
+            <div class="f"><div class="cb on"></div><div class="lbl" style="width: 120px"></div></div>
+            <div class="sig"></div><div class="sigl"></div>
+          </div>
+          <div class="card" id="c2">
+            <div class="num">FL-110</div><div class="ttl">Summons</div><div class="rule"></div>
+            <div class="f"><div class="lbl" style="width: 70px"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 110px"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 260px"></div></div>
+            <div class="f"><div class="lbl" style="width: 300px"></div></div>
+            <div class="f"><div class="lbl" style="width: 220px"></div></div>
+            <div class="sig"></div><div class="sigl"></div>
+          </div>
+          <div class="card" id="c3">
+            <div class="num">FL-105</div><div class="ttl">UCCJEA Declaration</div><div class="rule"></div>
+            <div class="f"><div class="lbl" style="width: 80px"></div><div class="box"></div></div>
+            <div class="f"><div class="cb on"></div><div class="lbl" style="width: 180px"></div></div>
+            <div class="f"><div class="cb"></div><div class="lbl" style="width: 140px"></div></div>
+            <div class="f"><div class="lbl" style="width: 64px"></div><div class="box"></div><div class="box"></div></div>
+            <div class="f"><div class="lbl" style="width: 64px"></div><div class="box"></div><div class="box"></div></div>
+            <div class="sig"></div><div class="sigl"></div>
+          </div>
+
+          <div id="fee-label" class="abs mono">Petition or response fee</div>
+          <div id="fee" class="abs serif">$450</div>
+          <div id="fee-waiver" class="abs">(fee waiver available)</div>
+          <div id="fee-chip" class="abs chip"><i></i>Effective Jan 1, 2026</div>
+        </div>
+      </section>
+
+      <!-- Scene 5: EN <-> ES -->
+      <section id="s5" class="clip" data-start="19.6" data-duration="3.8" data-track-index="1">
+        <div id="s5-bg"></div>
+        <div id="s5-inner" class="abs" style="inset: 0">
+          <div id="toggle" class="abs">
+            <div id="knob"></div>
+            <div id="tg-en" class="tg mono">EN</div>
+            <div id="tg-es" class="tg mono">ES</div>
+          </div>
+          <div id="lang-en" class="abs lang">
+            <div class="eb mono">The Court</div>
+            <div class="h">Which Riverside County Courthouse Takes Your Family Law Case</div>
+            <div class="d">Family law cases in Riverside County are filed at one of four courthouses by zip code: Riverside, Menifee, Indio or Blythe.</div>
+            <div class="m"><div class="chip"><i></i>Checked October 2026 · Not legal advice</div></div>
+          </div>
+          <div id="lang-es" class="abs lang" lang="es">
+            <div class="eb mono">En español</div>
+            <div class="h">Qué corte del condado de Riverside recibe su caso de derecho familiar</div>
+            <div class="d">El derecho familiar en Riverside se presenta en una de cuatro cortes según el código postal: Riverside, Menifee, Indio o Blythe.</div>
+            <div class="m"><div class="chip"><i></i>Revisado octubre de 2026 · No es asesoría legal</div></div>
+          </div>
+          <div id="s5-foot" class="abs mono">Every guide in English and Spanish</div>
+        </div>
+      </section>
+
+      <!-- Scene 6: the site -->
+      <section id="s6" class="clip" data-start="23.4" data-duration="3" data-track-index="2">
+        <div id="s6-bg"></div>
+        <div id="browser">
+          <div id="browser-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div id="url">familylawriverside.com</div></div>
+          <div id="viewport"><img id="site-img" data-layout-allow-overflow src="assets/site-full.png" alt="familylawriverside.com homepage" /></div>
+        </div>
+      </section>
+
+      <!-- Scene 7: burgundy band + end card -->
+      <section id="s7" class="clip" data-start="26.4" data-duration="3.6" data-track-index="1">
+        <div id="band"></div>
+        <div id="band-text" class="abs"><span class="mono">Not a law firm</span><span class="serif">Legal information, not legal advice.</span></div>
+        <div id="end-wrap">
+          <svg id="end-icon" viewBox="0 0 24 24" color="#fbf8f1"><use href="#landmark" /></svg>
+          <div id="end-name" class="serif">familylawriverside.com</div>
+          <div id="end-tag" class="serif">The Riverside County family court, explained</div>
+          <div id="end-mono" class="mono">Cited to the court · dated · English and Spanish</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      // ---------- build the jargon paragraph (deterministic) ----------
+      // [bracketed] words are the ones that survive.
+      const JARGON =
+        "WHEREAS the petitioner, appearing in propria persona, hereby avers that the within action for dissolution is properly venued, and that the respondent, having been duly served pursuant to the provisions governing service of process, shall be deemed to have notice thereof; NOTWITHSTANDING any prior stipulation, the [Family] [court] shall retain jurisdiction over all matters pendente lite, including but not limited to temporary orders, ex parte applications and requests for order as set forth [in] the moving papers, together with the declaration required under the Uniform Child Custody Jurisdiction and Enforcement Act; venue within [Riverside] [County,] having been determined by residence, the parties are hereinafter advised that the matters [explained] herein remain subject to further order, and that nothing contained [in] the foregoing shall be construed as a waiver of any right, remedy, privilege or defense; all terms, whether [plain] or technical, shall bear the meanings ascribed thereto, mutatis mutandis, and the court may, upon noticed motion and good cause shown, enter such further and other orders as are just, as more fully set forth in so many [words.]";
+      const jargon = document.getElementById("jargon");
+      JARGON.split(" ").forEach((tok, i) => {
+        const keep = tok.startsWith("[");
+        const s = document.createElement("span");
+        s.className = keep ? "w keep" : "w drop";
+        s.textContent = keep ? tok.slice(1, -1) : tok;
+        jargon.appendChild(s);
+        jargon.appendChild(document.createTextNode(" "));
+      });
+      // seeded PRNG (mulberry32) for the fade-out order
+      function mulberry32(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+      const rnd = mulberry32(80808);
+      const drops = Array.from(document.querySelectorAll("#jargon .drop"));
+      const order = drops.map((el) => ({ el, k: rnd() })).sort((a, b) => a.k - b.k);
+
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- Scene 1: jargon -> plain words ----------
+      tl.fromTo("#jargon", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 0);
+      tl.fromTo("#jargon", { scale: 1.035 }, { scale: 1, duration: 3.4, ease: "none" }, 0);
+      order.forEach((o, i) => {
+        tl.fromTo(o.el, { opacity: 1 }, { opacity: 0, duration: 0.4, ease: "power1.in" }, 0.85 + (i / order.length) * 1.9);
+      });
+      tl.fromTo("#jargon .keep", { color: "#6b6760" }, { color: "#1c2541", duration: 0.5, ease: "power1.inOut" }, 2.15);
+      tl.to("#jargon .keep", { opacity: 0, y: -8, duration: 0.4, ease: "power2.in", stagger: 0.02 }, 2.85);
+      tl.fromTo("#plain .ln", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.16 }, 3.35);
+      tl.fromTo("#s1-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 3.9);
+      tl.fromTo("#s1-sub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 4.15);
+      tl.to(["#plain", "#s1-eyebrow", "#s1-sub"], { opacity: 0, duration: 0.3 }, 5.3);
+
+      // ---------- Scene 2: photo + masthead ----------
+      tl.fromTo("#s2-wrap", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 5.6);
+      tl.fromTo("#photo", { scale: 1.08 }, { scale: 1, duration: 4.6, ease: "none" }, 5.6);
+      tl.fromTo("#masthead", { y: -120 }, { y: 0, duration: 0.6, ease: "power3.out" }, 5.75);
+      tl.fromTo("#s2-lines .ln", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.32 }, 6.2);
+      tl.fromTo("#s2-chips .chip", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", stagger: 0.18 }, 7.6);
+      tl.to("#s2-wrap", { opacity: 0, duration: 0.35 }, 9.85);
+
+      // ---------- Scene 3: four courthouses ----------
+      tl.fromTo("#s3-bg", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.5, ease: "power3.inOut" }, 10.2);
+      tl.fromTo("#s3-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 10.55);
+      tl.fromTo("#s3-title", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 10.6);
+      tl.fromTo("#s3-sub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 10.9);
+      tl.fromTo("#s3-chip", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 11.2);
+      const countyLine = document.getElementById("county-line");
+      const len = Math.ceil(countyLine.getTotalLength());
+      tl.fromTo(countyLine, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut" }, 10.6);
+      tl.fromTo("#county", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power1.out" }, 11.0);
+      tl.fromTo("#river", { opacity: 0 }, { opacity: 0.55, duration: 0.6 }, 11.4);
+      tl.fromTo(["#county-label", "#az-label"], { opacity: 0 }, { opacity: 1, duration: 0.6 }, 11.5);
+      [11.55, 12.0, 12.45, 12.9].forEach((t, i) => {
+        const n = i + 1;
+        tl.fromTo("#p" + n, { opacity: 0, y: -110 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.4)" }, t);
+        tl.fromTo("#sh" + n, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }, t + 0.1);
+        tl.fromTo("#l" + n, { opacity: 0, x: n === 4 ? 14 : -14 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, t + 0.3);
+      });
+      tl.to("#s3-inner", { opacity: 0, duration: 0.35 }, 14.45);
+
+      // ---------- Scene 4: forms + fee ----------
+      tl.fromTo("#s4-bg", { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.5, ease: "power3.inOut" }, 14.8);
+      tl.fromTo("#s4-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 15.1);
+      tl.fromTo("#s4-title", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 15.15);
+      tl.fromTo("#s4-sub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 15.45);
+      [
+        ["#c1", -250, 24, -9],
+        ["#c2", 0, -6, 0],
+        ["#c3", 250, 24, 9],
+      ].forEach(([id, x, y, r], i) => {
+        tl.fromTo(id, { opacity: 0, x: 520, y: 160, rotation: 18 }, { opacity: 1, x, y, rotation: r, duration: 0.75, ease: "power3.out" }, 15.4 + i * 0.45);
+      });
+      tl.fromTo("#fee-label", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 16.75);
+      tl.fromTo("#fee", { opacity: 0, y: 24, scale: 0.94, transformOrigin: "0% 60%" }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 16.85);
+      tl.fromTo("#fee-waiver", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 17.55);
+      tl.fromTo("#fee-chip", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 18.0);
+      tl.to("#s4-inner", { opacity: 0, duration: 0.35 }, 19.25);
+
+      // ---------- Scene 5: EN <-> ES ----------
+      tl.fromTo("#s5-bg", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.inOut" }, 19.6);
+      tl.fromTo("#toggle", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 19.9);
+      tl.fromTo("#lang-en > *", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.1 }, 20.0);
+      tl.fromTo("#knob", { x: 0 }, { x: 126, duration: 0.4, ease: "power2.inOut" }, 21.0);
+      tl.fromTo("#tg-en", { color: "#fbf8f1" }, { color: "#8f7c83", duration: 0.3 }, 21.05);
+      tl.fromTo("#tg-es", { color: "#8f7c83" }, { color: "#fbf8f1", duration: 0.3 }, 21.05);
+      tl.to("#lang-en > *", { opacity: 0, y: -18, duration: 0.3, ease: "power2.in", stagger: 0.04 }, 21.05);
+      tl.fromTo("#lang-es > *", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.08 }, 21.35);
+      tl.fromTo("#s5-foot", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 21.8);
+      tl.to("#s5-inner", { opacity: 0, duration: 0.35 }, 23.05);
+
+      // ---------- Scene 6: site scroll ----------
+      tl.fromTo("#s6-bg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 23.4);
+      tl.fromTo("#browser", { opacity: 0, y: 80, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 23.4);
+      tl.fromTo("#site-img", { y: 0 }, { y: -973, duration: 2.1, ease: "power2.inOut" }, 23.9);
+      tl.to("#browser", { opacity: 0, scale: 0.96, duration: 0.3 }, 26.1);
+
+      // ---------- Scene 7: band -> end card ----------
+      tl.fromTo("#band", { scaleX: 0, scaleY: 180 / 1080, transformOrigin: "0% 50%" }, { scaleX: 1, scaleY: 180 / 1080, duration: 0.6, ease: "power3.inOut" }, 26.45);
+      tl.fromTo("#band-text > *", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.12 }, 26.85);
+      tl.to("#band-text", { opacity: 0, duration: 0.3 }, 27.75);
+      tl.fromTo("#band", { scaleY: 180 / 1080 }, { scaleY: 1, duration: 0.7, ease: "power3.inOut", immediateRender: false }, 27.8);
+      tl.fromTo("#end-icon", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 28.1);
+      tl.fromTo("#end-name", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 28.2);
+      tl.fromTo("#end-tag", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 28.5);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.8);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 29.1);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

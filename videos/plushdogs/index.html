@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>plush-dogs.com — Real or Plush?</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Nunito";
+        src: url("assets/fonts/nunito.woff2") format("woff2");
+        font-weight: 400 900;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/plex-mono-500.woff2") format("woff2");
+        font-weight: 500;
+      }
+      :root {
+        --violet: #581b87;
+        --violet2: #9333ea;
+        --violet3: #c084fc;
+        --lilac: #ede4fb;
+        --lilac2: #f3e8ff;
+        --peach: #ffd9c7;
+        --mint: #d6f5e9;
+        --sun: #ffe9a8;
+        --ink: #1f1a2e;
+        --ink2: #5b5470;
+        --line: #e6ddf5;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #ffffff; }
+      #root {
+        position: relative; width: 100%; height: 100%; overflow: hidden;
+        font-family: "Nunito", system-ui, sans-serif; color: var(--ink);
+      }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .bg { position: absolute; inset: 0; background: #ffffff; }
+      .abs { position: absolute; }
+      .fill { position: absolute; inset: 0; }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
+      .grad { background: linear-gradient(90deg, #9333ea 0%, #c084fc 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 0.06em; }
+      .paw { position: absolute; fill: var(--violet3); }
+
+      /* ---------- scene 1: the game ---------- */
+      #s1 { z-index: 1; }
+      #s1-bg { background: radial-gradient(1200px 900px at 72% 30%, #ffffff 0%, var(--lilac2) 55%, var(--lilac) 100%); }
+      .card {
+        position: absolute; left: 140px; top: 160px; width: 860px; height: 760px; border-radius: 40px; overflow: hidden;
+        background: #fff; border: 14px solid #fff; box-shadow: 0 30px 80px rgba(88, 27, 135, 0.22);
+      }
+      .card .ph { position: absolute; inset: 0; border-radius: 28px; overflow: hidden; }
+      .card img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+      .stamp {
+        position: absolute; left: 50px; top: 400px; width: 380px; height: 190px; border: 12px solid var(--violet2); border-radius: 34px;
+        display: flex; align-items: center; justify-content: center; font-size: 140px; font-weight: 900; color: var(--violet2);
+        letter-spacing: -0.02em; background: rgba(255, 255, 255, 0.82); line-height: 1;
+      }
+      .tag {
+        position: absolute; left: 26px; bottom: 26px; display: flex; align-items: center; gap: 16px; padding: 14px 24px 14px 22px;
+        background: #fff; border-radius: 999px; box-shadow: 0 10px 30px rgba(88, 27, 135, 0.18); white-space: nowrap;
+      }
+      .tag b { font-size: 30px; font-weight: 900; color: var(--violet); }
+      .tag span { font-size: 18px; color: var(--ink2); }
+      #round { left: 1080px; top: 180px; height: 52px; width: 300px; }
+      #round .r { position: absolute; left: 0; top: 0; padding: 12px 22px; border-radius: 999px; background: var(--violet); color: #fff; font-size: 20px; white-space: nowrap; }
+      #q { left: 1080px; top: 270px; width: 740px; font-size: 128px; font-weight: 900; line-height: 1.02; letter-spacing: -0.02em; color: var(--violet); }
+      #q span { display: block; }
+      #btns { left: 1080px; top: 620px; width: 720px; height: 130px; }
+      .btn {
+        position: absolute; top: 0; width: 330px; height: 124px; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 18px;
+        font-size: 52px; font-weight: 900; box-shadow: 0 14px 30px rgba(88, 27, 135, 0.15);
+      }
+      .btn svg { width: 54px; height: 54px; }
+      #b-real { left: 0; background: var(--mint); color: #145c43; }
+      #b-real svg { fill: inherit; }
+      #b-real { fill: #145c43; }
+      #b-plush { left: 360px; background: var(--peach); color: #8a3a1c; }
+      #b-plush svg { fill: #8a3a1c; }
+      #b-real .on { position: absolute; inset: 0; border-radius: 999px; background: var(--violet2); opacity: 0; }
+      .btn svg, .btn em { position: relative; }
+      .btn em { font-style: normal; }
+      #out1 { left: 0; width: 1920px; top: 650px; text-align: center; font-size: 120px; font-weight: 900; letter-spacing: -0.02em; color: var(--violet); }
+      #out2 { left: 0; width: 1920px; top: 810px; text-align: center; font-size: 62px; font-weight: 900; color: var(--ink); letter-spacing: -0.01em; }
+
+      /* ---------- scene 2: headline + Biscuit ---------- */
+      #s2 { z-index: 2; }
+      #s2-bg { background: #ffffff; }
+      #pills { left: 140px; top: 210px; display: flex; gap: 14px; }
+      .pill { display: flex; align-items: center; gap: 12px; padding: 12px 24px; border: 2px solid var(--line); border-radius: 999px; background: #fff; font-size: 28px; font-weight: 800; color: var(--ink); white-space: nowrap; }
+      .pill i { display: block; width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--violet3); }
+      #h1 { left: 140px; top: 300px; width: 1180px; font-size: 128px; font-weight: 900; line-height: 1.04; letter-spacing: -0.02em; color: var(--violet); }
+      #h1 .line { display: block; }
+      #s2-sub { left: 140px; top: 620px; width: 960px; font-size: 34px; line-height: 1.45; color: var(--ink2); }
+      #s2-chip { left: 140px; top: 840px; padding: 14px 22px; border-radius: 999px; background: var(--violet); color: #fff; font-size: 19px; white-space: nowrap; }
+      #panel { left: 1300px; top: 170px; width: 500px; height: 740px; border-radius: 44px; background: linear-gradient(180deg, #efe1fd 0%, #f7efff 60%, #ffffff 100%); overflow: hidden; }
+      #biscuit-wrap { left: 1330px; top: 380px; width: 440px; height: 440px; }
+      #biscuit-wrap svg { width: 440px; height: 440px; }
+
+      /* ---------- scene 3: your own dog ---------- */
+      #s3 { z-index: 3; }
+      #s3-bg { background: radial-gradient(1300px 900px at 75% 50%, #fff7f2 0%, #ffeee5 55%, #ffe3d5 100%); }
+      #s3-eyebrow { left: 140px; top: 270px; font-size: 22px; color: #a2492a; }
+      #s3-title { left: 140px; top: 320px; width: 900px; font-size: 112px; font-weight: 900; line-height: 1.02; letter-spacing: -0.02em; color: var(--violet); }
+      #s3-title .line { display: block; }
+      #s3-sub { left: 140px; top: 590px; width: 780px; font-size: 34px; line-height: 1.45; color: var(--ink2); }
+      #s3-cta { left: 140px; top: 800px; padding: 22px 38px; border-radius: 999px; background: var(--violet2); color: #fff; font-size: 32px; font-weight: 900; box-shadow: 0 14px 30px rgba(147, 51, 234, 0.3); }
+      .pola { position: absolute; width: 360px; height: 430px; background: #fff; border-radius: 14px; padding: 18px 18px 0; box-shadow: 0 24px 50px rgba(120, 60, 30, 0.22); }
+      .pola .im { width: 324px; height: 324px; border-radius: 6px; overflow: hidden; position: relative; }
+      .pola img { position: absolute; left: 0; top: 0; width: 324px; height: 324px; display: block; }
+      #seam { left: 1010px; top: 150px; width: 820px; height: 780px; }
+
+      /* ---------- scene 4: rainbow bridge ---------- */
+      #s4 { z-index: 4; }
+      #s4-bg { background: radial-gradient(1400px 1000px at 50% 30%, #fbf7ff 0%, var(--lilac2) 50%, var(--lilac) 100%); }
+      #arc { left: 560px; top: 110px; width: 800px; height: 400px; }
+      #s4-eyebrow { left: 0; width: 1920px; text-align: center; top: 560px; font-size: 22px; color: #6b4a9a; }
+      #s4-title { left: 0; width: 1920px; text-align: center; top: 610px; font-size: 92px; font-weight: 900; letter-spacing: -0.02em; color: var(--violet); }
+      #s4-sub { left: 210px; width: 1500px; text-align: center; top: 740px; font-size: 36px; line-height: 1.45; color: var(--ink2); }
+      #s4-cta { left: 0; width: 1920px; top: 880px; display: flex; justify-content: center; }
+      #s4-cta div { padding: 20px 38px; border-radius: 999px; background: #dfd2f5; color: var(--violet); font-size: 30px; font-weight: 900; }
+
+      /* ---------- scene 5: breed search ---------- */
+      #s5 { z-index: 5; }
+      #s5-bg { background: linear-gradient(180deg, #ffffff 0%, #faf6ff 100%); }
+      #s5-eyebrow { left: 360px; top: 110px; font-size: 22px; color: var(--violet2); }
+      #search { left: 360px; top: 160px; width: 1200px; height: 128px; border-radius: 999px; background: #fff; border: 3px solid #e2d3f8; box-shadow: 0 18px 40px rgba(88, 27, 135, 0.14); }
+      #ph { left: 54px; top: 0; height: 122px; display: flex; align-items: center; font-size: 40px; color: #8f88a3; white-space: nowrap; }
+      #typed { left: 54px; top: 0; height: 122px; display: flex; align-items: center; font-size: 48px; font-weight: 800; color: var(--ink); white-space: nowrap; }
+      #caret { display: inline-block; width: 4px; height: 52px; background: var(--violet2); margin-left: 4px; }
+      #find { right: 12px; top: 12px; width: 200px; height: 98px; border-radius: 999px; background: var(--violet2); color: #fff; font-size: 42px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+      #result { left: 360px; top: 360px; width: 1200px; height: 560px; border-radius: 40px; background: #fff; border: 2px solid var(--line); box-shadow: 0 30px 70px rgba(88, 27, 135, 0.16); overflow: hidden; }
+      #result .im { position: absolute; left: 0; top: 0; width: 620px; height: 560px; overflow: hidden; }
+      #result .im img { position: absolute; left: -110px; top: 0; height: 560px; width: auto; display: block; }
+      #r-info { left: 680px; top: 70px; width: 480px; }
+      #r-name { font-size: 96px; font-weight: 900; color: var(--violet); line-height: 1; letter-spacing: -0.02em; }
+      #r-makers { font-size: 38px; font-weight: 800; color: var(--ink2); margin-top: 22px; }
+      #r-from { font-size: 34px; font-weight: 800; color: var(--ink2); margin-top: 50px; }
+      #r-price { font-size: 150px; font-weight: 900; line-height: 1; letter-spacing: -0.03em; margin-top: 4px; }
+      #r-chip { left: 680px; top: 470px; padding: 12px 20px; border-radius: 999px; background: var(--lilac); color: var(--violet); font-size: 18px; white-space: nowrap; }
+
+      /* ---------- scene 6: site ---------- */
+      #s6 { z-index: 6; }
+      #s6-bg { background: radial-gradient(1400px 900px at 50% 40%, #6b2aa0 0%, var(--violet) 70%); }
+      #browser { position: absolute; left: 260px; top: 100px; width: 1400px; height: 880px; background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 40px 120px rgba(20, 0, 40, 0.45); }
+      #browser-bar { height: 64px; background: #f3e8ff; display: flex; align-items: center; padding: 0 24px; gap: 10px; }
+      #browser-bar .dot { width: 16px; height: 16px; border-radius: 50%; background: #d8c6f0; }
+      #url { margin-left: 30px; flex: 1; height: 40px; border-radius: 20px; background: #ffffff; display: flex; align-items: center; padding: 0 22px; font-size: 22px; color: var(--ink); font-weight: 800; }
+      #viewport { position: absolute; left: 0; top: 64px; width: 1400px; height: 816px; overflow: hidden; }
+      #site-img { position: absolute; left: 0; top: 0; width: 1400px; height: auto; display: block; }
+
+      /* ---------- scene 7: end card ---------- */
+      #s7 { z-index: 7; }
+      #s7-bg { background: radial-gradient(1300px 900px at 50% 40%, #ffffff 0%, var(--lilac2) 70%, var(--lilac) 100%); }
+      #end-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 40px; }
+      #end-dog { width: 230px; height: 230px; }
+      #end-dog svg { width: 230px; height: 230px; }
+      #end-name { font-size: 150px; font-weight: 900; letter-spacing: -0.03em; margin-top: 10px; line-height: 1.05; color: var(--violet); }
+      #end-tag { font-size: 52px; font-weight: 900; color: var(--ink); margin-top: 14px; letter-spacing: -0.01em; }
+      #end-mono { font-size: 20px; color: var(--ink2); margin-top: 36px; }
+      #webhaus { left: 0; width: 1920px; top: 980px; text-align: center; font-size: 18px; color: #8a7fa3; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="paw" viewBox="0 0 100 100">
+          <ellipse cx="50" cy="68" rx="25" ry="21" />
+          <ellipse cx="20" cy="42" rx="10" ry="13" transform="rotate(-20 20 42)" />
+          <ellipse cx="39" cy="24" rx="10" ry="13" transform="rotate(-6 39 24)" />
+          <ellipse cx="61" cy="24" rx="10" ry="13" transform="rotate(6 61 24)" />
+          <ellipse cx="80" cy="42" rx="10" ry="13" transform="rotate(20 80 42)" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/whoosh-short.mp3" data-start="0.05" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/pop.mp3" data-start="0.8" data-duration="0.72" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/click-soft.mp3" data-start="1.2" data-duration="0.37" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-4" src="assets/sfx/impact-bass-1.mp3" data-start="1.65" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-5" src="assets/sfx/pop.mp3" data-start="2.3" data-duration="0.72" data-volume="0.22" data-track-index="11"></audio>
+      <audio id="sfx-6" src="assets/sfx/whoosh-short.mp3" data-start="2.95" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-7" src="assets/sfx/click-soft.mp3" data-start="3.45" data-duration="0.37" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-8" src="assets/sfx/impact-bass-1.mp3" data-start="3.9" data-duration="2.12" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-9" src="assets/sfx/pop.mp3" data-start="4.55" data-duration="0.72" data-volume="0.22" data-track-index="11"></audio>
+      <audio id="sfx-10" src="assets/sfx/whoosh-short.mp3" data-start="4.95" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-11" src="assets/sfx/click-soft.mp3" data-start="5.45" data-duration="0.37" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-12" src="assets/sfx/impact-bass-1.mp3" data-start="5.9" data-duration="2.12" data-volume="0.5" data-track-index="11"></audio>
+      <audio id="sfx-13" src="assets/sfx/pop.mp3" data-start="6.55" data-duration="0.72" data-volume="0.22" data-track-index="10"></audio>
+      <audio id="sfx-14" src="assets/sfx/whoosh.mp3" data-start="6.95" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-15" src="assets/sfx/pop.mp3" data-start="7.5" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-16" src="assets/sfx/whoosh.mp3" data-start="8.9" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-17" src="assets/sfx/pop.mp3" data-start="9.6" data-duration="0.72" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-18" src="assets/sfx/sparkle.mp3" data-start="9.75" data-duration="1.8" data-volume="0.2" data-track-index="11"></audio>
+      <audio id="sfx-19" src="assets/sfx/pop.mp3" data-start="10.5" data-duration="0.72" data-volume="0.22" data-track-index="10"></audio>
+      <audio id="sfx-20" src="assets/sfx/pop.mp3" data-start="10.7" data-duration="0.72" data-volume="0.22" data-track-index="12"></audio>
+      <audio id="sfx-21" src="assets/sfx/pop.mp3" data-start="10.9" data-duration="0.72" data-volume="0.22" data-track-index="13"></audio>
+      <audio id="sfx-22" src="assets/sfx/whoosh.mp3" data-start="13.95" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-23" src="assets/sfx/click-soft.mp3" data-start="14.6" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-24" src="assets/sfx/click-soft.mp3" data-start="14.85" data-duration="0.37" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-25" src="assets/sfx/click-soft.mp3" data-start="15.1" data-duration="0.37" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-26" src="assets/sfx/sparkle.mp3" data-start="18.3" data-duration="1.8" data-volume="0.16" data-track-index="10"></audio>
+      <audio id="sfx-27" src="assets/sfx/whoosh-short.mp3" data-start="21.3" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-28" src="assets/sfx/typing.mp3" data-start="21.98" data-duration="0.8" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-29" src="assets/sfx/click-soft.mp3" data-start="22.85" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-30" src="assets/sfx/whoosh-short.mp3" data-start="23" data-duration="0.57" data-volume="0.25" data-track-index="11"></audio>
+      <audio id="sfx-31" src="assets/sfx/ping.mp3" data-start="23.6" data-duration="1.32" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-32" src="assets/sfx/whoosh.mp3" data-start="24.65" data-duration="0.57" data-volume="0.4" data-track-index="11"></audio>
+      <audio id="sfx-33" src="assets/sfx/whoosh-short.mp3" data-start="25.25" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-34" src="assets/sfx/impact-bass-1.mp3" data-start="27.5" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-35" src="assets/sfx/chime.mp3" data-start="27.8" data-duration="2.2" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+
+      <!-- Scene 1: the game (three rounds, all honestly resolved: real dogs) -->
+      <section id="s1" class="clip" data-start="0" data-duration="9.4" data-track-index="1">
+        <div id="s1-bg" class="fill"></div>
+        <div id="s1-paws" class="fill">
+          <svg class="paw" style="left: 1700px; top: 60px; width: 90px; height: 90px; opacity: 0.35"><use href="#paw" /></svg>
+          <svg class="paw" style="left: 1820px; top: 860px; width: 70px; height: 70px; opacity: 0.3"><use href="#paw" /></svg>
+          <svg class="paw" style="left: 1040px; top: 930px; width: 60px; height: 60px; opacity: 0.25"><use href="#paw" /></svg>
+          <svg class="paw" style="left: 40px; top: 40px; width: 64px; height: 64px; opacity: 0.25"><use href="#paw" /></svg>
+          <svg class="paw" style="left: 1560px; top: 470px; width: 50px; height: 50px; opacity: 0.2"><use href="#paw" /></svg>
+        </div>
+        <div id="s1-ui" class="fill">
+          <div id="round" class="abs">
+            <div class="r mono" id="r1">Round 1 of 3</div>
+            <div class="r mono" id="r2">Round 2 of 3</div>
+            <div class="r mono" id="r3">Round 3 of 3</div>
+          </div>
+          <div id="q" class="abs" data-layout-allow-occlusion><span data-layout-allow-occlusion>Real…</span><span>or <span class="grad" style="display: inline" data-layout-allow-occlusion>plush?</span></span></div>
+          <div id="btns" class="abs">
+            <div class="btn" id="b-real"><div class="on"></div><svg viewBox="0 0 100 100"><use href="#paw" /></svg><em>Real</em></div>
+            <div class="btn" id="b-plush"><svg viewBox="0 0 100 100"><use href="#paw" /></svg><em>Plush</em></div>
+          </div>
+        </div>
+        <div class="card" id="c1">
+          <div class="ph"><img id="i1" src="assets/img/golden.jpg" alt="A real golden retriever" /></div>
+          <div class="stamp">Real.</div>
+          <div class="tag"><b>Golden Retriever</b><span class="mono">plush: 5 makers · from $21.99</span></div>
+        </div>
+        <div class="card" id="c2">
+          <div class="ph"><img id="i2" src="assets/img/labrador.jpg" alt="A real black labrador" /></div>
+          <div class="stamp">Real.</div>
+          <div class="tag"><b>Labrador</b><span class="mono">plush: 5 makers · from $20.05</span></div>
+        </div>
+        <div class="card" id="c3">
+          <div class="ph"><img id="i3" src="assets/img/dachshund.jpg" alt="A real dachshund" /></div>
+          <div class="stamp">Real.</div>
+          <div class="tag"><b>Dachshund</b><span class="mono">plush: 5 makers · from $9.99</span></div>
+        </div>
+        <div id="out1" class="abs">All three? Real.</div>
+        <div id="out2" class="abs">Now find the plush that looks <span class="grad">this real.</span></div>
+      </section>
+
+      <!-- Scene 2: headline + the site's mascot, Biscuit -->
+      <section id="s2" class="clip" data-start="8.9" data-duration="5.3" data-track-index="2">
+        <div id="s2-bg" class="fill"></div>
+        <div id="s2-in" class="fill">
+          <div id="panel" class="abs">
+            <svg class="paw" style="left: 380px; top: 40px; width: 70px; height: 70px; opacity: 0.35"><use href="#paw" /></svg>
+            <svg class="paw" style="left: 50px; top: 120px; width: 50px; height: 50px; opacity: 0.25"><use href="#paw" /></svg>
+            <svg class="paw" style="left: 400px; top: 560px; width: 56px; height: 56px; opacity: 0.3"><use href="#paw" /></svg>
+          </div>
+          <div id="pills" class="abs">
+            <div class="pill" id="p1"><i></i>23 breeds</div>
+            <div class="pill" id="p2"><i></i>8 makers</div>
+            <div class="pill" id="p3"><i></i>prices dated October 2026</div>
+          </div>
+          <div id="h1" class="abs"><span class="line">Stuffed dogs that</span><span class="line"><span class="grad">look real.</span></span></div>
+          <div id="s2-sub" class="abs">Which lifelike plush exists for your breed, who makes it and what it costs today.</div>
+          <div id="s2-chip" class="abs mono">Every price dated · every page lists its sources</div>
+          <div id="biscuit-wrap" class="abs">
+            <svg viewBox="0 0 200 200" aria-label="Biscuit, the Plush Dogs mascot">
+              <ellipse class="b-shadow" cx="100" cy="186" rx="44" ry="7" fill="#000" opacity=".08" />
+              <g class="b-dog">
+                <path class="b-tail" d="M138 150c14-6 24-20 20-36" fill="none" stroke="#E9B86A" stroke-width="14" stroke-linecap="round" />
+                <g class="b-body">
+                  <ellipse cx="100" cy="150" rx="48" ry="34" fill="#F3C97E" />
+                  <ellipse cx="100" cy="150" rx="48" ry="34" fill="none" stroke="#5B4A3A" stroke-width="1.2" stroke-dasharray="3 3" stroke-linecap="round" />
+                  <ellipse cx="100" cy="160" rx="26" ry="18" fill="#FBE4B8" />
+                </g>
+                <rect x="62" y="160" width="20" height="28" rx="10" fill="#F3C97E" />
+                <rect x="118" y="160" width="20" height="28" rx="10" fill="#F3C97E" />
+                <g class="b-head">
+                  <ellipse class="b-earL" cx="54" cy="96" rx="16" ry="34" fill="#D9A054" />
+                  <ellipse class="b-earR" cx="146" cy="96" rx="16" ry="34" fill="#D9A054" />
+                  <circle cx="100" cy="100" r="42" fill="#F3C97E" />
+                  <circle cx="100" cy="100" r="42" fill="none" stroke="#5B4A3A" stroke-width="1.2" stroke-dasharray="3 3" stroke-linecap="round" />
+                  <ellipse cx="100" cy="116" rx="20" ry="14" fill="#FBE4B8" />
+                  <g transform="translate(84 92)"><circle r="6" fill="#2A2440" /><circle cx="-2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="-2" cy="2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="2" r="1.2" fill="#FBFAFF" /></g>
+                  <g transform="translate(116 92)"><circle r="6" fill="#2A2440" /><circle cx="-2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="-2" cy="2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="2" r="1.2" fill="#FBFAFF" /></g>
+                  <ellipse class="b-lid" cx="84" cy="92" rx="7" ry="7" fill="#F3C97E" opacity="0" />
+                  <ellipse class="b-lid" cx="116" cy="92" rx="7" ry="7" fill="#F3C97E" opacity="0" />
+                  <path d="M92 110c0-5 16-5 16 0 0 4-4 7-8 7s-8-3-8-7z" fill="#3B2F2F" />
+                  <ellipse class="b-tongue" cx="100" cy="126" rx="4" ry="5" fill="#FF8DA1" opacity="0" />
+                  <path d="M100 117v5m0 0c-3 3-6 3-9 1m9-1c3 3 6 3 9 1" fill="none" stroke="#3B2F2F" stroke-width="2.2" stroke-linecap="round" />
+                  <rect x="118" y="118" width="14" height="11" rx="2" fill="#C9E6F5" stroke="#5B4A3A" stroke-width="1" stroke-dasharray="2.5 2.5" />
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 3: your own dog, from photos (tonal shift to warm peach) -->
+      <section id="s3" class="clip" data-start="14" data-duration="3.9" data-track-index="1">
+        <div id="s3-bg" class="fill"></div>
+        <div id="s3-in" class="fill">
+          <div id="s3-eyebrow" class="abs mono">Your own dog, as a plush</div>
+          <div id="s3-title" class="abs"><span class="line">Your own dog,</span><span class="line">from photos.</span></div>
+          <div id="s3-sub" class="abs">The makers who work from photos of your dog: how it works, what it costs, how long it takes.</div>
+          <div id="s3-cta" class="abs">Compare the makers</div>
+          <svg id="seam" class="abs" viewBox="0 0 820 780">
+            <rect id="seam-rect" x="10" y="10" width="800" height="760" rx="60" fill="none" stroke="#c0623d" stroke-width="5" stroke-dasharray="18 14" stroke-linecap="round" opacity="0.55" />
+          </svg>
+          <div class="pola" id="pl1" style="left: 1060px; top: 250px"><div class="im"><img src="assets/img/lab-face.jpg" alt="" /></div></div>
+          <div class="pola" id="pl2" style="left: 1260px; top: 200px"><div class="im"><img src="assets/img/lab-full.jpg" alt="" /></div></div>
+          <div class="pola" id="pl3" style="left: 1400px; top: 420px"><div class="im"><img src="assets/img/lab-mid.jpg" alt="" /></div></div>
+        </div>
+      </section>
+
+      <!-- Scene 4: Rainbow Bridge (gentle, slow) -->
+      <section id="s4" class="clip" data-start="17.9" data-duration="3.4" data-track-index="2">
+        <div id="s4-bg" class="fill"></div>
+        <div id="s4-in" class="fill">
+          <svg id="arc" class="abs" viewBox="0 0 800 400">
+            <path class="band" d="M60 400 A340 340 0 0 1 740 400" fill="none" stroke="#d9b8fb" stroke-width="30" stroke-linecap="round" />
+            <path class="band" d="M100 400 A300 300 0 0 1 700 400" fill="none" stroke="#f4c4dd" stroke-width="30" stroke-linecap="round" />
+            <path class="band" d="M140 400 A260 260 0 0 1 660 400" fill="none" stroke="#ffd9c7" stroke-width="30" stroke-linecap="round" />
+            <path class="band" d="M180 400 A220 220 0 0 1 620 400" fill="none" stroke="#ffe9a8" stroke-width="30" stroke-linecap="round" />
+            <path class="band" d="M220 400 A180 180 0 0 1 580 400" fill="none" stroke="#d6f5e9" stroke-width="30" stroke-linecap="round" />
+          </svg>
+          <div id="s4-eyebrow" class="abs mono">Over the Rainbow Bridge</div>
+          <div id="s4-title" class="abs">For a dog you had to say goodbye to</div>
+          <div id="s4-sub" class="abs">A lifelike plush made from your photos of them, and the keepsakes that last.</div>
+          <div id="s4-cta" class="abs"><div>Keep them close</div></div>
+        </div>
+      </section>
+
+      <!-- Scene 5: breed search, corgi -->
+      <section id="s5" class="clip" data-start="21.3" data-duration="3.4" data-track-index="1">
+        <div id="s5-bg" class="fill"></div>
+        <div id="s5-in" class="fill">
+          <div id="s5-eyebrow" class="abs mono">Pick a breed · 23 of them</div>
+          <div id="search" class="abs">
+            <div id="ph" class="abs">Find a breed: golden, corgi, dachshund…</div>
+            <div id="typed" class="abs"><span id="typed-txt"></span><span id="caret"></span></div>
+            <div id="find" class="abs">Find</div>
+          </div>
+          <div id="result" class="abs">
+            <div class="im"><img src="assets/img/corgi.jpg" alt="A real corgi" /></div>
+            <div id="r-info" class="abs">
+              <div id="r-name">Corgi</div>
+              <div id="r-makers">5 makers</div>
+              <div id="r-from">plush from</div>
+              <div id="r-price"><span class="grad">$3.99</span></div>
+            </div>
+            <div id="r-chip" class="abs mono">prices dated October 2026</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 6: the site -->
+      <section id="s6" class="clip" data-start="24.7" data-duration="2.8" data-track-index="2">
+        <div id="s6-bg" class="fill"></div>
+        <div id="browser">
+          <div id="browser-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div id="url">plush-dogs.com</div></div>
+          <div id="viewport"><img id="site-img" src="assets/site-full.png" alt="plush-dogs.com homepage" /></div>
+        </div>
+      </section>
+
+      <!-- Scene 7: end card -->
+      <section id="s7" class="clip" data-start="27.5" data-duration="2.5" data-track-index="1">
+        <div id="s7-bg" class="fill"></div>
+        <div id="end-wrap">
+          <div id="end-dog">
+            <svg viewBox="0 0 200 200">
+              <ellipse cx="100" cy="186" rx="44" ry="7" fill="#000" opacity=".08" />
+              <path class="e-tail" d="M138 150c14-6 24-20 20-36" fill="none" stroke="#E9B86A" stroke-width="14" stroke-linecap="round" />
+              <ellipse cx="100" cy="150" rx="48" ry="34" fill="#F3C97E" />
+              <ellipse cx="100" cy="150" rx="48" ry="34" fill="none" stroke="#5B4A3A" stroke-width="1.2" stroke-dasharray="3 3" stroke-linecap="round" />
+              <ellipse cx="100" cy="160" rx="26" ry="18" fill="#FBE4B8" />
+              <rect x="62" y="160" width="20" height="28" rx="10" fill="#F3C97E" />
+              <rect x="118" y="160" width="20" height="28" rx="10" fill="#F3C97E" />
+              <ellipse cx="54" cy="96" rx="16" ry="34" fill="#D9A054" />
+              <ellipse cx="146" cy="96" rx="16" ry="34" fill="#D9A054" />
+              <circle cx="100" cy="100" r="42" fill="#F3C97E" />
+              <circle cx="100" cy="100" r="42" fill="none" stroke="#5B4A3A" stroke-width="1.2" stroke-dasharray="3 3" stroke-linecap="round" />
+              <ellipse cx="100" cy="116" rx="20" ry="14" fill="#FBE4B8" />
+              <g transform="translate(84 92)"><circle r="6" fill="#2A2440" /><circle cx="-2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="-2" cy="2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="2" r="1.2" fill="#FBFAFF" /></g>
+              <g transform="translate(116 92)"><circle r="6" fill="#2A2440" /><circle cx="-2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="-2" r="1.2" fill="#FBFAFF" /><circle cx="-2" cy="2" r="1.2" fill="#FBFAFF" /><circle cx="2" cy="2" r="1.2" fill="#FBFAFF" /></g>
+              <path d="M92 110c0-5 16-5 16 0 0 4-4 7-8 7s-8-3-8-7z" fill="#3B2F2F" />
+              <path d="M100 117v5m0 0c-3 3-6 3-9 1m9-1c3 3 6 3 9 1" fill="none" stroke="#3B2F2F" stroke-width="2.2" stroke-linecap="round" />
+              <rect x="118" y="118" width="14" height="11" rx="2" fill="#C9E6F5" stroke="#5B4A3A" stroke-width="1" stroke-dasharray="2.5 2.5" />
+            </svg>
+          </div>
+          <div id="end-name">plush-dogs<span class="grad">.com</span></div>
+          <div id="end-tag">Stuffed dogs that look real.</div>
+          <div id="end-mono" class="mono">Prices dated · sources listed · not affiliated with any maker</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- Scene 1: Real… or plush? ----------
+      tl.fromTo("#s1-paws .paw", { y: 0 }, { y: -30, duration: 9, ease: "none", stagger: 0.2 }, 0);
+      tl.fromTo("#r1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, 0.2);
+      tl.fromTo("#q > span", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.6)", stagger: 0.2 }, 0.3);
+      tl.fromTo(["#b-real", "#b-plush"], { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.2)", stagger: 0.1 }, 0.8);
+
+      // Round geometry: transform origins sit on each dog's face, so the close-up starts on fur and eyes.
+      const rounds = [
+        { c: "#c1", i: "#i1", o: "579px 308px", t: 0.0, stamp: 1.9 },
+        { c: "#c2", i: "#i2", o: "493px 226px", t: 2.95, stamp: 4.15 },
+        { c: "#c3", i: "#i3", o: "357px 224px", t: 4.95, stamp: 6.15 },
+      ];
+      rounds.forEach((r, k) => {
+        if (k === 0) {
+          tl.fromTo(r.c, { opacity: 0, x: 0, y: 60, rotation: -3, scale: 0.94 }, { opacity: 1, y: 0, rotation: 0, scale: 1, duration: 0.6, ease: "back.out(1.4)" }, r.t + 0.05);
+        } else {
+          tl.fromTo(r.c, { opacity: 1, x: 1900, y: 0, rotation: 10, scale: 1 }, { x: 0, rotation: 0, duration: 0.6, ease: "back.out(1.2)" }, r.t);
+        }
+        tl.fromTo(r.i, { scale: 2.3, transformOrigin: r.o }, { scale: 2.1, duration: r.stamp - r.t - 0.15, ease: "none" }, r.t);
+        tl.to(r.i, { scale: 1, duration: 0.6, ease: "power3.inOut" }, r.stamp - 0.15);
+        // paw buttons wiggle while you decide
+        tl.fromTo(["#b-real", "#b-plush"], { rotation: 0 }, { rotation: 5, duration: 0.09, repeat: 5, yoyo: true, ease: "sine.inOut", stagger: 0.05 }, r.stamp - 0.75);
+        // the honest answer
+        tl.fromTo(r.c + " .stamp", { opacity: 0, scale: 2.6, rotation: -22 }, { opacity: 1, scale: 1, rotation: -10, duration: 0.45, ease: "back.out(2.6)" }, r.stamp);
+        tl.fromTo("#b-real .on", { opacity: 0 }, { opacity: 1, duration: 0.2, immediateRender: k === 0 }, r.stamp + 0.02);
+        tl.fromTo("#b-real", { color: "#145c43", fill: "#145c43", scale: 1 }, { color: "#ffffff", fill: "#ffffff", scale: 1.06, duration: 0.3, ease: "back.out(3)", immediateRender: k === 0 }, r.stamp + 0.02);
+        tl.fromTo(r.c + " .tag", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, r.stamp + 0.4);
+        if (k < 2) {
+          tl.to("#b-real .on", { opacity: 0, duration: 0.2 }, rounds[k + 1].t);
+          tl.to("#b-real", { color: "#145c43", fill: "#145c43", scale: 1, duration: 0.2 }, rounds[k + 1].t);
+          tl.to(r.c, { x: -1500, rotation: -10, duration: 0.6, ease: "power3.in" }, rounds[k + 1].t - 0.05);
+          tl.to("#r" + (k + 1), { opacity: 0, y: -10, duration: 0.2 }, rounds[k + 1].t);
+          tl.fromTo("#r" + (k + 2), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, rounds[k + 1].t + 0.1);
+        }
+      });
+
+      // Outro: all three cards line up, each stamped REAL
+      tl.to("#s1-ui", { opacity: 0, y: -20, duration: 0.35, ease: "power2.in" }, 6.9);
+      const row = [{ x: -500, r: -5 }, { x: 0, r: 2 }, { x: 500, r: 5 }];
+      ["#c1", "#c2", "#c3"].forEach((c, k) => {
+        tl.to(c, { x: 390 + row[k].x, y: -230, scale: 0.46, rotation: row[k].r, duration: 0.8, ease: "power3.inOut" }, 6.95 + k * 0.06);
+        tl.to(c + " .tag", { opacity: 0, duration: 0.2 }, 6.95);
+      });
+      tl.fromTo("#out1", { opacity: 0, y: 40, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(2)" }, 7.5);
+      tl.fromTo("#out2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 8.0);
+
+      // ---------- Scene 2: headline, Biscuit bounces in ----------
+      tl.fromTo("#s2-bg", { clipPath: "circle(0px at 1550px 600px)" }, { clipPath: "circle(2300px at 1550px 600px)", duration: 0.8, ease: "power3.inOut" }, 8.9);
+      tl.fromTo("#panel", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 9.2);
+      tl.fromTo("#biscuit-wrap", { y: -900 }, { y: 0, duration: 0.85, ease: "bounce.out" }, 9.3);
+      tl.fromTo("#biscuit-wrap svg", { scaleY: 1, scaleX: 1, transformOrigin: "50% 100%" }, { scaleY: 0.86, scaleX: 1.08, duration: 0.1, yoyo: true, repeat: 1, ease: "sine.out" }, 9.62);
+      tl.fromTo(".b-earL", { rotation: 0 }, { rotation: 14, svgOrigin: "54 66", duration: 0.14, yoyo: true, repeat: 3, ease: "sine.inOut" }, 9.62);
+      tl.fromTo(".b-earR", { rotation: 0 }, { rotation: -14, svgOrigin: "146 66", duration: 0.14, yoyo: true, repeat: 3, ease: "sine.inOut" }, 9.62);
+      tl.fromTo(".b-tail", { rotation: -10 }, { rotation: 16, svgOrigin: "138 150", duration: 0.2, yoyo: true, repeat: 17, ease: "sine.inOut" }, 9.9);
+      tl.fromTo(".b-head", { rotation: 0 }, { rotation: -7, svgOrigin: "100 140", duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 10.4);
+      tl.fromTo(".b-tongue", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 10.0);
+      tl.fromTo(".b-lid", { opacity: 0 }, { opacity: 1, duration: 0.06, yoyo: true, repeat: 1 }, 11.6);
+      tl.fromTo(".b-lid", { opacity: 0 }, { opacity: 1, duration: 0.06, yoyo: true, repeat: 1, immediateRender: false }, 13.0);
+      tl.fromTo("#h1 .line", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.5)", stagger: 0.2 }, 9.5);
+      ["#p1", "#p2", "#p3"].forEach((p, k) => {
+        tl.fromTo(p, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2.6)" }, 10.5 + k * 0.2);
+      });
+      tl.fromTo("#s2-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 11.2);
+      tl.fromTo("#s2-chip", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 11.8);
+      tl.to("#s2-in", { opacity: 0, duration: 0.4 }, 13.8);
+
+      // ---------- Scene 3: your own dog (softer pace) ----------
+      tl.fromTo("#s3-bg", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.inOut" }, 14.0);
+      tl.fromTo("#s3-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 14.3);
+      tl.fromTo("#s3-title .line", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.18 }, 14.35);
+      [["#pl1", -9], ["#pl2", 4], ["#pl3", 10]].forEach(([p, r], k) => {
+        tl.fromTo(p, { opacity: 0, y: 120, rotation: r - 14, scale: 0.9 }, { opacity: 1, y: 0, rotation: r, scale: 1, duration: 0.7, ease: "back.out(1.3)" }, 14.6 + k * 0.25);
+      });
+      tl.fromTo("#seam-rect", { strokeDashoffset: 3000, opacity: 0 }, { strokeDashoffset: 0, opacity: 0.55, duration: 2.2, ease: "power1.inOut" }, 15.0);
+      tl.fromTo("#s3-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 15.2);
+      tl.fromTo("#s3-cta", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 15.7);
+      tl.to("#s3-in", { opacity: 0, duration: 0.5 }, 17.45);
+
+      // ---------- Scene 4: Rainbow Bridge (slow, quiet) ----------
+      tl.fromTo("#s4-bg", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "sine.inOut" }, 17.9);
+      tl.fromTo("#arc .band", { strokeDasharray: 1100, strokeDashoffset: 1100 }, { strokeDashoffset: 0, duration: 1.6, ease: "sine.inOut", stagger: 0.12 }, 18.2);
+      tl.fromTo("#s4-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 18.6);
+      tl.fromTo("#s4-title", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 1.0, ease: "sine.out" }, 18.8);
+      tl.fromTo("#s4-sub", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "sine.out" }, 19.5);
+      tl.fromTo("#s4-cta div", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "sine.out" }, 20.0);
+      tl.to("#s4-in", { opacity: 0, duration: 0.5 }, 20.85);
+
+      // ---------- Scene 5: search "corgi" → from $3.99 ----------
+      tl.fromTo("#s5-bg", { y: 1080 }, { y: 0, duration: 0.5, ease: "power3.out" }, 21.3);
+      tl.fromTo("#s5-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 21.55);
+      tl.fromTo("#search", { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 21.5);
+      tl.to("#ph", { opacity: 0, duration: 0.15 }, 21.95);
+      tl.fromTo("#caret", { opacity: 0 }, { opacity: 1, duration: 0.05 }, 21.95);
+      const word = "corgi";
+      const typed = document.getElementById("typed-txt");
+      const tp = { n: 0 };
+      tl.fromTo(tp, { n: 0 }, { n: word.length, duration: 0.7, ease: "none", onUpdate: () => { typed.textContent = word.slice(0, Math.floor(tp.n + 0.0001)); } }, 22.0);
+      tl.fromTo("#find", { scale: 1 }, { scale: 0.9, duration: 0.08, yoyo: true, repeat: 1, ease: "power2.out" }, 22.85);
+      tl.to("#caret", { opacity: 0, duration: 0.05 }, 22.9);
+      tl.fromTo("#result", { opacity: 0, y: 120 }, { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.3)" }, 23.0);
+      tl.fromTo("#r-name", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 23.25);
+      tl.fromTo("#r-makers", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 23.35);
+      tl.fromTo("#r-from", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 23.5);
+      tl.fromTo("#r-price", { opacity: 0, scale: 1.8, transformOrigin: "0% 50%" }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.4)" }, 23.6);
+      tl.fromTo("#r-chip", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 23.95);
+      tl.to("#s5-in", { opacity: 0, duration: 0.3 }, 24.5);
+
+      // ---------- Scene 6: site scroll ----------
+      tl.fromTo("#s6-bg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 24.7);
+      tl.fromTo("#browser", { opacity: 0, y: 80, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out" }, 24.7);
+      tl.fromTo("#site-img", { y: 0 }, { y: -1875, duration: 2.0, ease: "power2.inOut" }, 25.2);
+      tl.to("#browser", { opacity: 0, scale: 0.96, duration: 0.3 }, 27.2);
+
+      // ---------- Scene 7: end card ----------
+      tl.fromTo("#s7-bg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 27.5);
+      tl.fromTo("#end-dog", { y: -500, opacity: 1 }, { y: 0, duration: 0.7, ease: "bounce.out" }, 27.5);
+      tl.fromTo(".e-tail", { rotation: -10 }, { rotation: 16, svgOrigin: "138 150", duration: 0.2, yoyo: true, repeat: 9, ease: "sine.inOut" }, 28.0);
+      tl.fromTo("#end-name", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.6)" }, 27.75);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 28.05);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.35);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.8);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

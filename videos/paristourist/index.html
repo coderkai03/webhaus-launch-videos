@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>paristourist.info — Next Stop: The Answer</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root {
+        --blue: #173f8f; --blue-deep: #0e2a63; --yellow: #ffcd00; --go: #1b7a4b;
+        --tri-blue: #0064b0; --tri-red: #ef4135;
+        --tint: #f2f5fb; --ink: #111827; --muted: #5b6472; --rule: #dfe3ea; --pale: #c9d6f2;
+        --l1: #ffcd00; --l2: #0064b0; --l3: #9f9825; --l4: #c04191; --l5: #f28e42; --l6: #6eca97;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--blue); }
+      #root {
+        position: relative; width: 100%; height: 100%; overflow: hidden;
+        font-family: system-ui, sans-serif; color: #ffffff;
+      }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+      .bg {
+        position: absolute; inset: 0;
+        background:
+          repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 80px),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 80px),
+          radial-gradient(1500px 900px at 30% 35%, #1d4aa3 0%, var(--blue) 55%, var(--blue-deep) 100%);
+      }
+      .sign { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; }
+      .mono { font-family: "IBM Plex Mono", monospace; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+      .tri { background: linear-gradient(90deg, var(--tri-blue) 0 33.34%, #ffffff 33.34% 66.67%, var(--tri-red) 66.67% 100%); }
+      #toprule { left: 0; top: 0; width: 1920px; height: 8px; z-index: 50; }
+
+      /* station dot (section number) */
+      .dot {
+        position: absolute; width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%;
+        border: 6px solid #ffffff; display: flex; align-items: center; justify-content: center;
+        font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 34px; color: #ffffff;
+        box-shadow: 0 6px 18px rgba(8, 20, 50, 0.25);
+      }
+      .dot.dk { color: var(--ink); }
+      .c1 { background: var(--l1); } .c2 { background: var(--l2); } .c3 { background: var(--l3); }
+      .c4 { background: var(--l4); } .c5 { background: var(--l5); } .c6 { background: var(--l6); }
+
+      /* ---------- scenes 1–2: the line on blue ---------- */
+      #hl-svg { left: 0; top: 0; }
+      .hl-label { position: absolute; width: 300px; margin-left: -150px; text-align: center; top: 920px; font-size: 34px; font-weight: 600; font-family: "Barlow Semi Condensed", sans-serif; color: #ffffff; white-space: nowrap; }
+      #hook1 { left: 160px; top: 170px; font-size: 150px; line-height: 0.98; letter-spacing: -0.01em; }
+      #hook1 span, #hook2 span { display: block; }
+      #hook2 { left: 160px; top: 230px; font-size: 170px; line-height: 0.98; letter-spacing: -0.01em; }
+      #hook2 .y { color: var(--yellow); }
+      #hook-eyebrow { left: 160px; top: 110px; font-size: 22px; color: var(--pale); }
+
+      #s2-eyebrow { left: 160px; top: 128px; font-size: 22px; color: var(--yellow); }
+      #s2-title { left: 160px; top: 168px; width: 980px; font-size: 128px; line-height: 0.95; letter-spacing: -0.005em; }
+      #s2-title .line { display: block; }
+      #s2-sub { left: 160px; top: 570px; width: 860px; font-size: 32px; line-height: 1.4; color: #dbe4f7; }
+      .hero-card { position: absolute; left: 1120px; width: 660px; border-radius: 12px; padding: 30px 34px; }
+      .hero-card h3 { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 50px; line-height: 1; display: flex; align-items: center; gap: 14px; }
+      .hero-card p { font-size: 25px; margin-top: 12px; line-height: 1.3; }
+      #hc1 { top: 190px; border: 3px solid #c9d6f2; color: #ffffff; }
+      #hc2 { top: 380px; background: var(--yellow); color: var(--ink); }
+
+      /* ---------- scene 3: the journey ---------- */
+      #s3-bg { position: absolute; inset: 0; background: var(--tint); }
+      #band { left: 0; top: 0; width: 1920px; height: 310px; background: #ffffff; overflow: hidden; }
+      #band-rule { left: 0; top: 304px; width: 1920px; height: 6px; }
+      #next-stop { left: 300px; top: 34px; width: 400px; margin-left: -200px; text-align: center; font-size: 22px; color: var(--blue); }
+      #strip { left: 0; top: 0; width: 4400px; height: 300px; }
+      #strip-line { left: -600px; top: 159px; width: 4600px; height: 16px; background: var(--blue); border-radius: 8px; }
+      #strip .dot { width: 84px; height: 84px; margin: -42px 0 0 -42px; font-size: 40px; border-width: 7px; border-color: #ffffff; box-shadow: 0 0 0 4px var(--blue); top: 167px; }
+      .halo { position: absolute; top: 167px; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; border: 5px solid var(--blue); opacity: 0; }
+      .st-label { position: absolute; top: 222px; width: 420px; margin-left: -210px; text-align: center; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 44px; color: var(--ink); white-space: nowrap; }
+
+      #search { left: 160px; top: 360px; width: 1060px; height: 104px; background: #ffffff; border: 3px solid var(--blue); border-radius: 14px; display: flex; align-items: center; padding: 0 10px 0 34px; box-shadow: 0 14px 40px rgba(23, 63, 143, 0.12); }
+      #q-text { flex: 1; font-size: 40px; color: var(--ink); white-space: nowrap; overflow: hidden; }
+      #q-text.ph { color: #8a93a3; }
+      #caret { display: inline-block; width: 3px; height: 44px; background: var(--blue); vertical-align: -8px; margin-left: 3px; }
+      #search-btn { width: 210px; height: 80px; border-radius: 10px; background: var(--yellow); color: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 30px; letter-spacing: 0.06em; }
+      .pill { position: absolute; left: 1270px; top: 384px; height: 56px; border-radius: 28px; background: #ffffff; border: 2px solid var(--rule); display: flex; align-items: center; gap: 14px; padding: 0 26px 0 8px; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 30px; color: var(--ink); white-space: nowrap; }
+      .pill .dot { position: static; margin: 0; width: 40px; height: 40px; border-width: 0; font-size: 22px; box-shadow: none; }
+
+      .card { position: absolute; left: 160px; top: 504px; width: 1600px; height: 500px; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 30px 80px rgba(14, 42, 99, 0.16); border: 1px solid var(--rule); }
+      .card .media { position: absolute; left: 0; top: 0; width: 560px; height: 500px; overflow: hidden; }
+      .card .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .card .edge { position: absolute; left: 560px; top: 0; width: 10px; height: 500px; }
+      .card .body { position: absolute; left: 630px; top: 46px; width: 900px; }
+      .card .slug { font-size: 20px; color: var(--muted); letter-spacing: 0.04em; text-transform: none; }
+      .card h2 { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.02; color: var(--ink); margin-top: 16px; display: flex; align-items: center; gap: 22px; white-space: nowrap; }
+      .rows { margin-top: 30px; }
+      .rowi { display: flex; align-items: center; gap: 18px; font-size: 30px; color: #2b3445; height: 52px; }
+      .tick { width: 34px; height: 34px; border-radius: 50%; background: #e3f1e9; position: relative; flex: none; }
+      .tick::after { content: ""; position: absolute; left: 12px; top: 6px; width: 8px; height: 15px; border: solid var(--go); border-width: 0 4px 4px 0; transform: rotate(45deg); }
+      .chip {
+        position: absolute; right: 40px; bottom: 40px; display: flex; align-items: center; gap: 14px; padding: 16px 24px; border-radius: 8px;
+        background: var(--go); color: #ffffff; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 21px; letter-spacing: 0.12em; text-transform: uppercase;
+      }
+      .chip i { display: block; width: 26px; height: 26px; border-radius: 50%; background: #ffffff; position: relative; }
+      .chip i::after { content: ""; position: absolute; left: 9px; top: 4px; width: 6px; height: 12px; border: solid var(--go); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+      .also { margin-top: 16px; padding-top: 14px; border-top: 2px solid var(--rule); width: 520px; font-size: 26px; line-height: 1.35; color: var(--muted); }
+      .also b { display: block; color: var(--ink); font-weight: 600; }
+
+      /* route panel (stop 2) */
+      .route { position: absolute; inset: 0; background: var(--blue-deep); }
+      .route .rt { position: absolute; left: 70px; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 46px; color: #ffffff; padding-left: 70px; white-space: nowrap; }
+      .route .mono { position: absolute; left: 70px; font-size: 18px; color: var(--pale); }
+      .tags { margin-top: 28px; display: flex; gap: 14px; }
+      .tag { border: 2px solid var(--blue); color: var(--blue); border-radius: 26px; padding: 8px 22px; font-size: 24px; font-weight: 600; white-space: nowrap; }
+
+      /* ---------- scene 4: sights ---------- */
+      #s4-bg { position: absolute; inset: 0; background: var(--tint); }
+      #s4-title { left: 160px; top: 120px; display: flex; align-items: center; gap: 22px; font-size: 70px; color: var(--ink); white-space: nowrap; }
+      #s4-title .dot { position: static; margin: 0; width: 64px; height: 64px; border-width: 0; font-size: 34px; box-shadow: none; }
+      .tile { position: absolute; top: 260px; width: 385px; height: 600px; border-radius: 14px; overflow: hidden; background: var(--blue-deep); box-shadow: 0 24px 60px rgba(14, 42, 99, 0.18); }
+      .tile img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+      .tile .lab { position: absolute; left: 18px; right: 18px; bottom: 18px; height: 104px; background: var(--blue); border: 3px solid #8fd1ad; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .tile .lab .nm { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 40px; color: #ffffff; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+      .tile .lab .ct { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 22px; color: #dbe4f7; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; }
+      #s4-foot { left: 160px; top: 920px; font-size: 22px; color: var(--blue); }
+
+      /* ---------- scene 5: site ---------- */
+      #browser { position: absolute; left: 260px; top: 100px; width: 1400px; height: 880px; background: #ffffff; border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px rgba(5, 15, 40, 0.5); }
+      #browser-bar { height: 64px; background: #e7ebf3; display: flex; align-items: center; padding: 0 24px; gap: 10px; }
+      #browser-bar .bd { width: 16px; height: 16px; border-radius: 50%; background: #c2c9d6; }
+      #url { margin-left: 30px; flex: 1; height: 40px; border-radius: 20px; background: #ffffff; display: flex; align-items: center; padding: 0 22px; font-size: 22px; color: var(--ink); font-weight: 500; }
+      #viewport { position: absolute; left: 0; top: 64px; width: 1400px; height: 816px; overflow: hidden; }
+      #site-img { position: absolute; left: 0; top: 0; width: 1400px; height: auto; display: block; }
+
+      /* ---------- scene 6: end card ---------- */
+      #end-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #badge { border: 4px solid #2e9a62; background: var(--blue); padding: 10px 26px 12px; display: flex; flex-direction: column; align-items: center; }
+      #badge small { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.12em; color: #ffffff; line-height: 1; }
+      #badge span { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 40px; letter-spacing: 0.04em; color: #ffffff; line-height: 1; margin-top: 2px; }
+      #end-name { font-size: 170px; line-height: 1; margin-top: 40px; letter-spacing: -0.005em; }
+      #end-stripe { width: 1180px; height: 18px; margin-top: 26px; }
+      #end-tag { font-size: 48px; font-weight: 500; color: #dbe4f7; margin-top: 34px; }
+      #end-mono { font-size: 20px; color: var(--yellow); margin-top: 36px; }
+      #webhaus { left: 0; width: 1920px; top: 975px; text-align: center; font-size: 18px; color: #9fb2da; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/whoosh-short.mp3" data-start="0.3" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/impact-bass-1.mp3" data-start="2.95" data-duration="2.12" data-volume="0.55" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/whoosh-short.mp3" data-start="5.05" data-duration="0.57" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="sfx-4" src="assets/sfx/whoosh.mp3" data-start="9.55" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-5" src="assets/sfx/typing.mp3" data-start="10.75" data-duration="1.1" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/click.mp3" data-start="11.95" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/pop.mp3" data-start="12.85" data-duration="0.72" data-volume="0.32" data-track-index="10"></audio>
+      <audio id="sfx-8" src="assets/sfx/whoosh-short.mp3" data-start="13.5" data-duration="0.57" data-volume="0.32" data-track-index="11"></audio>
+      <audio id="sfx-9" src="assets/sfx/typing.mp3" data-start="14.25" data-duration="0.8" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-10" src="assets/sfx/click.mp3" data-start="15.15" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/pop.mp3" data-start="16" data-duration="0.72" data-volume="0.32" data-track-index="10"></audio>
+      <audio id="sfx-12" src="assets/sfx/whoosh-short.mp3" data-start="16.6" data-duration="0.57" data-volume="0.32" data-track-index="11"></audio>
+      <audio id="sfx-13" src="assets/sfx/typing.mp3" data-start="17.35" data-duration="0.8" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-14" src="assets/sfx/click.mp3" data-start="18.25" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-15" src="assets/sfx/pop.mp3" data-start="19" data-duration="0.72" data-volume="0.32" data-track-index="10"></audio>
+      <audio id="sfx-16" src="assets/sfx/whoosh-short.mp3" data-start="19.6" data-duration="0.57" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-17" src="assets/sfx/pop.mp3" data-start="20.15" data-duration="0.72" data-volume="0.22" data-track-index="10"></audio>
+      <audio id="sfx-18" src="assets/sfx/pop.mp3" data-start="20.3" data-duration="0.72" data-volume="0.22" data-track-index="11"></audio>
+      <audio id="sfx-19" src="assets/sfx/pop.mp3" data-start="20.45" data-duration="0.72" data-volume="0.22" data-track-index="12"></audio>
+      <audio id="sfx-20" src="assets/sfx/pop.mp3" data-start="20.6" data-duration="0.72" data-volume="0.22" data-track-index="13"></audio>
+      <audio id="sfx-21" src="assets/sfx/whoosh.mp3" data-start="23.65" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-22" src="assets/sfx/whoosh-short.mp3" data-start="24.2" data-duration="0.57" data-volume="0.25" data-track-index="11"></audio>
+      <audio id="sfx-23" src="assets/sfx/riser.mp3" data-start="24.15" data-duration="3.2" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-24" src="assets/sfx/impact-bass-1.mp3" data-start="26.9" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-25" src="assets/sfx/chime.mp3" data-start="27.6" data-duration="2.4" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+      <div id="toprule" class="abs tri"></div>
+
+      <!-- Scenes 1–2: the line on Paris blue (persists through the hook and headline) -->
+      <section id="s-line" class="clip" data-start="0" data-duration="9.6" data-track-index="0">
+        <div id="hl-wrap" class="abs" style="inset: 0">
+          <svg id="hl-svg" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080">
+            <line id="hl-line" x1="100" y1="860" x2="1820" y2="860" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-dasharray="1720" stroke-dashoffset="1720" />
+          </svg>
+          <div class="dot c1 dk hl-dot" style="left: 160px; top: 860px">1</div>
+          <div class="dot c2 hl-dot" style="left: 480px; top: 860px">2</div>
+          <div class="dot c3 hl-dot" style="left: 800px; top: 860px">3</div>
+          <div class="dot c4 hl-dot" style="left: 1120px; top: 860px">4</div>
+          <div class="dot c5 dk hl-dot" style="left: 1440px; top: 860px">5</div>
+          <div class="dot c6 dk hl-dot" style="left: 1760px; top: 860px">6</div>
+          <div class="hl-label" style="left: 160px">Sights</div>
+          <div class="hl-label" style="left: 480px">Getting around</div>
+          <div class="hl-label" style="left: 800px">Which one?</div>
+          <div class="hl-label" style="left: 1120px">Planning</div>
+          <div class="hl-label" style="left: 1440px">Day trips</div>
+          <div class="hl-label" style="left: 1760px">Kids &amp; school</div>
+        </div>
+      </section>
+
+      <!-- Scene 1: hook -->
+      <section id="s1" class="clip" data-start="0" data-duration="5" data-track-index="1">
+        <div id="hook-eyebrow" class="abs mono">Paris · one question at a time</div>
+        <div id="hook1" class="abs sign"><span>Paris has a thousand</span><span>opinions.</span></div>
+        <div id="hook2" class="abs sign"><span>This site has</span><span class="y">sources.</span></div>
+      </section>
+
+      <!-- Scene 2: headline -->
+      <section id="s2" class="clip" data-start="5" data-duration="4.6" data-track-index="1">
+        <div id="s2-eyebrow" class="abs mono">Independent reference · Every answer cited</div>
+        <div id="s2-title" class="abs sign"><span class="line">Straight answers</span><span class="line">about Paris,</span><span class="line">with sources.</span></div>
+        <div id="s2-sub" class="abs">One question per page, answered from the official pages, with the date each was checked.</div>
+        <div id="hc1" class="hero-card">
+          <h3>Planning a trip <svg width="44" height="24" viewBox="0 0 44 24"><path d="M2 12 H40 M30 3 L40 12 L30 21" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /></svg></h3>
+          <p>What to book ahead, what to skip, what it costs</p>
+        </div>
+        <div id="hc2" class="hero-card">
+          <h3>In Paris right now <svg width="44" height="24" viewBox="0 0 44 24"><path d="M2 12 H40 M30 3 L40 12 L30 21" stroke="#111827" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /></svg></h3>
+          <p>Tickets, entrances, and how to get there from here</p>
+        </div>
+      </section>
+
+      <!-- Scene 3: next stop, the answer -->
+      <section id="s3" class="clip" data-start="9.6" data-duration="10" data-track-index="2">
+        <div id="s3-bg"></div>
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="band" class="abs">
+            <div id="strip" class="abs" data-layout-allow-overflow>
+              <div id="strip-line" class="abs"></div>
+              <div class="halo" id="halo1" style="left: 300px; border-color: #c9a400"></div>
+              <div class="halo" id="halo2" style="left: 900px; border-color: var(--l2)"></div>
+              <div class="halo" id="halo3" style="left: 1500px; border-color: var(--l3)"></div>
+              <div class="dot c1 dk" id="sd1" style="left: 300px">1</div>
+              <div class="dot c2" id="sd2" style="left: 900px">2</div>
+              <div class="dot c3" id="sd3" style="left: 1500px">3</div>
+              <div class="dot c4" id="sd4" style="left: 2100px">4</div>
+              <div class="dot c5 dk" id="sd5" style="left: 2700px">5</div>
+              <div class="dot c6 dk" id="sd6" style="left: 3300px">6</div>
+              <div class="st-label" style="left: 300px">Sights</div>
+              <div class="st-label" style="left: 900px">Getting around</div>
+              <div class="st-label" style="left: 1500px">Which one?</div>
+              <div class="st-label" style="left: 2100px">Planning</div>
+              <div class="st-label" style="left: 2700px">Day trips</div>
+              <div class="st-label" style="left: 3300px">Kids &amp; school</div>
+            </div>
+            <div id="next-stop" class="abs mono">Next stop</div>
+          </div>
+          <div id="band-rule" class="abs tri"></div>
+
+          <div id="search" class="abs">
+            <div id="q-text" class="ph">Ask about Paris</div>
+            <div id="search-btn" class="sign">SEARCH</div>
+          </div>
+          <div class="pill" id="pill1"><div class="dot c1 dk">1</div>Sights</div>
+          <div class="pill" id="pill2"><div class="dot c2">2</div>Getting around</div>
+          <div class="pill" id="pill3"><div class="dot c3">3</div>Which one?</div>
+
+          <!-- stop 1 -->
+          <div class="card" id="card1">
+            <div class="media"><img id="img1" src="assets/img/notre-dame.jpg" alt="Notre-Dame interior" /></div>
+            <div class="edge c1"></div>
+            <div class="body">
+              <div class="slug mono">paristourist.info/notre-dame-tickets-needed/</div>
+              <h2>Do You Need Tickets for Notre-Dame?</h2>
+              <div class="rows">
+                <div class="rowi"><div class="tick"></div>Answered from the official page</div>
+                <div class="rowi"><div class="tick"></div>Source cited on the page</div>
+                <div class="rowi"><div class="tick"></div>Date checked, shown with the answer</div>
+              </div>
+            </div>
+            <div class="chip"><i></i>Answered · source cited · date checked</div>
+          </div>
+
+          <!-- stop 2 -->
+          <div class="card" id="card2">
+            <div class="media">
+              <div class="route">
+                <div class="mono" style="top: 70px">From here to there</div>
+                <svg class="abs" style="left: 88px; top: 160px" width="40" height="230" viewBox="0 0 40 230">
+                  <line id="rt-line" x1="20" y1="20" x2="20" y2="210" stroke="#4d8fd6" stroke-width="10" stroke-linecap="round" stroke-dasharray="190" stroke-dashoffset="190" />
+                  <circle cx="20" cy="20" r="15" fill="#0e2a63" stroke="#4d8fd6" stroke-width="7" />
+                  <circle id="rt-end" cx="20" cy="210" r="18" fill="#4d8fd6" />
+                </svg>
+                <div class="rt" style="top: 150px">Gare du Nord</div>
+                <div class="rt" style="top: 340px">Eiffel Tower</div>
+              </div>
+            </div>
+            <div class="edge c2"></div>
+            <div class="body">
+              <div class="slug mono">paristourist.info/gare-du-nord-to-eiffel-tower/</div>
+              <h2>Gare du Nord <svg width="80" height="30" viewBox="0 0 80 30"><line x1="12" y1="15" x2="66" y2="15" stroke="#0064b0" stroke-width="7" /><circle cx="12" cy="15" r="9" fill="#ffffff" stroke="#0064b0" stroke-width="5" /><circle cx="68" cy="15" r="11" fill="#0064b0" /></svg> Eiffel Tower</h2>
+              <div class="rows">
+                <div class="rowi"><div class="tick"></div>Route from the official transport pages</div>
+                <div class="rowi"><div class="tick"></div>Source cited, date checked</div>
+              </div>
+              <div class="tags"><div class="tag">Metro with luggage</div><div class="tag">Metro with a stroller</div></div>
+            </div>
+            <div class="chip"><i></i>Answered · source cited · date checked</div>
+          </div>
+
+          <!-- stop 3 -->
+          <div class="card" id="card3">
+            <div class="media"><img id="img3" src="assets/img/eiffel-tower.jpg" alt="Eiffel Tower" style="object-position: 50% 40%" /></div>
+            <div class="edge c3"></div>
+            <div class="body">
+              <div class="slug mono">paristourist.info/eiffel-tower-stairs-or-elevator/</div>
+              <h2>Eiffel Tower: Stairs or Elevator?</h2>
+              <div class="rows">
+                <div class="rowi"><div class="tick"></div>Both options, side by side</div>
+                <div class="rowi"><div class="tick"></div>Source cited, date checked</div>
+              </div>
+              <div class="also">Also in Which one? <b>Is the Paris Museum Pass worth it?</b></div>
+            </div>
+            <div class="chip"><i></i>Answered · source cited · date checked</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 4: sights -->
+      <section id="s4" class="clip" data-start="19.6" data-duration="4.1" data-track-index="2">
+        <div id="s4-bg"></div>
+        <div id="s4-inner" class="abs" style="inset: 0">
+          <div id="s4-title" class="abs sign"><div class="dot c1 dk">1</div>Sights, and the questions people ask about them</div>
+          <div class="tile" id="t1" style="left: 160px"><img src="assets/img/tile-eiffel-tower.jpg" alt="Eiffel Tower" style="object-position: 50% 30%" /><div class="lab"><div class="nm">Eiffel Tower</div><div class="ct"><span id="n1">0</span> answers</div></div></div>
+          <div class="tile" id="t2" style="left: 565px"><img src="assets/img/louvre.jpg" alt="The Louvre" style="object-position: 35% 50%" /><div class="lab"><div class="nm">The Louvre</div><div class="ct"><span id="n2">0</span> answers</div></div></div>
+          <div class="tile" id="t3" style="left: 970px"><img src="assets/img/versailles.jpg" alt="Versailles" style="object-position: 60% 50%" /><div class="lab"><div class="nm">Versailles</div><div class="ct"><span id="n3">0</span> answers</div></div></div>
+          <div class="tile" id="t4" style="left: 1375px"><img src="assets/img/tile-notre-dame.jpg" alt="Notre-Dame" style="object-position: 50% 50%" /><div class="lab"><div class="nm">Notre-Dame</div><div class="ct"><span id="n4">0</span> answers</div></div></div>
+          <div id="s4-foot" class="abs mono">Seven sight guides · every answer cited · every date checked</div>
+        </div>
+      </section>
+
+      <!-- Scene 5: the site -->
+      <section id="s5" class="clip" data-start="23.7" data-duration="3.4" data-track-index="2">
+        <div id="browser">
+          <div id="browser-bar"><div class="bd"></div><div class="bd"></div><div class="bd"></div><div id="url">paristourist.info</div></div>
+          <div id="viewport"><img id="site-img" src="assets/site-full.png" alt="paristourist.info homepage" /></div>
+        </div>
+      </section>
+
+      <!-- Scene 6: end card -->
+      <section id="s6" class="clip" data-start="27" data-duration="3" data-track-index="3">
+        <div id="end-wrap">
+          <div id="badge"><small>.INFO</small><span>PARIS TOURIST</span></div>
+          <div id="end-name" class="sign">paristourist.info</div>
+          <div id="end-stripe" class="tri"></div>
+          <div id="end-tag">Straight answers about Paris, with sources.</div>
+          <div id="end-mono" class="mono">One question per page · Every answer cited · Every date checked</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- Scene 1: hook, the line draws in ----------
+      tl.fromTo("#hl-line", { strokeDashoffset: 1720 }, { strokeDashoffset: 0, duration: 1.9, ease: "power2.inOut" }, 0.3);
+      document.querySelectorAll(".hl-dot").forEach((d, i) => {
+        tl.fromTo(d, { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(2.4)" }, 0.45 + i * 0.3);
+      });
+      tl.fromTo(".hl-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.3 }, 0.6);
+      tl.fromTo("#hook-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.2);
+      tl.fromTo("#hook1 span", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.22 }, 0.3);
+      tl.to(["#hook1", "#hook-eyebrow"], { opacity: 0, y: -24, duration: 0.35, ease: "power2.in" }, 2.55);
+      tl.fromTo("#hook2 span", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: "power4.out", stagger: 0.2 }, 2.95);
+      tl.to("#hook2", { opacity: 0, y: -24, duration: 0.35, ease: "power2.in" }, 4.65);
+
+      // ---------- Scene 2: headline ----------
+      tl.fromTo("#s2-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 5.1);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.8, ease: "power4.out", stagger: 0.16 }, 5.15);
+      tl.fromTo("#s2-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 5.9);
+      tl.fromTo("#hc1", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 6.2);
+      tl.fromTo("#hc2", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 6.35);
+      tl.to(["#s2-eyebrow", "#s2-title", "#s2-sub", "#hc1", "#hc2"], { opacity: 0, duration: 0.35 }, 9.2);
+      tl.to("#hl-wrap", { opacity: 0, duration: 0.35 }, 9.2);
+
+      // ---------- Scene 3: the journey ----------
+      tl.fromTo("#s3-bg", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.5, ease: "power3.inOut" }, 9.6);
+      tl.fromTo("#band", { y: -320 }, { y: 0, duration: 0.55, ease: "power3.out" }, 9.85);
+      tl.fromTo("#band-rule", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.6, ease: "power2.inOut" }, 10.0);
+      tl.fromTo("#next-stop", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 10.4);
+      tl.fromTo("#search", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 10.1);
+
+      // stops: strip x so the station sits under "Next stop" (x = 300)
+      const STOPS = [
+        { arrive: 10.55, from: 700, x: 0, q: "Do I need a ticket for Notre-Dame?", t0: 10.75, t1: 11.85, click: 11.95, open: 12.1, chip: 12.85, out: 13.45 },
+        { arrive: 14.1, from: 0, x: -600, q: "Gare du Nord to the Eiffel Tower", t0: 14.25, t1: 15.05, click: 15.15, open: 15.3, chip: 16.0, out: 16.55 },
+        { arrive: 17.2, from: -600, x: -1200, q: "Eiffel Tower: stairs or elevator?", t0: 17.35, t1: 18.15, click: 18.25, open: 18.4, chip: 19.0, out: 99 },
+      ];
+      STOPS.forEach((s, i) => {
+        const n = i + 1;
+        const slide = i === 0 ? 0.75 : 0.6;
+        tl.fromTo("#strip", { x: s.from }, { x: s.x, duration: slide, ease: "power3.inOut", immediateRender: i === 0 }, s.arrive - slide);
+        tl.fromTo("#sd" + n, { scale: 1 }, { scale: 1.22, duration: 0.3, ease: "back.out(3)", immediateRender: false }, s.arrive - 0.05);
+        tl.fromTo("#halo" + n, { scale: 1, opacity: 0.9 }, { scale: 2.1, opacity: 0, duration: 0.8, ease: "power2.out" }, s.arrive);
+        if (i > 0) tl.fromTo("#sd" + i, { scale: 1.22 }, { scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, s.arrive - 0.5);
+        tl.fromTo("#pill" + n, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, s.arrive);
+        tl.fromTo("#search-btn", { scale: 1 }, { scale: 0.92, duration: 0.08, ease: "power1.in", yoyo: true, repeat: 1, immediateRender: false }, s.click);
+        const card = "#card" + n;
+        tl.fromTo(card, { opacity: 0, y: 40, clipPath: "inset(0% 0% 100% 0%)" },
+          { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)", duration: 0.55, ease: "power3.out" }, s.open);
+        tl.fromTo(card + " .slug", { opacity: 0 }, { opacity: 1, duration: 0.3 }, s.open + 0.2);
+        tl.fromTo(card + " h2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, s.open + 0.22);
+        tl.fromTo(card + " .rowi", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out", stagger: 0.09 }, s.open + 0.38);
+        tl.fromTo(card + " .chip", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, s.chip);
+        if (s.out < 99) {
+          tl.to(card, { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }, s.out);
+          tl.to("#pill" + n, { opacity: 0, duration: 0.25 }, s.out);
+        }
+      });
+      tl.fromTo("#img1", { scale: 1.12 }, { scale: 1, duration: 1.6, ease: "power2.out" }, 12.1);
+      tl.fromTo("#img3", { scale: 1.12 }, { scale: 1, duration: 1.4, ease: "power2.out" }, 18.4);
+      tl.fromTo("#rt-line", { strokeDashoffset: 190 }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, 15.55);
+      tl.fromTo("#rt-end", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 16.1);
+      tl.fromTo("#card2 .tag", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.1 }, 15.8);
+      tl.fromTo("#card3 .also", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 18.85);
+
+      // search-bar typing: one proxy, text derived from time (seek-safe)
+      const qEl = document.getElementById("q-text");
+      const typer = { t: 9.6 };
+      const renderQ = (t) => {
+        let text = "", typing = false;
+        for (const s of STOPS) {
+          if (t >= s.t0 && t < s.out) {
+            const k = Math.max(0, Math.min(1, (t - s.t0) / (s.t1 - s.t0)));
+            text = s.q.slice(0, Math.round(k * s.q.length));
+            typing = k < 1;
+          }
+        }
+        if (!text) { qEl.className = "ph"; qEl.textContent = "Ask about Paris"; return; }
+        const caretOn = typing || Math.floor(t * 2.5) % 2 === 0;
+        qEl.className = "";
+        qEl.innerHTML = "";
+        qEl.appendChild(document.createTextNode(text));
+        if (caretOn) { const c = document.createElement("span"); c.id = "caret"; qEl.appendChild(c); }
+      };
+      tl.fromTo(typer, { t: 9.6 }, { t: 19.6, duration: 10, ease: "none", onUpdate: () => renderQ(typer.t) }, 9.6);
+      tl.to("#s3-inner", { opacity: 0, duration: 0.35 }, 19.3);
+
+      // ---------- Scene 4: sights ----------
+      tl.fromTo("#s4-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 19.65);
+      const counts = [8, 5, 4, 3];
+      counts.forEach((c, i) => {
+        const t = 19.85 + i * 0.15;
+        const id = "#t" + (i + 1);
+        tl.fromTo(id, { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, t);
+        tl.fromTo(id + " img", { scale: 1.15 }, { scale: 1, duration: 3.6, ease: "power1.out" }, t);
+        const node = document.querySelector("#n" + (i + 1));
+        const p = { v: 0 };
+        tl.fromTo(p, { v: 0 }, { v: c, duration: 1.0, ease: "power2.out", onUpdate: () => { node.textContent = String(Math.round(p.v)); } }, t + 0.3);
+      });
+      tl.fromTo("#s4-foot", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 20.9);
+      tl.to("#s4-inner", { opacity: 0, duration: 0.3 }, 23.35);
+      tl.to("#s4-bg", { opacity: 0, duration: 0.35 }, 23.4);
+
+      // ---------- Scene 5: site scroll ----------
+      tl.fromTo("#browser", { opacity: 0, y: 80, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 23.7);
+      tl.fromTo("#site-img", { y: 0 }, { y: -2300, duration: 2.5, ease: "power2.inOut" }, 24.2);
+      tl.to("#browser", { opacity: 0, scale: 0.96, duration: 0.3 }, 26.75);
+
+      // ---------- Scene 6: end card, tricolore wipes in the URL ----------
+      tl.fromTo("#badge", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 27.05);
+      tl.fromTo("#end-stripe", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.75, ease: "power3.inOut" }, 27.15);
+      tl.fromTo("#end-name", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.75, ease: "power3.inOut" }, 27.15);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 27.75);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.05);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.6);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

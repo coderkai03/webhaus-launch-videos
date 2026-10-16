@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>anaheim.info — What Changed</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Open Sans";
+        src: url("assets/fonts/open-sans-latin.woff2") format("woff2");
+        font-weight: 300 800;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/plex-mono-400.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/plex-mono-500.woff2") format("woff2");
+        font-weight: 500;
+      }
+      :root {
+        --night: #1b1d21;
+        --night-2: #2b2e33;
+        --deep: #15171a;
+        --panel: #24272c;
+        --teal: #2ab4c6;
+        --teal-lt: #6fd3df;
+        --teal-deep: #0f6f7c;
+        --orange: #f39a24;
+        --text: #eceef0;
+        --muted: #bfc4ca;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--night); }
+      #root {
+        position: relative; width: 100%; height: 100%; overflow: hidden;
+        font-family: "Open Sans", system-ui, "Segoe UI", sans-serif; color: var(--text);
+      }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .bg { position: absolute; inset: 0; background: radial-gradient(1400px 900px at 70% 40%, #24272c 0%, var(--night) 60%, var(--deep) 100%); }
+      .abs { position: absolute; }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+
+      /* ---------- scenes 1–2: live header over the plaza photo ---------- */
+      #photo-wrap { position: absolute; inset: 0; overflow: hidden; }
+      #hero-img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; transform-origin: 38% 22%; }
+      #photo-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(21, 23, 26, 0.86) 0%, rgba(21, 23, 26, 0.42) 48%, rgba(21, 23, 26, 0.08) 100%); }
+      #photo-dark { position: absolute; inset: 0; background: rgba(21, 23, 26, 0.62); }
+      #header {
+        position: absolute; left: 0; top: 0; width: 1920px; height: 104px; display: flex; align-items: center; padding: 0 140px;
+        background: linear-gradient(180deg, rgba(21, 23, 26, 0.96), rgba(36, 39, 44, 0.9)); border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .icon-btn { width: 58px; height: 58px; border: 2px solid rgba(255, 255, 255, 0.22); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+      #wm { margin-left: 26px; }
+      .wordmark { font-weight: 700; letter-spacing: 0.12em; color: #ffffff; line-height: 1; white-space: nowrap; }
+      .wordmark span { font-weight: 300; }
+      #wm .wordmark { font-size: 36px; }
+      .subline { font-weight: 600; letter-spacing: 0.14em; color: var(--muted); white-space: nowrap; }
+      #wm .subline { font-size: 13.5px; margin-top: 8px; }
+      #live { margin-left: auto; margin-right: 22px; display: flex; align-items: center; gap: 16px; }
+      #clock { position: relative; width: 44px; height: 44px; border: 2.5px solid var(--text); border-radius: 50%; }
+      .hand { position: absolute; left: 50%; bottom: 50%; background: var(--text); border-radius: 2px; }
+      #hand-h { width: 3px; height: 11px; margin-left: -1.5px; }
+      #hand-m { width: 2px; height: 16px; margin-left: -1px; background: var(--teal-lt); }
+      #live-txt { text-align: right; }
+      #live-txt .mono { font-size: 14px; color: var(--muted); }
+      #live-txt .row2 { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+      #live-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); }
+      #live-txt .row2 .mono { color: var(--teal-lt); font-size: 14px; }
+
+      #hook1 { left: 140px; top: 360px; font-size: 104px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; white-space: nowrap; color: #ffffff; }
+      #hook2 { left: 140px; top: 500px; font-size: 64px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; width: 1100px; color: var(--text); }
+      #hook2 .l { display: block; white-space: nowrap; }
+      #hook2 em { font-style: normal; color: var(--orange); }
+
+      #s2-eyebrow { left: 140px; top: 300px; font-size: 20px; color: var(--teal-lt); }
+      #s2-title { left: 140px; top: 345px; width: 1500px; font-size: 118px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.04; color: #ffffff; }
+      #s2-title .line { display: block; white-space: nowrap; }
+      #s2-title .line + .line { color: var(--teal-lt); }
+      #s2-sub { left: 140px; top: 630px; width: 1200px; font-size: 34px; line-height: 1.4; color: var(--text); }
+      .cite {
+        display: inline-flex; align-items: center; gap: 14px; padding: 13px 22px; background: rgba(15, 111, 124, 0.92); color: #ffffff;
+        font-family: "IBM Plex Mono", monospace; font-size: 19px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; border-radius: 4px;
+      }
+      .cite i { display: block; width: 24px; height: 24px; border-radius: 50%; background: var(--teal-lt); position: relative; flex: none; }
+      .cite i::after { content: ""; position: absolute; left: 8px; top: 4px; width: 6px; height: 12px; border: solid var(--teal-deep); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+      #s2-cite { left: 140px; top: 760px; }
+
+      /* ---------- scene 3: what changed ---------- */
+      #s3-bg { position: absolute; inset: 0; background: var(--night); }
+      #ticker { position: absolute; left: 0; top: 0; width: 1920px; height: 64px; background: var(--orange); overflow: hidden; }
+      #ticker-track { position: absolute; left: 0; top: 0; height: 64px; display: flex; align-items: center; white-space: nowrap; }
+      #ticker-track span { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 22px; letter-spacing: 0.16em; color: var(--deep); padding-right: 44px; }
+      #s3-head { left: 140px; top: 128px; display: flex; align-items: center; gap: 26px; }
+      #s3-bar { width: 8px; height: 76px; background: var(--teal); }
+      #s3-title { font-size: 72px; font-weight: 700; letter-spacing: -0.02em; color: #ffffff; white-space: nowrap; }
+      #s3-note { left: 1180px; top: 160px; width: 600px; text-align: right; font-size: 19px; color: var(--muted); }
+      .chg {
+        position: absolute; left: 140px; width: 1640px; height: 166px; background: var(--panel); border-top: 4px solid var(--orange); border-radius: 6px;
+      }
+      .chg .date { position: absolute; left: 40px; top: 36px; font-size: 19px; color: var(--orange); }
+      .chg .topic { position: absolute; left: 40px; top: 70px; width: 440px; font-size: 40px; font-weight: 700; color: #ffffff; line-height: 1.15; letter-spacing: -0.01em; }
+      .chg .old { position: absolute; left: 520px; top: 28px; font-size: 34px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+      .chg .old b { position: absolute; left: -6px; right: -6px; top: 52%; height: 5px; background: var(--orange); border-radius: 3px; transform-origin: left center; }
+      .chg .new { position: absolute; left: 520px; top: 86px; font-size: 40px; font-weight: 700; color: var(--teal-lt); white-space: nowrap; letter-spacing: -0.01em; }
+      .chg .new u { text-decoration: none; color: var(--orange); }
+      .chg .stamp { position: absolute; right: 36px; top: 30px; padding: 8px 14px; border: 2px solid var(--teal); color: var(--teal-lt); font-size: 16px; border-radius: 4px; }
+
+      /* ---------- scene 4: map ---------- */
+      #map-cam { position: absolute; inset: 0; transform-origin: 1100px 560px; }
+      #map-img { position: absolute; left: 300px; top: 0; width: 1920px; height: 1080px; filter: grayscale(1) invert(1) brightness(0.62) contrast(1.25); }
+      #map-tint { position: absolute; left: 300px; top: 0; width: 1920px; height: 1080px; background: rgba(15, 111, 124, 0.16); }
+      #dots { position: absolute; left: 300px; top: 0; width: 1920px; height: 1080px; }
+      .dot { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: var(--teal); border: 3px solid #0b3a40; }
+      .ven { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: var(--orange); border: 4px solid #5a3608; }
+      .ring { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 3px solid var(--orange); }
+      #map-panel { position: absolute; left: 0; top: 0; width: 980px; height: 1080px; background: linear-gradient(90deg, var(--night) 0%, var(--night) 66%, rgba(27, 29, 33, 0) 100%); }
+      #m-eyebrow { left: 140px; top: 330px; font-size: 20px; color: var(--orange); }
+      #m-title { left: 140px; top: 372px; font-size: 92px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.04; color: #ffffff; }
+      #m-title span { display: block; white-space: nowrap; }
+      #m-sub { left: 140px; top: 590px; width: 600px; font-size: 30px; line-height: 1.42; color: var(--text); }
+      #m-cite { left: 140px; top: 770px; }
+      #m-legend { left: 140px; top: 860px; display: flex; gap: 34px; font-size: 18px; color: var(--muted); }
+      #m-legend div { display: flex; align-items: center; gap: 12px; }
+      #m-legend i { display: block; width: 18px; height: 18px; border-radius: 50%; }
+      .badge {
+        position: absolute; display: flex; align-items: center; gap: 14px; padding: 10px 24px 10px 10px; background: #ffffff; color: var(--night);
+        border-radius: 40px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45); white-space: nowrap; font-size: 26px; font-weight: 700;
+      }
+      .badge .ic { width: 50px; height: 50px; border-radius: 50%; background: var(--teal-deep); display: flex; align-items: center; justify-content: center; flex: none; }
+      .badge .num { display: inline-block; width: 30px; height: 30px; border-radius: 6px; border: 2.5px dashed var(--teal-deep); margin-right: 2px; }
+      .lead { position: absolute; height: 3px; background: #ffffff; transform-origin: left center; }
+
+      /* ---------- scene 5: site ---------- */
+      #s5-bg { position: absolute; inset: 0; background: var(--teal-deep); }
+      #browser { position: absolute; left: 260px; top: 100px; width: 1400px; height: 880px; background: var(--deep); border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5); }
+      #browser-bar { height: 64px; background: #e9ebee; display: flex; align-items: center; padding: 0 24px; gap: 10px; }
+      #browser-bar .dot3 { width: 16px; height: 16px; border-radius: 50%; background: #c3c8ce; }
+      #url { margin-left: 30px; flex: 1; height: 40px; border-radius: 20px; background: #ffffff; display: flex; align-items: center; padding: 0 22px; font-size: 22px; color: var(--night); font-weight: 600; }
+      #viewport { position: absolute; left: 0; top: 64px; width: 1400px; height: 816px; overflow: hidden; }
+      #site-img { position: absolute; left: 0; top: 0; width: 1400px; height: auto; display: block; }
+
+      /* ---------- scene 6: ask anaheim ---------- */
+      #ask-photo { position: absolute; inset: 0; overflow: hidden; }
+      #ask-img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #ask-shade { position: absolute; inset: 0; background: rgba(21, 23, 26, 0.66); }
+      #ask-title { left: 0; width: 1920px; top: 205px; text-align: center; font-size: 132px; font-weight: 700; letter-spacing: -0.02em; color: #ffffff; }
+      #search { position: absolute; left: 380px; top: 420px; width: 1160px; height: 120px; background: #ffffff; border-radius: 16px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5); }
+      #q { position: absolute; left: 44px; top: 0; height: 120px; line-height: 120px; font-size: 44px; color: var(--night); font-weight: 600; white-space: nowrap; }
+      #caret { display: inline-block; width: 3px; height: 50px; background: var(--teal-deep); vertical-align: middle; margin-left: 4px; }
+      #s-btn { position: absolute; right: 12px; top: 12px; width: 96px; height: 96px; border-radius: 12px; background: var(--teal-deep); display: flex; align-items: center; justify-content: center; }
+      #chips { left: 300px; width: 1320px; top: 590px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 18px; }
+      .qchip { padding: 14px 26px; border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 40px; background: rgba(21, 23, 26, 0.6); font-size: 26px; font-weight: 700; color: #ffffff; white-space: nowrap; }
+      #answer { position: absolute; left: 380px; top: 590px; width: 1160px; padding: 34px 44px; background: var(--panel); border-top: 4px solid var(--orange); border-radius: 8px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5); }
+      #answer .mono { font-size: 18px; color: var(--orange); }
+      #answer .a1 { font-size: 46px; font-weight: 700; color: #ffffff; margin-top: 12px; white-space: nowrap; }
+      #answer .a2 { font-size: 30px; color: var(--teal-lt); margin-top: 10px; font-weight: 600; white-space: nowrap; }
+
+      /* ---------- scene 7: end card ---------- */
+      #end-bg { position: absolute; inset: 0; background: radial-gradient(1200px 700px at 50% 45%, #24272c 0%, var(--night) 60%, var(--deep) 100%); }
+      #end-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #end-name { font-size: 140px; }
+      #end-rule { display: flex; width: 560px; height: 6px; margin-top: 34px; }
+      #end-rule i { flex: 1; display: block; }
+      #end-sub { font-size: 24px; margin-top: 30px; }
+      #end-tag { font-size: 50px; font-weight: 700; color: #ffffff; margin-top: 46px; letter-spacing: -0.01em; white-space: nowrap; }
+      #end-tag em { font-style: normal; color: var(--teal-lt); }
+      #end-mono { font-size: 19px; color: var(--muted); margin-top: 30px; }
+      #webhaus { left: 0; width: 1920px; top: 975px; text-align: center; font-size: 18px; color: #8a9097; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4" /><line x1="15.4" y1="15.4" x2="20.5" y2="20.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" /></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><g stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="7" x2="19" y2="7" /><line x1="5" y1="12" x2="19" y2="12" /><line x1="5" y1="17" x2="19" y2="17" /></g></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M15.5 3.2a8.8 8.8 0 1 0 5.3 15.1A7.2 7.2 0 0 1 15.5 3.2z" fill="currentColor" /></symbol>
+        <symbol id="i-walk" viewBox="0 0 24 24">
+          <circle cx="13.2" cy="3.6" r="2.1" fill="currentColor" />
+          <g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.4 7.4 L10.6 13.6" /><path d="M10.6 13.6 L13.4 17 L14.4 21.6" /><path d="M10.6 13.6 L8.9 17.4 L6.2 20.8" />
+            <path d="M12.2 8 L8.8 9.8 L7.6 12.8" /><path d="M12.2 8.6 L14 11.4 L17 12.4" />
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/whoosh-short.mp3" data-start="0.15" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/riser.mp3" data-start="2.2" data-duration="3.4" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/impact-bass-1.mp3" data-start="4.95" data-duration="2.12" data-volume="0.55" data-track-index="11"></audio>
+      <audio id="sfx-4" src="assets/sfx/pop.mp3" data-start="6.5" data-duration="0.72" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-5" src="assets/sfx/whoosh.mp3" data-start="8.85" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/click-soft.mp3" data-start="10.25" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/pop.mp3" data-start="10.6" data-duration="0.72" data-volume="0.28" data-track-index="11"></audio>
+      <audio id="sfx-8" src="assets/sfx/click-soft.mp3" data-start="11.75" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-9" src="assets/sfx/pop.mp3" data-start="12.1" data-duration="0.72" data-volume="0.28" data-track-index="11"></audio>
+      <audio id="sfx-10" src="assets/sfx/click-soft.mp3" data-start="13.25" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/pop.mp3" data-start="13.6" data-duration="0.72" data-volume="0.28" data-track-index="11"></audio>
+      <audio id="sfx-12" src="assets/sfx/click-soft.mp3" data-start="14.75" data-duration="0.37" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-13" src="assets/sfx/pop.mp3" data-start="15.1" data-duration="0.72" data-volume="0.28" data-track-index="11"></audio>
+      <audio id="sfx-14" src="assets/sfx/whoosh-short.mp3" data-start="16.35" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-15" src="assets/sfx/pop.mp3" data-start="16.9" data-duration="0.72" data-volume="0.25" data-track-index="11"></audio>
+      <audio id="sfx-16" src="assets/sfx/pop.mp3" data-start="17.3" data-duration="0.72" data-volume="0.2" data-track-index="10"></audio>
+      <audio id="sfx-17" src="assets/sfx/pop.mp3" data-start="17.75" data-duration="0.72" data-volume="0.2" data-track-index="11"></audio>
+      <audio id="sfx-18" src="assets/sfx/ping.mp3" data-start="18.95" data-duration="1.32" data-volume="0.2" data-track-index="10"></audio>
+      <audio id="sfx-19" src="assets/sfx/ping.mp3" data-start="19.55" data-duration="1.32" data-volume="0.2" data-track-index="11"></audio>
+      <audio id="sfx-20" src="assets/sfx/ping.mp3" data-start="20.15" data-duration="1.32" data-volume="0.2" data-track-index="12"></audio>
+      <audio id="sfx-21" src="assets/sfx/whoosh.mp3" data-start="21.55" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-22" src="assets/sfx/whoosh-short.mp3" data-start="22.15" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-23" src="assets/sfx/whoosh-short.mp3" data-start="24.55" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-24" src="assets/sfx/typing.mp3" data-start="25.05" data-duration="1.2" data-volume="0.35" data-track-index="11"></audio>
+      <audio id="sfx-25" src="assets/sfx/click-soft.mp3" data-start="26.3" data-duration="0.37" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-26" src="assets/sfx/pop.mp3" data-start="26.45" data-duration="0.72" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-27" src="assets/sfx/impact-bass-1.mp3" data-start="27" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-28" src="assets/sfx/chime.mp3" data-start="27.45" data-duration="2.5" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+
+      <!-- Scenes 1–2: the site's live header over the sunset palm plaza -->
+      <section id="s-photo" class="clip" data-start="0" data-duration="9" data-track-index="0">
+        <div id="photo-wrap">
+          <img id="hero-img" src="assets/hero.jpg" alt="Palm-lined plaza at sunset" />
+          <div id="photo-shade"></div>
+          <div id="photo-dark"></div>
+        </div>
+        <div id="header">
+          <div class="icon-btn"><svg width="30" height="30" style="color: #fff"><use href="#i-menu" /></svg></div>
+          <div id="wm">
+            <div class="wordmark">ANAHEIM<span>.INFO</span></div>
+            <div class="subline">THE PRACTICAL GUIDE · ORANGE COUNTY, CALIFORNIA</div>
+          </div>
+          <div id="live">
+            <div id="live-txt">
+              <div class="mono">Local time · weather</div>
+              <div class="row2"><div id="live-dot"></div><div class="mono">Live in the header</div></div>
+            </div>
+            <div id="clock"><div class="hand" id="hand-h"></div><div class="hand" id="hand-m"></div></div>
+            <svg width="34" height="34" style="color: var(--teal-lt)"><use href="#i-moon" /></svg>
+          </div>
+          <div class="icon-btn"><svg width="30" height="30" style="color: #fff"><use href="#i-search" /></svg></div>
+        </div>
+      </section>
+
+      <!-- Scene 1: hook -->
+      <section id="s1" class="clip" data-start="0" data-duration="5" data-track-index="1">
+        <div id="hook1" class="abs">The parks have an app.</div>
+        <div id="hook2" class="abs"><span class="l">Everything <em>outside the gates</em></span><span class="l">has this.</span></div>
+      </section>
+
+      <!-- Scene 2: headline -->
+      <section id="s2" class="clip" data-start="5" data-duration="4" data-track-index="1">
+        <div id="s2-eyebrow" class="abs mono">Independent · not affiliated with any park, city or venue</div>
+        <div id="s2-title" class="abs"><span class="line">Outside the gates:</span><span class="line">The practical guide.</span></div>
+        <div id="s2-sub" class="abs">Everything around the parks, the arenas and the convention center.</div>
+        <div id="s2-cite" class="abs cite"><i></i>Straight answers from the source · checked Oct 2026</div>
+      </section>
+
+      <!-- Scene 3: what changed -->
+      <section id="s3" class="clip" data-start="9" data-duration="7.4" data-track-index="2">
+        <div id="s3-bg"></div>
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="ticker"><div id="ticker-track"></div></div>
+          <div id="s3-head" class="abs"><div id="s3-bar"></div><div id="s3-title">What changed</div></div>
+          <div id="s3-note" class="abs mono">Checked Oct 2026</div>
+          <div class="chg" id="c1" style="top: 262px">
+            <div class="date mono">March 31, 2026</div><div class="topic">ART shuttle</div>
+            <div class="old">Running<b></b></div>
+            <div class="new">Shut down. <u>Paid shuttles for 13 hotels</u> replaced it.</div>
+            <div class="stamp mono">Cited · dated</div>
+          </div>
+          <div class="chg" id="c2" style="top: 452px">
+            <div class="date mono">January 5, 2026</div><div class="topic">Honda Center parking</div>
+            <div class="old">Separate parking pass<b></b></div>
+            <div class="new">Now <u>included</u>. No separate pass.</div>
+            <div class="stamp mono">Cited · dated</div>
+          </div>
+          <div class="chg" id="c3" style="top: 642px">
+            <div class="date mono">August 9, 2026</div><div class="topic">OCTA route 553</div>
+            <div class="old">Not on the timetable<b></b></div>
+            <div class="new">New: train station to a Disneyland stop, <u>weekdays only</u>.</div>
+            <div class="stamp mono">Cited · dated</div>
+          </div>
+          <div class="chg" id="c4" style="top: 832px">
+            <div class="date mono">September 8, 2026</div><div class="topic">Lyft discount</div>
+            <div class="old">Discounted rides<b></b></div>
+            <div class="new">The hotel-to-gate ride discount <u>expired</u>.</div>
+            <div class="stamp mono">Cited · dated</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 4: the map -->
+      <section id="s4" class="clip" data-start="16.4" data-duration="5.2" data-track-index="2">
+        <div id="map-cam">
+          <img id="map-img" src="assets/map.jpg" alt="Map of the Anaheim resort district" />
+          <div id="map-tint"></div>
+          <div id="dots"></div>
+        </div>
+        <div id="map-panel"></div>
+        <div id="m-eyebrow" class="abs mono">The Anaheim map</div>
+        <div id="m-title" class="abs"><span>Hotels by</span><span>walking minutes.</span></div>
+        <div id="m-sub" class="abs">Minutes on foot to the gates, the convention center and Honda Center, and which shuttle each is on.</div>
+        <div id="m-cite" class="abs cite"><i></i>From the operator's own page</div>
+        <div id="m-legend" class="abs mono"><div><i style="background: var(--teal)"></i>Hotels</div><div><i style="background: var(--orange)"></i>Gates · venues · trains</div></div>
+        <div id="badges"></div>
+      </section>
+
+      <!-- Scene 5: the site -->
+      <section id="s5" class="clip" data-start="21.6" data-duration="3" data-track-index="2">
+        <div id="s5-bg"></div>
+        <div id="browser">
+          <div id="browser-bar"><div class="dot3"></div><div class="dot3"></div><div class="dot3"></div><div id="url">anaheim.info</div></div>
+          <div id="viewport"><img id="site-img" src="assets/site-full.png" alt="anaheim.info homepage" /></div>
+        </div>
+      </section>
+
+      <!-- Scene 6: Ask Anaheim -->
+      <section id="s6" class="clip" data-start="24.6" data-duration="2.6" data-track-index="2">
+        <div id="ask-photo"><img id="ask-img" src="assets/hero-ask.jpg" alt="" /><div id="ask-shade"></div></div>
+        <div id="ask-title" class="abs">Ask Anaheim.</div>
+        <div id="search">
+          <div id="q"><span id="q-text"></span><span id="caret"></span></div>
+          <div id="s-btn"><svg width="52" height="52" style="color: #fff"><use href="#i-search" /></svg></div>
+        </div>
+        <div id="chips" class="abs">
+          <div class="qchip">Is the ART shuttle still running?</div><div class="qchip">ARTIC to Disneyland</div><div class="qchip">Honda Center parking</div>
+          <div class="qchip">Hotels with a shuttle</div><div class="qchip">Splash pads</div><div class="qchip">Disneyland parking cost</div>
+        </div>
+        <div id="answer">
+          <div class="mono">What changed · March 31, 2026</div>
+          <div class="a1">No. The ART shuttle shut down.</div>
+          <div class="a2">Paid shuttles for 13 hotels replaced it.</div>
+        </div>
+      </section>
+
+      <!-- Scene 7: end card -->
+      <section id="s7" class="clip" data-start="27.2" data-duration="2.8" data-track-index="2">
+        <div id="end-bg"></div>
+        <div id="end-wrap">
+          <div id="end-name" class="wordmark">ANAHEIM<span>.INFO</span></div>
+          <div id="end-rule"><i style="background: var(--teal)"></i><i style="background: var(--orange)"></i></div>
+          <div id="end-sub" class="subline">THE PRACTICAL GUIDE · ORANGE COUNTY, CALIFORNIA</div>
+          <div id="end-tag">Outside the gates. <em>Ask Anaheim.</em></div>
+          <div id="end-mono" class="mono">Independent · every figure from the source</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- data: dots measured from the site's own map card (tools/find-dots.mjs) ----------
+      const DOTS = [[423.8,139.8,"t"],[483.2,170.7,"t"],[505.2,231.6,"t"],[349.7,238.7,"t"],[517.4,242.1,"t"],[507.9,244.1,"t"],[523.2,253.5,"t"],[511,258.1,"t"],[492.3,274.5,"o"],[510.7,268.3,"t"],[420,286.6,"o"],[561.8,290.5,"t"],[503.9,291.6,"t"],[492.7,295.9,"t"],[942.8,303.7,"o"],[407.2,305.6,"t"],[495.8,306.5,"t"],[565.8,306.5,"t"],[499.8,325.6,"t"],[379.1,326.8,"t"],[525,331.8,"o"],[563.8,329.3,"t"],[579.3,335.6,"t"],[925.8,339.5,"t"],[495.1,344.5,"t"],[569.4,345.5,"t"],[584.7,344.6,"t"],[515.7,348.6,"t"],[803.2,349.5,"t"],[543.8,351.5,"t"],[558.3,351.9,"t"],[597.8,351.5,"t"],[484.7,352.6,"t"],[503.2,359.4,"t"],[477.2,359.7,"t"],[931.1,367.5,"o"],[836.2,368.4,"o"],[383.2,369.4,"t"],[477,370.7,"t"],[497.8,373.5,"t"],[466.3,375.3,"t"],[407.8,383.5,"t"],[483.3,383.5,"t"],[499.9,388.7,"t"],[483.2,399.4,"t"],[426.9,405.7,"o"],[882.1,409.5,"o"],[455.3,406.6,"t"],[455.8,427.5,"t"],[481,427.8,"t"],[499.9,437.7,"t"],[484,440.5,"t"],[475.3,449.3,"t"],[498.3,448.8,"t"],[491,457.3,"t"],[483.2,522.5,"t"],[473.7,534.5,"t"],[485.5,543.1,"t"],[493.7,553.2,"t"],[473.2,559.3,"t"],[464.2,577.4,"t"],[469.4,587.4,"t"],[478.9,593.4,"t"],[489.2,608.3,"t"]];
+      const S = 1.6, OX = 300; // map card 1200x675 drawn at 1920x1080, shifted right by 300px
+      const dotsEl = document.getElementById("dots");
+      const hotels = [], venues = [];
+      DOTS.forEach(([x, y, k]) => {
+        const el = document.createElement("div");
+        el.className = k === "t" ? "dot" : "ven";
+        el.style.left = (x * S).toFixed(1) + "px";
+        el.style.top = (y * S).toFixed(1) + "px";
+        if (k === "o") {
+          const ring = document.createElement("div");
+          ring.className = "ring"; ring.style.left = el.style.left; ring.style.top = el.style.top;
+          dotsEl.appendChild(ring); venues.push({ el, ring });
+        } else hotels.push({ el, d: Math.hypot(x - 490, y - 330) });
+        dotsEl.appendChild(el);
+      });
+      hotels.sort((a, b) => a.d - b.d);
+
+      // Walking-minute badges: generic (no invented numbers), anchored to real hotel dots.
+      const BADGES = [
+        { at: [517.4, 242.1], dx: 70, dy: -120, label: "min to the gates" },
+        { at: [455.3, 406.6], dx: 80, dy: 90, label: "min to the convention center" },
+        { at: [925.8, 339.5], dx: -390, dy: -150, label: "min to Honda Center" },
+      ];
+      const badgesEl = document.getElementById("badges");
+      const walk = '<div class="ic"><svg width="30" height="30" style="color:#fff"><use href="#i-walk"/></svg></div>';
+      BADGES.forEach((b, i) => {
+        const x = OX + b.at[0] * S, y = b.at[1] * S;
+        const bx = x + b.dx, by = y + b.dy;
+        const ex = bx + (b.dx < 0 ? 330 : 0), ey = by + 35;
+        const len = Math.hypot(ex - x, ey - y), ang = Math.atan2(ey - y, ex - x) * 180 / Math.PI;
+        badgesEl.insertAdjacentHTML("beforeend",
+          `<div class="lead" id="ld${i}" style="left:${x.toFixed(1)}px;top:${(y - 1.5).toFixed(1)}px;width:${len.toFixed(1)}px;rotate:${ang.toFixed(2)}deg"></div>` +
+          `<div class="badge" id="bd${i}" style="left:${bx.toFixed(1)}px;top:${by.toFixed(1)}px">${walk}<span class="num"></span>${b.label}</div>`);
+      });
+
+      // Ticker text
+      const tick = "WHAT CHANGED · ART SHUTTLE · HONDA CENTER PARKING · OCTA ROUTE 553 · LYFT DISCOUNT · ";
+      document.getElementById("ticker-track").innerHTML = Array.from({ length: 6 }, () => `<span>${tick}</span>`).join("");
+
+      // ---------- Scene 1: live header + hook ----------
+      tl.fromTo("#hero-img", { scale: 1.12 }, { scale: 1.02, duration: 9, ease: "none" }, 0);
+      tl.fromTo("#photo-dark", { opacity: 1 }, { opacity: 0, duration: 1.2, ease: "power2.out" }, 0);
+      tl.fromTo("#header", { y: -110 }, { y: 0, duration: 0.7, ease: "power3.out" }, 0.2);
+      tl.fromTo("#live", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 0.75);
+      tl.fromTo("#hand-m", { rotation: 40 }, { rotation: 760, duration: 9, ease: "none", transformOrigin: "50% 100%" }, 0);
+      tl.fromTo("#hand-h", { rotation: 250 }, { rotation: 310, duration: 9, ease: "none", transformOrigin: "50% 100%" }, 0);
+      tl.fromTo("#live-dot", { opacity: 1 }, { opacity: 0.25, duration: 0.5, ease: "sine.inOut", repeat: 17, yoyo: true }, 0);
+
+      tl.fromTo("#hook1", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.6);
+      tl.fromTo("#hook2 .l", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.2 }, 2.0);
+      tl.to(["#hook1", "#hook2"], { opacity: 0, y: -20, duration: 0.35, ease: "power2.in" }, 4.55);
+
+      // ---------- Scene 2: headline ----------
+      tl.to("#photo-dark", { opacity: 0.75, duration: 0.6, ease: "power2.inOut" }, 4.7);
+      tl.fromTo("#s2-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 5.15);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.8, ease: "power4.out", stagger: 0.18 }, 5.2);
+      tl.fromTo("#s2-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 5.9);
+      tl.fromTo("#s2-cite", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)", transformOrigin: "0% 50%" }, 6.5);
+      tl.to(["#s2-eyebrow", "#s2-title", "#s2-sub", "#s2-cite", "#header"], { opacity: 0, duration: 0.35 }, 8.6);
+
+      // ---------- Scene 3: what changed ----------
+      tl.fromTo("#s3-bg", { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: 0.5, ease: "power3.inOut" }, 9);
+      tl.fromTo("#ticker", { y: -64 }, { y: 0, duration: 0.4, ease: "power3.out" }, 9.3);
+      tl.fromTo("#ticker-track", { x: 0 }, { x: -1100, duration: 7.1, ease: "none" }, 9.3);
+      tl.fromTo("#s3-head", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 9.4);
+      tl.fromTo("#s3-note", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 9.7);
+      ["#c1", "#c2", "#c3", "#c4"].forEach((id, i) => {
+        const t = 9.8 + i * 1.5;
+        tl.fromTo(id, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, t);
+        tl.fromTo(id + " .old b", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.inOut" }, t + 0.45);
+        tl.to(id + " .old", { opacity: 0.45, duration: 0.3 }, t + 0.75);
+        tl.fromTo(id + " .new", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.6)" }, t + 0.8);
+        tl.fromTo(id + " .stamp", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, t + 1.05);
+      });
+      tl.to("#s3-inner", { opacity: 0, duration: 0.35 }, 16.05);
+
+      // ---------- Scene 4: map ----------
+      tl.fromTo("#map-cam", { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power3.out" }, 16.4);
+      tl.to("#map-cam", { scale: 1.05, duration: 4.2, ease: "none" }, 17.4);
+      tl.fromTo("#map-panel", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 16.4);
+      tl.fromTo("#m-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 16.7);
+      tl.fromTo("#m-title span", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: "power4.out", stagger: 0.15 }, 16.75);
+      tl.fromTo("#m-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 17.3);
+      tl.fromTo("#m-cite", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)", transformOrigin: "0% 50%" }, 17.9);
+      tl.fromTo("#m-legend", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 18.2);
+      venues.forEach((v, i) => {
+        tl.fromTo(v.el, { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(2.5)" }, 16.9 + i * 0.06);
+        tl.fromTo(v.ring, { scale: 1, opacity: 0.9 }, { scale: 2.6, opacity: 0, duration: 1.1, ease: "power2.out", repeat: 2 }, 17.1 + i * 0.06);
+      });
+      hotels.forEach((h, i) => {
+        tl.fromTo(h.el, { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(3)" }, 17.2 + i * 0.026);
+      });
+      BADGES.forEach((b, i) => {
+        const t = 18.8 + i * 0.6;
+        tl.fromTo("#ld" + i, { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power2.out" }, t);
+        tl.fromTo("#bd" + i, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, t + 0.15);
+      });
+      tl.to(["#map-cam", "#map-panel", "#m-eyebrow", "#m-title", "#m-sub", "#m-cite", "#m-legend", "#badges"], { opacity: 0, duration: 0.3 }, 21.3);
+
+      // ---------- Scene 5: site scroll ----------
+      tl.fromTo("#s5-bg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 21.6);
+      tl.fromTo("#browser", { opacity: 0, y: 80, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out" }, 21.6);
+      tl.fromTo("#site-img", { y: 0 }, { y: -2170, duration: 2.1, ease: "power2.inOut" }, 22.15);
+      tl.to("#browser", { opacity: 0, scale: 0.96, duration: 0.3 }, 24.3);
+
+      // ---------- Scene 6: Ask Anaheim ----------
+      tl.fromTo("#ask-photo", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 24.6);
+      tl.fromTo("#ask-img", { scale: 1.08 }, { scale: 1.02, duration: 2.6, ease: "none" }, 24.6);
+      tl.fromTo("#ask-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 24.7);
+      tl.fromTo("#search", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 24.8);
+      tl.fromTo("#chips .qchip", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.05 }, 24.95);
+      const question = "Is the ART shuttle still running?";
+      const qEl = document.getElementById("q-text");
+      const typed = { n: 0 };
+      tl.fromTo(typed, { n: 0 }, { n: question.length, duration: 1.15, ease: "none", onUpdate: () => { qEl.textContent = question.slice(0, Math.round(typed.n)); } }, 25.05);
+      tl.fromTo("#caret", { opacity: 1 }, { opacity: 0, duration: 0.2, repeat: 5, yoyo: true, ease: "steps(1)" }, 25.0);
+      tl.fromTo("#s-btn", { scale: 1 }, { scale: 0.88, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut" }, 26.3);
+      tl.to("#chips", { opacity: 0, y: 20, duration: 0.2 }, 26.35);
+      tl.fromTo("#answer", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(1.6)" }, 26.45);
+      tl.to(["#ask-title", "#search", "#answer", "#ask-photo"], { opacity: 0, duration: 0.25 }, 26.95);
+
+      // ---------- Scene 7: end card ----------
+      tl.fromTo("#end-bg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 27.2);
+      tl.fromTo("#end-name", { opacity: 0, y: 30, scale: 1.08 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 27.25);
+      tl.fromTo("#end-rule i", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut", stagger: 0.12, transformOrigin: "0% 50%" }, 27.55);
+      tl.fromTo("#end-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 27.75);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 27.9);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.2);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+# Reinstallable dependencies and tool caches
+node_modules/
+.hyperframes/
+.media/
+
+# Intermediate renders (finals live in videos/final/) and review stills
+videos/*/renders/
+videos/*/snaps*/
+videos/*/check*.jpg
+videos/review-*.jpg
+*.log

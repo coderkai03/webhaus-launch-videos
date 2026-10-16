@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>longbeach.biz — The Desk (vertical)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Source Serif 4"; src: url("assets/fonts/source-serif-4-latin.woff2") format("woff2"); font-weight: 200 900; }
+      @font-face { font-family: "IBM Plex Sans"; src: url("assets/fonts/ibm-plex-sans-latin.woff2") format("woff2"); font-weight: 100 700; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root { --navy: #1b3a5c; --navy-deep: #0f2238; --teal: #5fe0d3; --desk: #15191f; --desk-2: #1c2129; --line: #2b323d; --paper: #ede8dc; --muted: #a7adb6; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--desk); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "IBM Plex Sans", system-ui, sans-serif; color: var(--paper); }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+      .bg {
+        position: absolute; inset: 0;
+        background:
+          repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 90px),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 90px),
+          radial-gradient(1200px 1500px at 50% 40%, #1a1f27 0%, var(--desk) 60%, #101318 100%);
+      }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; letter-spacing: 0.16em; text-transform: uppercase; }
+      .serif { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; }
+      .stamp { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border: 1px solid rgba(95, 224, 211, 0.55); font-family: "IBM Plex Mono", monospace; font-size: 19px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal); }
+      .stamp i { display: block; width: 9px; height: 9px; background: var(--teal); }
+
+      /* HUD */
+      #topbar { left: 0; top: 0; width: 1080px; height: 104px; background: var(--navy-deep); border-bottom: 4px solid var(--teal); display: flex; align-items: center; padding: 0 80px; }
+      #tb-mark { font-family: "Source Serif 4", serif; font-weight: 600; font-size: 38px; color: #ffffff; }
+      #tb-mark b { color: var(--teal); font-weight: 600; }
+      #tb-right { margin-left: auto; font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: 0.16em; color: #9fb3c8; }
+      #tb-right b { color: var(--teal); font-weight: 500; }
+      #ticker { left: 0; top: 1560px; width: 1080px; height: 60px; background: #0c0f13; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; }
+      #ticker-label { position: absolute; left: 0; top: 0; height: 60px; width: 220px; background: var(--teal); color: var(--desk); display: flex; align-items: center; justify-content: center; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.16em; z-index: 2; }
+      #ticker-win { position: absolute; left: 220px; top: 0; width: 860px; height: 60px; overflow: hidden; }
+      #ticker-track { position: absolute; left: 28px; top: 0; height: 60px; display: flex; align-items: center; white-space: nowrap; font-family: "IBM Plex Mono", monospace; font-size: 21px; letter-spacing: 0.1em; color: var(--paper); }
+      #ticker-track span { margin-right: 54px; }
+      #ticker-track em { font-style: normal; color: var(--teal); margin-right: 12px; }
+
+      /* hook + headline */
+      #rule { left: 0; top: 480px; width: 1080px; height: 5px; background: var(--teal); transform-origin: 0 50%; box-shadow: 0 0 24px rgba(95, 224, 211, 0.45); }
+      #eyebrow { left: 80px; top: 416px; font-size: 30px; color: var(--teal); letter-spacing: 0.2em; white-space: nowrap; }
+      #cursor { display: inline-block; width: 17px; height: 32px; background: var(--teal); vertical-align: -5px; margin-left: 6px; }
+      #hook { left: 80px; top: 560px; width: 940px; font-size: 118px; line-height: 1.04; letter-spacing: -0.02em; }
+      #hook span { display: block; white-space: nowrap; }
+      #hook .t { color: var(--teal); }
+      #h1 { left: 80px; top: 552px; width: 920px; font-size: 78px; line-height: 1.1; letter-spacing: -0.015em; }
+      #h1 .line { display: block; white-space: nowrap; }
+      #desks { left: 80px; top: 1100px; width: 920px; display: flex; flex-wrap: wrap; gap: 12px; }
+      #desks div { font-family: "IBM Plex Mono", monospace; font-size: 22px; letter-spacing: 0.14em; padding: 10px 16px; border: 1px solid var(--line); background: var(--desk-2); color: var(--paper); }
+
+      /* desks */
+      #s2-head { left: 80px; top: 168px; font-size: 84px; letter-spacing: -0.015em; }
+      #s2-sub { left: 80px; top: 286px; font-size: 24px; color: var(--muted); }
+      #s2-stamp { right: 80px; top: 278px; }
+      #s2-rule { left: 80px; top: 340px; width: 920px; height: 2px; background: var(--paper); transform-origin: 0 50%; }
+      .card { position: absolute; left: 80px; width: 920px; height: 360px; background: var(--desk-2); border: 1px solid var(--line); overflow: hidden; }
+      .card img { position: absolute; left: 0; top: 0; width: 300px; height: 360px; object-fit: cover; }
+      .card .body { position: absolute; left: 300px; top: 0; width: 620px; height: 360px; padding: 30px 34px; }
+      .card .k { font-size: 17px; color: var(--teal); }
+      .card .ti { font-size: 40px; margin-top: 8px; white-space: nowrap; letter-spacing: -0.01em; }
+      .fig { position: relative; margin-top: 22px; padding: 16px 20px; background: #12161c; border: 1px solid var(--line); }
+      .fig .flash { position: absolute; inset: 0; background: var(--teal); opacity: 0; }
+      .fig .lab { position: relative; font-size: 17px; color: var(--muted); }
+      .fig .big { position: relative; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 68px; letter-spacing: -0.02em; line-height: 1.12; margin-top: 4px; white-space: nowrap; }
+      .fig .big small { font-size: 21px; color: var(--muted); letter-spacing: 0.02em; margin-left: 10px; }
+      .fig .note { position: relative; font-size: 21px; color: #c9c5bb; margin-top: 4px; white-space: nowrap; }
+      .fig .note b { color: var(--teal); font-weight: 500; }
+      .card .flash-all { position: absolute; inset: 0; background: #ffffff; opacity: 0; }
+
+      /* end card */
+      #e-bg { position: absolute; inset: 0; background: radial-gradient(1200px 1500px at 50% 42%, #163152 0%, var(--navy-deep) 70%, #0a1828 100%); }
+      #end-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1600px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #end-rule { width: 520px; height: 5px; background: var(--teal); box-shadow: 0 0 24px rgba(95, 224, 211, 0.45); }
+      #end-name { font-size: 132px; letter-spacing: -0.02em; line-height: 1; margin-top: 50px; color: #ffffff; }
+      #end-name b { color: var(--teal); font-weight: 600; }
+      #end-tag { font-family: "IBM Plex Mono", monospace; font-size: 25px; color: #c9d3de; margin-top: 34px; white-space: nowrap; }
+      #end-note { width: 860px; text-align: center; font-size: 24px; line-height: 1.5; color: #8ea0b4; margin-top: 54px; }
+      #webhaus { left: 0; width: 1080px; top: 1580px; text-align: center; font-size: 22px; color: #7f93a8; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="vertical" data-start="0" data-duration="15" data-width="1080" data-height="1920">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/riser.mp3" data-start="0" data-duration="3.4" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/whoosh-short.mp3" data-start="0.15" data-duration="0.57" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-3" src="assets/sfx/typing.mp3" data-start="0.9" data-duration="1.3" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-4" src="assets/sfx/impact-bass-1.mp3" data-start="2.7" data-duration="2.12" data-volume="0.5" data-track-index="11"></audio>
+      <audio id="sfx-5" src="assets/sfx/whoosh-short.mp3" data-start="4.05" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/whoosh.mp3" data-start="6.9" data-duration="0.57" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/impact-bass-1.mp3" data-start="7.35" data-duration="2.12" data-volume="0.48" data-track-index="11"></audio>
+      <audio id="sfx-8" src="assets/sfx/pop.mp3" data-start="7.85" data-duration="0.72" data-volume="0.26" data-track-index="10"></audio>
+      <audio id="sfx-9" src="assets/sfx/impact-bass-1.mp3" data-start="8.15" data-duration="2.12" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-10" src="assets/sfx/pop.mp3" data-start="8.65" data-duration="0.72" data-volume="0.26" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/impact-bass-1.mp3" data-start="8.95" data-duration="2.12" data-volume="0.4" data-track-index="13"></audio>
+      <audio id="sfx-12" src="assets/sfx/pop.mp3" data-start="9.45" data-duration="0.72" data-volume="0.26" data-track-index="10"></audio>
+      <audio id="sfx-13" src="assets/sfx/impact-bass-1.mp3" data-start="12.15" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-14" src="assets/sfx/chime.mp3" data-start="12.45" data-duration="2.5" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+
+
+      <section id="hud" class="clip" data-start="0" data-duration="12.1" data-track-index="0">
+        <div id="topbar" class="abs"><div id="tb-mark">LongBeach<b>.biz</b></div><div id="tb-right">QUOTED · <b>CITED</b> · DATED</div></div>
+        <div id="ticker" class="abs">
+          <div id="ticker-label">ON THE DESK</div>
+          <div id="ticker-win" data-layout-allow-overflow data-layout-allow-occlusion><div id="ticker-track">
+            <span data-layout-allow-occlusion><em data-layout-allow-occlusion>LA28 OLYMPIC SPORTS IN LONG BEACH</em>JUL 12–29, 2028</span>
+            <span data-layout-allow-occlusion><em data-layout-allow-occlusion>PARALYMPIC SPORTS</em>AUG 16–27, 2028</span>
+            <span data-layout-allow-occlusion><em data-layout-allow-occlusion>BUS FARE</em>$1.25</span>
+            <span data-layout-allow-occlusion><em data-layout-allow-occlusion>PASSPORT SHUTTLE</em>FREE FRI–SUN</span>
+            <span data-layout-allow-occlusion><em data-layout-allow-occlusion>GRAND PRIX</em>APR 16–18, 2027</span>
+            <span data-layout-allow-occlusion><em data-layout-allow-occlusion>LA28 OLYMPIC SPORTS IN LONG BEACH</em>JUL 12–29, 2028</span>
+          </div></div>
+        </div>
+      </section>
+
+      <section id="s1" class="clip" data-start="0" data-duration="7" data-track-index="1">
+        <div id="rule" class="abs"></div>
+        <div id="eyebrow" class="abs mono"><span id="eb-text"></span><span id="cursor"></span></div>
+        <div id="hook" class="abs serif"><span>Before you sign</span><span>the lease,</span><span class="t">read the desk.</span></div>
+        <div id="h1" class="abs serif">
+          <span class="line">Independent information,</span>
+          <span class="line">data, and resources for</span>
+          <span class="line">Long Beach businesses,</span>
+          <span class="line">property owners,</span>
+          <span class="line">residents, and visitors.</span>
+        </div>
+        <div id="desks" class="abs"><div>BUSINESS</div><div>PROPERTY</div><div>DATA</div><div>VISITING</div><div>MAP</div></div>
+      </section>
+
+      <section id="s2" class="clip" data-start="7" data-duration="5.1" data-track-index="1">
+        <div id="s2-shake" class="abs" style="inset: 0">
+          <div id="s2-head" class="abs serif">Start here</div>
+          <div id="s2-sub" class="abs mono">Three desks, one question each</div>
+          <div id="s2-rule" class="abs"></div>
+          <div class="card" id="k1" style="top: 380px">
+            <img src="assets/desk-1.png" alt="" style="object-position: 38% 50%" />
+            <div class="body">
+              <div class="k mono">Business desk</div>
+              <div class="ti serif">I am opening a business</div>
+              <div class="fig"><div class="flash"></div><div class="lab mono">Convention Center parking</div><div class="big"><span id="f1" style="display: inline-block">$15.00</span><small>/day · operator</small></div><div class="note" id="f1n"><b>$10.00</b> city, for events · conflict flagged</div></div>
+            </div>
+            <div class="flash-all"></div>
+          </div>
+          <div class="card" id="k2" style="top: 770px">
+            <img src="assets/desk-2.png" alt="" />
+            <div class="body">
+              <div class="k mono">Property desk</div>
+              <div class="ti serif">I own or am buying property</div>
+              <div class="fig"><div class="flash"></div><div class="lab mono">Grand Prix 2027</div><div class="big"><span id="f2">APR 16–18</span></div><div class="note" id="f2n">No 2027 closure notice yet</div></div>
+            </div>
+            <div class="flash-all"></div>
+          </div>
+          <div class="card" id="k3" style="top: 1160px">
+            <img src="assets/desk-3.png" alt="" />
+            <div class="body">
+              <div class="k mono">Visiting desk</div>
+              <div class="ti serif">I am arriving with a purpose</div>
+              <div class="fig"><div class="flash"></div><div class="lab mono">Bus fare</div><div class="big"><span id="f3" style="display: inline-block">$1.25</span></div><div class="note" id="f3n">Passport shuttle <b>free</b> Friday–Sunday</div></div>
+            </div>
+            <div class="flash-all"></div>
+          </div>
+          <div id="s2-stamp" class="abs stamp"><i></i>Cited · dated</div>
+        </div>
+      </section>
+
+      <section id="s3" class="clip" data-start="12.1" data-duration="2.9" data-track-index="2">
+        <div id="e-bg"></div>
+        <div id="end-wrap">
+          <div id="end-rule"></div>
+          <div id="end-name" class="serif">LongBeach<b>.biz</b></div>
+          <div id="end-tag">The business intelligence desk for Long Beach, CA.</div>
+          <div id="end-note">Independent. Not affiliated with the City of Long Beach, the Port of Long Beach or any operator. No legal or tax advice.</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // HUD
+      tl.fromTo("#topbar", { y: -110 }, { y: 0, duration: 0.5, ease: "power3.out" }, 0.05);
+      tl.fromTo("#ticker", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.4);
+      tl.fromTo("#ticker-track", { x: 0 }, { x: -1900, duration: 11.7, ease: "none" }, 0.4);
+
+      // Hook: rule draws, eyebrow types
+      tl.fromTo("#rule", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, 0.2);
+      const eb = "THE LONG BEACH, CALIFORNIA DESK";
+      const ebNode = document.getElementById("eb-text");
+      const ty = { n: 0 };
+      tl.to(ty, { n: eb.length, duration: 1.25, ease: "none", onUpdate: () => { ebNode.textContent = eb.slice(0, Math.round(ty.n)); } }, 0.9);
+      tl.fromTo("#cursor", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.85);
+      tl.fromTo("#cursor", { opacity: 1 }, { opacity: 0, duration: 0.28, ease: "steps(1)", repeat: 9, yoyo: true, immediateRender: false }, 2.2);
+      tl.fromTo("#hook span", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.38 }, 2.2);
+      tl.to("#hook", { opacity: 0, y: -24, duration: 0.35, ease: "power2.in" }, 3.85);
+
+      // Headline
+      tl.fromTo("#h1 .line", { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power4.out", stagger: 0.12 }, 4.15);
+      tl.fromTo("#desks div", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.08 }, 5.0);
+      tl.to(["#eyebrow", "#h1", "#desks"], { opacity: 0, duration: 0.3 }, 6.65);
+      tl.to("#rule", { scaleX: 0, transformOrigin: "100% 50%", duration: 0.4, ease: "power2.in" }, 6.55);
+
+      // Three desks slam in
+      tl.fromTo("#s2-head", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 7.0);
+      tl.fromTo("#s2-sub", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 7.15);
+      tl.fromTo("#s2-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, 7.1);
+      const figs = [
+        { el: "#f1" },
+        { el: "#f2", text: "APR 16–18" },
+        { el: "#f3" },
+      ];
+      figs.forEach((f, i) => {
+        const t = 7.3 + i * 0.8;
+        const k = "#k" + (i + 1);
+        tl.fromTo(k, { opacity: 0, scale: 1.2, y: -40 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "power4.in" }, t);
+        tl.fromTo(k + " .flash-all", { opacity: 0.35 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, t + 0.3);
+        tl.fromTo("#s2-shake", { x: 0, y: 0 }, { keyframes: [{ x: -9, y: 4, duration: 0.04 }, { x: 7, y: -3, duration: 0.04 }, { x: -4, y: 2, duration: 0.04 }, { x: 0, y: 0, duration: 0.06 }], immediateRender: false }, t + 0.3);
+        tl.fromTo(k + " .fig .flash", { opacity: 0.9 }, { opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, t + 0.55);
+        const node = document.querySelector(f.el);
+        const p = { v: 0, n: 0 };
+        if (f.text) {
+          tl.to(p, { n: f.text.length, duration: 0.45, ease: "none", onUpdate: () => { node.textContent = f.text.slice(0, Math.round(p.n)); } }, t + 0.55);
+        } else {
+          tl.fromTo(f.el, { opacity: 0, scale: 1.35 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, t + 0.55);
+        }
+        tl.fromTo(f.el + "n", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, t + 0.9);
+      });
+      tl.fromTo("#s2-stamp", { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 9.9);
+      tl.to("#s2-shake", { opacity: 0, duration: 0.3 }, 11.8);
+
+      // End card
+      tl.fromTo("#end-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.inOut" }, 12.15);
+      tl.fromTo("#end-name", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 12.4);
+      tl.fromTo("#end-tag", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 12.75);
+      tl.fromTo("#end-note", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 13.1);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 13.5);
+
+      window.__timelines["vertical"] = tl;
+    </script>
+  </body>
+</html>

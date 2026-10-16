@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>boracay.biz — Before You Land</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/plex-mono-400.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("assets/fonts/plex-mono-500.woff2") format("woff2");
+        font-weight: 500;
+      }
+      :root {
+        --deep: #0d2b3a;
+        --deep-2: #17475a;
+        --sea: #0b7a8a;
+        --tld: #7fd6df;
+        --sun: #e8742c;
+        --gold: #f2a71b;
+        --sand: #f6f1e7;
+        --ink: #1c2a31;
+        --mute: #5d6d75;
+        --line: #e2dccd;
+        --soft: #b9cbd3;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--deep); }
+      #root {
+        position: relative; width: 100%; height: 100%; overflow: hidden;
+        font-family: system-ui, sans-serif; color: var(--sand);
+      }
+      svg { overflow: visible; }
+      .clip { position: absolute; inset: 0; }
+      .bg { position: absolute; inset: 0; background: var(--deep); }
+      .abs { position: absolute; }
+      .mono { font-family: "IBM Plex Mono", Menlo, Consolas, monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+
+      /* ---------- logo ---------- */
+      .badge {
+        display: inline-flex; align-items: center; justify-content: center; border-radius: 22%;
+        background: var(--deep-2); border: 2px solid #406777; color: #fff; font-weight: 800; letter-spacing: -0.02em;
+      }
+      .badge i { display: inline-block; width: 0.2em; height: 0.2em; border-radius: 50%; background: var(--tld); margin: 0 0.06em; transform: translateY(0.12em); }
+      .word { font-weight: 800; letter-spacing: -0.03em; color: #fff; }
+      .word em { font-style: normal; color: var(--tld); }
+
+      /* ---------- scene 1: hook ---------- */
+      #sky { position: absolute; inset: 0; background: linear-gradient(180deg, #08202c 0%, #0d2b3a 34%, #17475a 70%, #2f7182 100%); }
+      #glow { position: absolute; left: 640px; top: 140px; width: 1400px; height: 1000px; background: radial-gradient(closest-side, rgba(242, 167, 27, 0.55), rgba(232, 116, 44, 0.22) 45%, rgba(232, 116, 44, 0) 100%); }
+      #sun-wrap { position: absolute; left: 1140px; top: 440px; width: 400px; height: 400px; }
+      #sun-wrap svg, .sun svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+      #scape { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #hook { left: 140px; top: 180px; width: 1000px; font-size: 104px; font-weight: 800; line-height: 1.04; letter-spacing: -0.035em; }
+      #hook span { display: block; }
+      #hook .b { color: var(--tld); }
+      #until { left: 140px; top: 460px; font-size: 104px; font-weight: 800; letter-spacing: -0.035em; color: var(--gold); }
+      #night { position: absolute; inset: 0; background: var(--deep); opacity: 0; }
+
+      /* ---------- scene 2: headline ---------- */
+      #s2-logo { left: 140px; top: 170px; display: flex; align-items: center; gap: 24px; }
+      #s2-logo .badge { width: 96px; height: 76px; font-size: 40px; }
+      #s2-logo .word { font-size: 64px; }
+      #s2-eyebrow { left: 140px; top: 300px; font-size: 22px; color: var(--tld); }
+      #s2-title { left: 140px; top: 350px; width: 1300px; font-size: 132px; font-weight: 800; letter-spacing: -0.045em; line-height: 1; }
+      #s2-title .line { display: block; }
+      #search {
+        left: 140px; top: 660px; width: 1040px; height: 104px; background: #fff; border-radius: 22px;
+        display: flex; align-items: center; padding: 0 36px; gap: 26px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      }
+      #search-text { font-size: 40px; color: var(--mute); white-space: nowrap; }
+      #caret { display: inline-block; width: 3px; height: 44px; background: var(--sea); vertical-align: middle; margin-left: 4px; }
+      #s2-nav { left: 140px; top: 830px; display: flex; gap: 40px; font-size: 34px; font-weight: 600; color: var(--soft); }
+      #s2-nav span:first-child { color: #fff; }
+
+      /* ---------- scenes 3–4: sand ---------- */
+      #sand-bg { position: absolute; inset: 0; background: var(--sand); }
+      #s3-eyebrow { left: 110px; top: 118px; font-size: 22px; color: #0a6c7a; }
+      #s3-title { left: 110px; top: 156px; font-size: 92px; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); }
+
+      /* boarding pass */
+      #pass { left: 110px; top: 312px; width: 800px; height: 540px; filter: drop-shadow(0 30px 50px rgba(28, 42, 49, 0.18)); }
+      #pass-body { position: absolute; inset: 0; background: #fffdf8; border-radius: 26px; overflow: hidden; }
+      #pass-head { position: absolute; left: 0; top: 0; width: 800px; height: 88px; background: var(--deep); display: flex; align-items: center; padding: 0 32px; gap: 16px; }
+      #pass-head .badge { width: 54px; height: 42px; font-size: 22px; }
+      #pass-head .word { font-size: 30px; }
+      #pass-head .mono { margin-left: auto; font-size: 18px; color: var(--tld); }
+      .route { position: absolute; top: 112px; }
+      .route .mono { font-size: 15px; color: var(--mute); }
+      .route .big { font-size: 50px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
+      #plane-line { position: absolute; left: 248px; top: 160px; width: 120px; }
+      .checklabel { position: absolute; left: 32px; top: 240px; font-size: 15px; color: var(--mute); }
+      .check { position: absolute; left: 32px; height: 48px; display: flex; align-items: center; gap: 18px; font-size: 29px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+      .box { position: relative; width: 36px; height: 36px; border-radius: 9px; border: 3px solid #cfc6b2; background: #fff; }
+      .box .fill { position: absolute; inset: -3px; border-radius: 9px; background: var(--sea); }
+      .box svg { position: absolute; left: 4px; top: 5px; width: 22px; height: 20px; }
+      #perf { position: absolute; left: 588px; top: 104px; height: 420px; border-left: 3px dashed #d9d0bc; }
+      .notch { position: absolute; width: 40px; height: 40px; border-radius: 50%; background: var(--sand); left: 569px; }
+      #stub { position: absolute; left: 612px; top: 112px; width: 168px; }
+      #stub .mono { font-size: 14px; color: var(--mute); }
+      #stub .val { font-size: 30px; font-weight: 800; color: var(--ink); margin: 4px 0 18px; letter-spacing: -0.01em; }
+      #barcode { position: absolute; left: 618px; top: 330px; width: 152px; height: 150px; }
+
+      /* headline cards */
+      .card {
+        position: absolute; left: 1000px; width: 820px; height: 156px; background: #fff; border: 1px solid var(--line); border-radius: 16px;
+        padding: 20px 30px 0 36px; box-shadow: 0 16px 40px rgba(28, 42, 49, 0.08); overflow: hidden;
+      }
+      .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 7px; background: var(--sun); }
+      .card .top { display: flex; align-items: center; justify-content: space-between; height: 30px; }
+      .card .topic { font-family: "IBM Plex Mono", monospace; font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+      .card h3 { font-size: 29px; font-weight: 700; color: var(--ink); line-height: 1.24; margin-top: 10px; letter-spacing: -0.01em; }
+      .chip {
+        display: flex; align-items: center; gap: 10px; padding: 6px 14px; background: #e3f4f5; color: var(--sea); border-radius: 999px;
+        font-family: "IBM Plex Mono", monospace; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+      }
+      .chip b { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--sea); }
+
+      /* ---------- scene 4: maps ---------- */
+      #s4-eyebrow { left: 156px; top: 110px; font-size: 22px; color: #0a6c7a; }
+      #s4-title { left: 156px; top: 148px; font-size: 92px; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); }
+      .tile {
+        position: absolute; width: 520px; height: 220px; border-radius: 26px; overflow: hidden; padding: 34px 40px; color: #fff;
+        box-shadow: 0 18px 40px rgba(28, 42, 49, 0.14);
+      }
+      .tile.o { background: linear-gradient(135deg, #d9652a 0%, #e8892c 55%, #eba52e 100%); }
+      .tile.t { background: linear-gradient(135deg, #0b7c8b 0%, #0f8f99 55%, #14a5a9 100%); }
+      .tile h4 { font-size: 46px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+      .tile p { font-size: 28px; margin-top: 10px; opacity: 0.95; }
+      .ring { position: absolute; right: -50px; bottom: -70px; width: 220px; height: 220px; border-radius: 50%; border: 26px solid rgba(255, 255, 255, 0.2); }
+      #pills { left: 156px; top: 880px; display: flex; gap: 16px; }
+      .pill { font-size: 30px; padding: 16px 30px; border-radius: 999px; background: #fff; border: 2px solid var(--line); color: var(--ink); }
+      .pill.on { background: var(--sea); border-color: var(--sea); color: #fff; }
+      #pills-label { left: 156px; top: 836px; font-size: 18px; color: var(--mute); }
+
+      /* ---------- scene 5: phone ---------- */
+      #s5-bg { position: absolute; inset: 0; background: radial-gradient(900px 700px at 70% 50%, #17475a 0%, var(--deep) 70%); }
+      #s5-eyebrow { left: 140px; top: 250px; font-size: 22px; color: var(--tld); }
+      #s5-l1 { left: 140px; top: 296px; width: 900px; font-size: 80px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.04; }
+      #s5-l2 { left: 140px; top: 520px; width: 900px; font-size: 80px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.04; }
+      #s5-l2 .o { color: var(--gold); }
+      #s5-sub { left: 140px; top: 720px; width: 820px; font-size: 34px; line-height: 1.35; color: var(--soft); }
+
+      #phone-scale { left: 1190px; top: 50px; width: 420px; height: 860px; transform: scale(1.14); transform-origin: 0 0; }
+      #phone { left: 0; top: 0; width: 420px; height: 860px; }
+      #phone-body {
+        position: absolute; inset: 0; border-radius: 70px; background: linear-gradient(150deg, #3a4b54 0%, #1a262c 40%, #0f171b 100%);
+        box-shadow: 0 50px 110px rgba(0, 0, 0, 0.55), inset 0 0 0 2px #56666e, inset 0 0 0 7px #0b1215;
+      }
+      .btn { position: absolute; width: 6px; border-radius: 3px; background: #2b383e; }
+      #screen { position: absolute; left: 16px; top: 16px; width: 388px; height: 828px; border-radius: 56px; overflow: hidden; background: var(--sand); color: var(--ink); }
+      .ph-status { position: absolute; left: 0; top: 0; width: 388px; height: 52px; background: var(--deep); color: #fff; z-index: 5; }
+      .ph-time { position: absolute; left: 40px; top: 17px; font-size: 17px; font-weight: 700; }
+      .ph-island { position: absolute; left: 137px; top: 12px; width: 114px; height: 32px; border-radius: 16px; background: #000; }
+      .ph-icons { position: absolute; right: 30px; top: 19px; display: flex; gap: 7px; align-items: center; }
+      .ph-head { position: absolute; left: 0; top: 52px; width: 388px; height: 118px; background: var(--deep); overflow: hidden; }
+      .ph-logo { position: absolute; left: 20px; top: 8px; display: flex; align-items: center; gap: 10px; }
+      .ph-logo .badge { width: 40px; height: 32px; font-size: 16px; border-width: 1.5px; }
+      .ph-logo .word { font-size: 23px; }
+      .ph-sun { position: absolute; right: -58px; top: -64px; width: 150px; height: 150px; }
+      .ph-search { position: absolute; left: 18px; top: 56px; width: 352px; height: 46px; background: #fff; border-radius: 13px; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 15px; color: var(--mute); white-space: nowrap; }
+      .ph-scroll { position: absolute; left: 0; top: 170px; width: 388px; height: 594px; overflow: hidden; }
+      .ph-content { position: absolute; left: 0; top: 0; width: 388px; }
+      .ph-label { position: absolute; left: 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--mute); }
+      .ph-tile { position: absolute; width: 170px; height: 76px; border-radius: 13px; padding: 11px 13px; color: #fff; overflow: hidden; }
+      .ph-tile.o { background: linear-gradient(135deg, #d9652a, #eba52e); }
+      .ph-tile.t { background: linear-gradient(135deg, #0b7c8b, #14a5a9); }
+      .ph-tile b { display: block; font-size: 15px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+      .ph-tile span { display: block; font-size: 11.5px; margin-top: 3px; }
+      .ph-tile .ring { right: -22px; bottom: -34px; width: 80px; height: 80px; border-width: 10px; }
+      .ph-pills { position: absolute; left: 18px; top: 330px; display: flex; gap: 8px; white-space: nowrap; }
+      .ph-pills .pill { font-size: 13px; padding: 7px 13px; border-width: 1.5px; }
+      .ph-list { position: absolute; left: 18px; top: 378px; width: 352px; background: #fff; border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+      .ph-row { position: relative; padding: 12px 14px; font-size: 14.5px; font-weight: 600; line-height: 1.3; border-bottom: 1px solid var(--line); }
+      .ph-row .hl { position: absolute; inset: 0; background: rgba(11, 122, 138, 0.14); }
+      .ph-nav { position: absolute; left: 0; bottom: 0; width: 388px; height: 64px; background: var(--deep); display: flex; justify-content: space-around; padding: 9px 12px 0; color: var(--soft); z-index: 4; }
+      .ph-nav div { text-align: center; font-size: 11px; width: 60px; }
+      .ph-nav div b { display: block; font-size: 17px; height: 22px; font-weight: 700; }
+      .ph-nav div:first-child { color: #fff; font-weight: 700; }
+      .ph-dim { position: absolute; inset: 0; background: rgba(13, 27, 34, 0.45); z-index: 6; opacity: 0; }
+      .ph-sheet { position: absolute; left: 0; bottom: 0; width: 388px; height: 330px; background: #fbfaf7; border-radius: 26px 26px 0 0; z-index: 7; padding: 10px 18px 0; }
+      .ph-handle { width: 46px; height: 5px; border-radius: 3px; background: #cfcac0; margin: 0 auto 14px; }
+      .ph-sh-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #e7e2d8; }
+      .ph-sh-head .badge { width: 46px; height: 46px; font-size: 18px; border-radius: 12px; }
+      .ph-sh-head b { display: block; font-size: 16px; }
+      .ph-sh-head span { display: block; font-size: 13px; color: var(--mute); margin-top: 2px; }
+      .ph-opt { position: relative; display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 14px; margin-top: 8px; background: #fff; border-radius: 12px; font-size: 16px; font-weight: 500; border: 1px solid #ece7dd; overflow: hidden; }
+      .ph-opt .hl { position: absolute; inset: 0; background: rgba(11, 122, 138, 0.16); }
+      .ph-opt svg { width: 22px; height: 22px; }
+      .ripple { position: absolute; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; background: rgba(11, 122, 138, 0.35); z-index: 9; opacity: 0; }
+      .ph-toast { position: absolute; left: 64px; top: 70px; width: 260px; height: 44px; border-radius: 22px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; font-weight: 600; z-index: 8; }
+      .ph-nosig { position: absolute; left: 0; bottom: 64px; width: 388px; height: 44px; background: var(--sun); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; font-weight: 700; z-index: 3; }
+      .ph-article { position: absolute; left: 0; top: 52px; width: 388px; height: 712px; background: var(--sand); z-index: 3; padding: 22px 22px 0; }
+      .ph-back { font-size: 15px; font-weight: 600; color: var(--sea); }
+      .ph-article h5 { font-size: 25px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.18; margin-top: 16px; color: var(--ink); }
+      .ph-offline { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 7px 13px; border-radius: 999px; background: var(--deep); color: var(--tld); font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+      .ph-offline b { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--tld); }
+      .skel { height: 11px; border-radius: 6px; background: #e4ddcd; margin-top: 12px; }
+      .skel.h { height: 16px; width: 60%; background: #d6ccb6; margin-top: 26px; }
+      .ph-cite { margin-top: 18px; font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); }
+
+      /* ---------- scene 6: site ---------- */
+      #s6-bg { position: absolute; inset: 0; background: linear-gradient(160deg, #0b7a8a 0%, #0d2b3a 100%); }
+      #browser { position: absolute; left: 260px; top: 100px; width: 1400px; height: 880px; background: #f6f1e7; border-radius: 18px; overflow: hidden; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.45); }
+      #browser-bar { height: 64px; background: #e9e4d9; display: flex; align-items: center; padding: 0 24px; gap: 10px; }
+      #browser-bar .dot { width: 16px; height: 16px; border-radius: 50%; background: #c9c1b1; }
+      #url { margin-left: 30px; flex: 1; height: 40px; border-radius: 20px; background: #ffffff; display: flex; align-items: center; padding: 0 22px; font-size: 22px; color: var(--ink); font-weight: 600; }
+      #viewport { position: absolute; left: 0; top: 64px; width: 1400px; height: 816px; overflow: hidden; }
+      #site-img { position: absolute; left: 0; top: 0; width: 1400px; height: auto; display: block; }
+
+      /* ---------- scene 7: end card ---------- */
+      #end-sky { position: absolute; inset: 0; background: linear-gradient(180deg, #08202c 0%, #0d2b3a 50%, #17475a 100%); }
+      #end-scape { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #end-sun { position: absolute; left: 820px; top: 70px; width: 280px; height: 280px; }
+      #end-wrap { position: absolute; left: 0; top: 360px; width: 1920px; display: flex; flex-direction: column; align-items: center; }
+      #end-logo { display: flex; align-items: center; gap: 34px; }
+      #end-logo .badge { width: 170px; height: 134px; font-size: 70px; border-width: 3px; }
+      #end-logo .word { font-size: 150px; line-height: 1; }
+      #end-tag { font-size: 50px; font-weight: 700; color: var(--sand); margin-top: 34px; letter-spacing: -0.02em; }
+      #end-mono { font-size: 21px; color: var(--tld); margin-top: 30px; }
+      #webhaus { left: 0; width: 1920px; top: 800px; text-align: center; font-size: 18px; color: #cfe7ea; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <radialGradient id="sun-disc-grad" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#ffe7a0" />
+          <stop offset="0.55" stop-color="#f9bd3a" />
+          <stop offset="1" stop-color="#f09a1e" />
+        </radialGradient>
+        <linearGradient id="ray-grad" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#f6b12a" />
+          <stop offset="1" stop-color="#ee921c" />
+        </linearGradient>
+        <symbol id="sun-rays" viewBox="-200 -200 400 400"><g id="rays-g"></g></symbol>
+        <symbol id="sun-disc" viewBox="-200 -200 400 400">
+          <circle r="112" fill="#ffd36a" opacity="0.18" />
+          <circle r="96" fill="url(#sun-disc-grad)" />
+          <circle r="94" fill="none" stroke="#fff3c7" stroke-opacity="0.45" stroke-width="2.5" />
+        </symbol>
+        <symbol id="plane" viewBox="0 0 24 24">
+          <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div class="bg"></div>
+
+      <!-- Sound effects (HyperFrames bundled SFX library) -->
+      <audio id="sfx-1" src="assets/sfx/riser.mp3" data-start="0.4" data-duration="3.9" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/impact-bass-1.mp3" data-start="3.15" data-duration="2.12" data-volume="0.55" data-track-index="11"></audio>
+      <audio id="sfx-3" src="assets/sfx/whoosh.mp3" data-start="4.4" data-duration="0.57" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-4" src="assets/sfx/pop.mp3" data-start="5" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-5" src="assets/sfx/typing.mp3" data-start="6.1" data-duration="1.4" data-volume="0.22" data-track-index="10"></audio>
+      <audio id="sfx-6" src="assets/sfx/whoosh.mp3" data-start="8.55" data-duration="0.57" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-7" src="assets/sfx/whoosh-short.mp3" data-start="9.2" data-duration="0.57" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-8" src="assets/sfx/pop.mp3" data-start="10" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-9" src="assets/sfx/pop.mp3" data-start="11" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-10" src="assets/sfx/pop.mp3" data-start="12" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/pop.mp3" data-start="13" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-12" src="assets/sfx/whoosh.mp3" data-start="14.55" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-13" src="assets/sfx/pop.mp3" data-start="14.95" data-duration="0.72" data-volume="0.2" data-track-index="11"></audio>
+      <audio id="sfx-14" src="assets/sfx/pop.mp3" data-start="15.37" data-duration="0.72" data-volume="0.2" data-track-index="10"></audio>
+      <audio id="sfx-15" src="assets/sfx/pop.mp3" data-start="15.79" data-duration="0.72" data-volume="0.2" data-track-index="11"></audio>
+      <audio id="sfx-16" src="assets/sfx/whoosh.mp3" data-start="18.8" data-duration="0.57" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-17" src="assets/sfx/click-soft.mp3" data-start="20.2" data-duration="0.37" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-18" src="assets/sfx/pop.mp3" data-start="20.55" data-duration="0.72" data-volume="0.25" data-track-index="11"></audio>
+      <audio id="sfx-19" src="assets/sfx/glitch-3.mp3" data-start="21.2" data-duration="0.9" data-volume="0.18" data-track-index="10"></audio>
+      <audio id="sfx-20" src="assets/sfx/click-soft.mp3" data-start="22.35" data-duration="0.37" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-21" src="assets/sfx/ping.mp3" data-start="22.95" data-duration="1.32" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-22" src="assets/sfx/whoosh.mp3" data-start="24" data-duration="0.57" data-volume="0.38" data-track-index="11"></audio>
+      <audio id="sfx-23" src="assets/sfx/whoosh-short.mp3" data-start="24.6" data-duration="0.57" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-24" src="assets/sfx/impact-bass-1.mp3" data-start="26.85" data-duration="2.12" data-volume="0.45" data-track-index="10"></audio>
+      <audio id="sfx-25" src="assets/sfx/chime.mp3" data-start="27.4" data-duration="2.5" data-volume="0.45" data-track-index="11"></audio>
+      <!-- /Sound effects -->
+
+      <!-- Scenes 1–2: sunrise over the sea, then the sun parks in the corner like the site's header -->
+      <section id="s-hero" class="clip" data-start="0" data-duration="8.6" data-track-index="0">
+        <div id="sky"></div>
+        <div id="glow"></div>
+        <div id="night"></div>
+        <div id="sun-wrap" data-layout-allow-overflow>
+          <svg id="sun-rays-svg" viewBox="-200 -200 400 400"><use href="#sun-rays" x="-200" y="-200" width="400" height="400" /></svg>
+          <svg viewBox="-200 -200 400 400"><use href="#sun-disc" x="-200" y="-200" width="400" height="400" /></svg>
+        </div>
+        <svg id="scape" viewBox="0 0 1920 1080"></svg>
+      </section>
+
+      <!-- Scene 1: hook -->
+      <section id="s1" class="clip" data-start="0" data-duration="4.8" data-track-index="1">
+        <div id="hook" class="abs"><span>The island is easy.</span><span class="b">Getting there isn’t.</span></div>
+        <div id="until" class="abs">Until now.</div>
+      </section>
+
+      <!-- Scene 2: headline -->
+      <section id="s2" class="clip" data-start="4.8" data-duration="3.8" data-track-index="1">
+        <div id="s2-logo" class="abs"><div class="badge">b<i></i>b</div><div class="word">boracay<em>.biz</em></div></div>
+        <div id="s2-eyebrow" class="abs mono">Independent guide · Every fact cited</div>
+        <div id="s2-title" class="abs"><span class="line">Boracay, the</span><span class="line">practical guide.</span></div>
+        <div id="search" class="abs">
+          <svg width="44" height="44" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#5d6d75" stroke-width="2.2" /><path d="M15 15l5.5 5.5" stroke="#5d6d75" stroke-width="2.4" stroke-linecap="round" /></svg>
+          <div><span id="search-text"></span><span id="caret"></span></div>
+        </div>
+        <div id="s2-nav" class="abs"><span>Ask</span><span>Stay</span><span>When</span><span>Arrive</span><span>Rules</span></div>
+      </section>
+
+      <!-- Scenes 3–4 shared sand background -->
+      <section id="s-sand" class="clip" data-start="8.6" data-duration="10.2" data-track-index="0">
+        <div id="sand-bg"></div>
+      </section>
+
+      <!-- Scene 3: boarding-pass checklist -->
+      <section id="s3" class="clip" data-start="8.6" data-duration="6" data-track-index="1">
+        <div id="s3-inner" class="abs" style="inset: 0">
+          <div id="s3-eyebrow" class="abs mono">Arriving · step by step</div>
+          <div id="s3-title" class="abs">Before you land.</div>
+
+          <div id="pass" class="abs">
+            <div id="pass-body">
+              <div id="pass-head"><div class="badge">b<i></i>b</div><div class="word">boracay<em>.biz</em></div><div class="mono">Boarding pass</div></div>
+              <div class="route" style="left: 32px"><div class="mono">From</div><div class="big">Airport</div></div>
+              <svg id="plane-line" height="40" viewBox="0 0 120 40">
+                <line x1="0" y1="20" x2="120" y2="20" stroke="#cfc6b2" stroke-width="3" stroke-dasharray="6 8" />
+                <g transform="translate(46 4) rotate(90 14 16)"><use href="#plane" width="32" height="32" fill="#0b7a8a" /></g>
+              </svg>
+              <div class="route" style="left: 384px"><div class="mono">To</div><div class="big">Island</div></div>
+              <div class="checklabel mono">Before you land</div>
+              <div class="check" id="c1" style="top: 272px"><div class="box"><div class="fill"></div><svg viewBox="0 0 22 20"><path d="M2 10 L8.5 16.5 L20 3" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>Which airport?</div>
+              <div class="check" id="c2" style="top: 334px"><div class="box"><div class="fill"></div><svg viewBox="0 0 22 20"><path d="M2 10 L8.5 16.5 L20 3" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>Registration systems</div>
+              <div class="check" id="c3" style="top: 396px"><div class="box"><div class="fill"></div><svg viewBox="0 0 22 20"><path d="M2 10 L8.5 16.5 L20 3" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>Terminal fee</div>
+              <div class="check" id="c4" style="top: 458px"><div class="box"><div class="fill"></div><svg viewBox="0 0 22 20"><path d="M2 10 L8.5 16.5 L20 3" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>Which port this season?</div>
+              <div id="perf"></div>
+              <div id="stub">
+                <div class="mono">Guide</div><div class="val">boracay.biz</div>
+                <div class="mono">Section</div><div class="val">Arriving</div>
+              </div>
+              <svg id="barcode" viewBox="0 0 152 150"></svg>
+            </div>
+            <div class="notch" style="top: -20px"></div>
+            <div class="notch" style="top: 520px"></div>
+          </div>
+
+          <div class="card" id="h1" style="top: 232px"><div class="top"><div class="topic">Arriving</div><div class="chip"><b></b>Cited · date-checked</div></div><h3>Caticlan or Kalibo: Which Airport for Boracay</h3></div>
+          <div class="card" id="h2" style="top: 404px"><div class="top"><div class="topic">Arriving</div><div class="chip"><b></b>Cited · date-checked</div></div><h3>Boracay iPass, LezzGo and eBoracay: The Registration Systems Compared</h3></div>
+          <div class="card" id="h3" style="top: 576px"><div class="top"><div class="topic">Rules and Money</div><div class="chip"><b></b>Cited · date-checked</div></div><h3>Boracay Terminal and Environmental Fees: The Reported Figures and Where Sources Conflict</h3></div>
+          <div class="card" id="h4" style="top: 748px"><div class="top"><div class="topic">Arriving</div><div class="chip"><b></b>Cited · date-checked</div></div><h3>Cagban, Tambisaan and Tabon: Which Boracay Port Is Used in Which Season</h3></div>
+        </div>
+      </section>
+
+      <!-- Scene 4: map tiles -->
+      <section id="s4" class="clip" data-start="14.6" data-duration="4.2" data-track-index="1">
+        <div id="s4-inner" class="abs" style="inset: 0">
+          <div id="s4-eyebrow" class="abs mono">Maps</div>
+          <div id="s4-title" class="abs">Hotels on one map.</div>
+          <div class="tile o" data-layout-allow-overflow style="left: 156px; top: 300px"><h4>Station 1 hotels</h4><p>Hotels on one map</p><div class="ring"></div></div>
+          <div class="tile o" data-layout-allow-overflow style="left: 700px; top: 300px"><h4>Station 2 hotels</h4><p>Hotels on one map</p><div class="ring"></div></div>
+          <div class="tile o" data-layout-allow-overflow style="left: 1244px; top: 300px"><h4>Station 3 hotels</h4><p>Hotels on one map</p><div class="ring"></div></div>
+          <div class="tile o" data-layout-allow-overflow style="left: 156px; top: 544px"><h4>Bulabog and the north</h4><p>Diniwid, Yapak, Newcoast</p><div class="ring"></div></div>
+          <div class="tile t" data-layout-allow-overflow style="left: 700px; top: 544px"><h4>Ports and airports</h4><p>Caticlan, Cagban, Tabon</p><div class="ring"></div></div>
+          <div class="tile t" data-layout-allow-overflow style="left: 1244px; top: 544px"><h4>Banks and ATMs</h4><p>From the banks' own listings</p><div class="ring"></div></div>
+          <div id="pills-label" class="abs mono">Questions by topic</div>
+          <div id="pills" class="abs"><div class="pill on">Arriving</div><div class="pill">Rules and Money</div><div class="pill">When to Go</div><div class="pill">Areas and Stays</div><div class="pill">Power</div></div>
+        </div>
+      </section>
+
+      <!-- Scene 5: phone, add to home screen, then offline -->
+      <section id="s5" class="clip" data-start="18.8" data-duration="5.2" data-track-index="2">
+        <div id="s5-bg"></div>
+        <div id="s5-inner" class="abs" style="inset: 0">
+          <div id="s5-eyebrow" class="abs mono">Installs like an app</div>
+          <div id="s5-l1" class="abs">Add it to your home screen.</div>
+          <div id="s5-l2" class="abs"><span class="o">No signal?</span> It still works.</div>
+          <div id="s5-sub" class="abs">Pages you’ve already opened keep working offline.</div>
+
+          <div id="phone-scale" class="abs"><div id="phone" class="abs">
+            <div class="btn" style="left: -4px; top: 170px; height: 40px"></div>
+            <div class="btn" style="left: -4px; top: 236px; height: 70px"></div>
+            <div class="btn" style="left: -4px; top: 320px; height: 70px"></div>
+            <div class="btn" style="right: -4px; top: 260px; height: 110px"></div>
+            <div id="phone-body"></div>
+            <div id="screen" data-layout-allow-overlap data-layout-allow-occlusion data-layout-allow-overflow>
+              <div class="ph-status">
+                <div class="ph-time">9:41</div>
+                <div class="ph-island"></div>
+                <div class="ph-icons">
+                  <svg id="sig" width="20" height="13" viewBox="0 0 20 13"><rect x="0" y="9" width="3.6" height="4" rx="1" fill="#fff" /><rect x="5.4" y="6" width="3.6" height="7" rx="1" fill="#fff" /><rect x="10.8" y="3" width="3.6" height="10" rx="1" fill="#fff" /><rect x="16.2" y="0" width="3.6" height="13" rx="1" fill="#fff" /></svg>
+                  <svg id="sig-off" width="20" height="13" viewBox="0 0 20 13" style="position: absolute; left: 0; top: 0"><rect x="0" y="9" width="3.6" height="4" rx="1" fill="#5d6d75" /><rect x="5.4" y="6" width="3.6" height="7" rx="1" fill="#5d6d75" /><rect x="10.8" y="3" width="3.6" height="10" rx="1" fill="#5d6d75" /><rect x="16.2" y="0" width="3.6" height="13" rx="1" fill="#5d6d75" /></svg>
+                  <svg id="wifi" width="18" height="13" viewBox="0 0 18 13"><path d="M9 12.5 L6.4 9.6 A3.8 3.8 0 0 1 11.6 9.6 Z" fill="#fff" /><path d="M3.6 6.8 A7.6 7.6 0 0 1 14.4 6.8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" /><path d="M1 4 A11.4 11.4 0 0 1 17 4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" /></svg>
+                  <svg width="28" height="13" viewBox="0 0 28 13"><rect x="0.75" y="0.75" width="23" height="11.5" rx="3.2" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.5" /><rect x="2.6" y="2.6" width="17" height="7.8" rx="1.8" fill="#fff" /><rect x="25" y="4" width="2" height="5" rx="1" fill="#fff" fill-opacity="0.55" /></svg>
+                </div>
+              </div>
+              <div class="ph-head">
+                <svg class="ph-sun" viewBox="-200 -200 400 400"><use href="#sun-rays" x="-200" y="-200" width="400" height="400" /><use href="#sun-disc" x="-200" y="-200" width="400" height="400" /></svg>
+                <div class="ph-logo"><div class="badge">b<i></i>b</div><div class="word">boracay<em>.biz</em></div></div>
+                <div class="ph-search"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5" fill="none" stroke="#5d6d75" stroke-width="2.4" /><path d="M15 15l5.5 5.5" stroke="#5d6d75" stroke-width="2.6" stroke-linecap="round" /></svg>Ask about Boracay: fees, drones…</div>
+              </div>
+              <div class="ph-scroll">
+                <div class="ph-content" id="ph-content">
+                  <div class="ph-label" style="top: 16px">MAPS</div>
+                  <div class="ph-tile o" style="left: 18px; top: 40px"><b>Station 1 hotels</b><span>Hotels on one map</span><div class="ring"></div></div>
+                  <div class="ph-tile o" style="left: 200px; top: 40px"><b>Station 2 hotels</b><span>Hotels on one map</span><div class="ring"></div></div>
+                  <div class="ph-tile o" style="left: 18px; top: 126px"><b>Station 3 hotels</b><span>Hotels on one map</span><div class="ring"></div></div>
+                  <div class="ph-tile o" style="left: 200px; top: 126px"><b>Bulabog and the north</b><span>Diniwid, Yapak, Newcoast</span><div class="ring"></div></div>
+                  <div class="ph-tile t" style="left: 18px; top: 212px"><b>Ports and airports</b><span>Caticlan, Cagban, Tabon</span><div class="ring"></div></div>
+                  <div class="ph-tile t" style="left: 200px; top: 212px"><b>Banks and ATMs</b><span>From the banks' own listings</span><div class="ring"></div></div>
+                  <div class="ph-label" style="top: 306px">QUESTIONS BY TOPIC</div>
+                  <div class="ph-pills"><div class="pill on">Arriving</div><div class="pill">Rules and Money</div><div class="pill">When to Go</div></div>
+                  <div class="ph-list">
+                    <div class="ph-row" id="ph-row1"><div class="hl"></div>Getting to Boracay: Each Step From the Airport to the Island</div>
+                    <div class="ph-row">Boracay Entry Requirements: What Official Sources Say You Are Asked for at the Jetty Port</div>
+                    <div class="ph-row">Boracay iPass, LezzGo and eBoracay: The Registration Systems Compared</div>
+                    <div class="ph-row">Caticlan or Kalibo: Which Airport for Boracay</div>
+                    <div class="ph-row" style="border-bottom: 0">Boracay Peak Dates for 2026 and 2027: Holy Week, Labor Day, Christmas</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ph-article" id="ph-article">
+                <div class="ph-back">‹ Arriving</div>
+                <h5>Getting to Boracay: Each Step From the Airport to the Island</h5>
+                <div class="ph-offline"><b></b>Opened offline</div>
+                <div class="skel" style="width: 100%; margin-top: 22px"></div>
+                <div class="skel" style="width: 94%"></div>
+                <div class="skel" style="width: 98%"></div>
+                <div class="skel" style="width: 70%"></div>
+                <div class="skel h"></div>
+                <div class="skel" style="width: 96%"></div>
+                <div class="skel" style="width: 88%"></div>
+                <div class="skel" style="width: 92%"></div>
+                <div class="skel h" style="width: 48%"></div>
+                <div class="skel" style="width: 97%"></div>
+                <div class="skel" style="width: 64%"></div>
+                <div class="ph-cite">Cited · date-checked</div>
+              </div>
+              <div class="ph-nav"><div><b>?</b>Ask</div><div><b>⌂</b>Stay</div><div><b>☀</b>When</div><div><b>→</b>Arrive</div><div><b>§</b>Rules</div></div>
+              <div class="ph-dim" id="ph-dim"></div>
+              <div class="ph-sheet" id="ph-sheet">
+                <div class="ph-handle"></div>
+                <div class="ph-sh-head"><div class="badge">b<i></i>b</div><div><b>boracay.biz</b><span>Boracay, the practical guide</span></div></div>
+                <div class="ph-opt">Copy<svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="#1c2a31" stroke-width="1.8" /><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15" fill="none" stroke="#1c2a31" stroke-width="1.8" stroke-linecap="round" /></svg></div>
+                <div class="ph-opt" id="ph-add"><div class="hl"></div><span style="position: relative; font-weight: 700">Add to Home Screen</span><svg viewBox="0 0 24 24" style="position: relative"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="#1c2a31" stroke-width="1.8" /><path d="M12 8v8M8 12h8" stroke="#1c2a31" stroke-width="1.8" stroke-linecap="round" /></svg></div>
+                <div class="ph-opt">Find on Page<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="#1c2a31" stroke-width="1.8" /><path d="M15 15l5 5" stroke="#1c2a31" stroke-width="1.8" stroke-linecap="round" /></svg></div>
+              </div>
+              <div class="ripple" id="rip1" style="left: 200px; top: 612px"></div>
+              <div class="ripple" id="rip2" style="left: 190px; top: 272px"></div>
+              <div class="ph-toast" id="ph-toast"><svg width="18" height="18" viewBox="0 0 22 20"><path d="M2 10 L8.5 16.5 L20 3" fill="none" stroke="#7fd6df" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" /></svg>Added to Home Screen</div>
+              <div class="ph-nosig" id="ph-nosig"><svg width="22" height="18" viewBox="0 0 22 18"><rect x="1" y="12" width="3.6" height="5" rx="1" fill="#ffffff" fill-opacity="0.6" /><rect x="6.4" y="9" width="3.6" height="8" rx="1" fill="#ffffff" fill-opacity="0.6" /><rect x="11.8" y="5.5" width="3.6" height="11.5" rx="1" fill="#ffffff" fill-opacity="0.6" /><rect x="17.2" y="2" width="3.6" height="15" rx="1" fill="#ffffff" fill-opacity="0.6" /><path d="M2 1.5 L20.5 16.5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" /></svg>No signal · saved pages still open</div>
+            </div>
+          </div></div>
+        </div>
+      </section>
+
+      <!-- Scene 6: the site -->
+      <section id="s6" class="clip" data-start="24" data-duration="3" data-track-index="2">
+        <div id="s6-bg"></div>
+        <div id="browser">
+          <div id="browser-bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div id="url">boracay.biz</div></div>
+          <div id="viewport"><img id="site-img" src="assets/site-full.png" alt="boracay.biz homepage" /></div>
+        </div>
+      </section>
+
+      <!-- Scene 7: end card -->
+      <section id="s7" class="clip" data-start="27" data-duration="3" data-track-index="2">
+        <div id="end-sky"></div>
+        <div id="end-sun" class="sun">
+          <svg id="end-rays" viewBox="-200 -200 400 400"><use href="#sun-rays" x="-200" y="-200" width="400" height="400" /></svg>
+          <svg viewBox="-200 -200 400 400"><use href="#sun-disc" x="-200" y="-200" width="400" height="400" /></svg>
+        </div>
+        <svg id="end-scape" viewBox="0 0 1920 1080"></svg>
+        <div id="end-wrap">
+          <div id="end-logo"><div class="badge">b<i></i>b</div><div class="word">boracay<em>.biz</em></div></div>
+          <div id="end-tag">Boracay, the practical guide</div>
+          <div id="end-mono" class="mono">Every fact cited · Works offline</div>
+        </div>
+        <div id="webhaus" class="abs mono">a Webhaus site</div>
+      </section>
+    </div>
+
+    <script>
+      // ---------- deterministic art (seeded PRNG, same output every run) ----------
+      let seed = 2026 * 1000 + 6;
+      const rnd = () => {
+        seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+      const r = (a, b) => a + (b - a) * rnd();
+      const f = (n) => n.toFixed(1);
+      const NS = "http://www.w3.org/2000/svg";
+
+      // Sun rays: tapered wedges like the corner sun on boracay.biz, alternating long and short.
+      (() => {
+        let s = "";
+        const N = 16;
+        for (let i = 0; i < N; i++) {
+          const a = (i / N) * Math.PI * 2;
+          const L = i % 2 === 0 ? 182 : 150;
+          const w = 0.085, rIn = 106;
+          const p = (rad, ang) => `${f(Math.cos(ang) * rad)} ${f(Math.sin(ang) * rad)}`;
+          s += `<path d="M${p(rIn, a - w)} L${p(L, a - w * 0.3)} L${p(L, a + w * 0.3)} L${p(rIn, a + w)} Z" fill="url(#ray-grad)"/>`;
+        }
+        document.getElementById("rays-g").innerHTML = s;
+      })();
+
+      // Sea + shore. horizon: y of the horizon; shore: y where the sand starts (beyond H = no beach); sunX for the glitter path.
+      function makeScape(svgId, W, H, horizon, shore, sunX, id) {
+        const seaBottom = Math.min(shore + 40, H);
+        let s = `<defs>
+          <linearGradient id="${id}-sea" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#3a8f9a"/><stop offset="0.06" stop-color="#0e7a88"/>
+            <stop offset="0.5" stop-color="#0b8794"/><stop offset="0.82" stop-color="#1fb0b5"/><stop offset="1" stop-color="#7fd6df"/>
+          </linearGradient>
+          <linearGradient id="${id}-sand" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#f6f1e7"/><stop offset="1" stop-color="#e9dcc2"/>
+          </linearGradient>
+        </defs>`;
+        s += `<rect x="0" y="${horizon}" width="${W}" height="${seaBottom - horizon}" fill="url(#${id}-sea)"/>`;
+        s += `<rect x="0" y="${horizon - 1}" width="${W}" height="2" fill="#ffd9a0" opacity="0.35"/>`;
+        const depth = Math.min(shore, H) - horizon;
+        // wave lines (perspective: short and faint near the horizon, longer near the shore)
+        let waves = "";
+        for (let i = 0; i < 90; i++) {
+          const t = Math.pow(rnd(), 1.3);
+          const y = horizon + 6 + depth * t * 0.92;
+          const len = 24 + 240 * t * r(0.5, 1);
+          const x = r(-40, W);
+          waves += `<path d="M${f(x)} ${f(y)} q${f(len / 2)} ${f(-2 - 3 * t)} ${f(len)} 0" fill="none" stroke="#e8fbfc" stroke-opacity="${r(0.08, 0.22).toFixed(2)}" stroke-width="${f(1 + 2.4 * t)}" stroke-linecap="round"/>`;
+        }
+        s += `<g id="${id}-waves">${waves}</g>`;
+        // sun glitter path
+        let glit = `<defs><clipPath id="${id}-below"><rect x="0" y="${horizon}" width="${W}" height="${H - horizon}"/></clipPath><radialGradient id="${id}-gl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd27a" stop-opacity="0.55"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient></defs>`;
+        glit += `<ellipse cx="${sunX}" cy="${horizon}" rx="${f(Math.min(depth, 300) * 0.7)}" ry="${f(depth * 1.1)}" fill="url(#${id}-gl)" clip-path="url(#${id}-below)"/>`;
+        for (let i = 0; i < 64; i++) {
+          const t = i / 63;
+          const y = horizon + 4 + depth * Math.pow(t, 1.6) * 0.9;
+          const spread = 14 + 170 * t;
+          const h = 1.6 + 4.2 * t;
+          const segs = 1 + Math.floor(rnd() * 3);
+          for (let k = 0; k < segs; k++) {
+            const w = (10 + 120 * t) * r(0.3, 1);
+            const x = sunX + r(-1, 1) * spread - w / 2;
+            glit += `<rect x="${f(x)}" y="${f(y + r(-1, 1))}" width="${f(w)}" height="${f(h)}" rx="${f(h / 2)}" fill="${k === 0 ? "#fff4cf" : "#ffd27a"}" opacity="${(r(0.5, 0.95) * (1 - t * 0.5)).toFixed(2)}"/>`;
+          }
+        }
+        s += `<g id="${id}-glit" style="mix-blend-mode: screen">${glit}</g>`;
+        if (shore < H) {
+          // shoreline: gentle S-curve, wet sand band, foam lace, dry sand with grain
+          const c = (o) => `M0 ${shore + 34 + o} C${W * 0.22} ${shore + 6 + o} ${W * 0.48} ${shore + 40 + o} ${W * 0.7} ${shore + 16 + o} S${W * 0.92} ${shore - 4 + o} ${W} ${shore + 6 + o}`;
+          s += `<path d="${c(-14)} L${W} ${H} L0 ${H} Z" fill="#a9e3e2" opacity="0.75"/>`;
+          s += `<path d="${c(0)} L${W} ${H} L0 ${H} Z" fill="#e5d6b8"/>`;
+          s += `<g id="${id}-foam"><path d="${c(-2)}" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.92"/>`;
+          s += `<path d="${c(-12)}" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="40 26 90 30" opacity="0.6"/></g>`;
+          s += `<path d="${c(22)} L${W} ${H} L0 ${H} Z" fill="url(#${id}-sand)"/>`;
+          let grain = "";
+          for (let i = 0; i < 520; i++) {
+            const x = r(0, W), y = r(shore + 70, H);
+            grain += `<circle cx="${f(x)}" cy="${f(y)}" r="${r(0.8, 2).toFixed(1)}" fill="${i % 4 === 0 ? "#ffffff" : "#c8b58e"}" opacity="${r(0.25, 0.55).toFixed(2)}"/>`;
+          }
+          s += grain;
+        }
+        document.getElementById(svgId).innerHTML = s;
+      }
+      makeScape("scape", 1920, 1080, 640, 900, 1340, "hs");
+      makeScape("end-scape", 1920, 1080, 900, 2000, 960, "es");
+
+      // Barcode on the pass stub
+      (() => {
+        let s = "", x = 0;
+        while (x < 150) {
+          const w = [2, 2, 3, 5, 2, 4][Math.floor(rnd() * 6)];
+          if (rnd() > 0.35) s += `<rect x="${x}" y="0" width="${w}" height="150" fill="#1c2a31"/>`;
+          x += w + 2;
+        }
+        document.getElementById("barcode").innerHTML = s;
+      })();
+
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- Scene 1: sunrise hook ----------
+      tl.fromTo("#sun-wrap", { y: 240 }, { y: -130, duration: 3.6, ease: "power2.out" }, 0);
+      tl.fromTo("#sun-rays-svg", { rotation: 0 }, { rotation: 40, duration: 8.6, ease: "none" }, 0);
+      tl.fromTo("#glow", { opacity: 0.15, scale: 0.7 }, { opacity: 1, scale: 1, duration: 3.4, ease: "power2.out" }, 0);
+      tl.fromTo("#hs-glit", { opacity: 0 }, { opacity: 1, duration: 2.6, ease: "power1.in" }, 0.6);
+      tl.fromTo("#hs-waves", { x: 0 }, { x: -60, duration: 4.8, ease: "none" }, 0);
+      tl.fromTo("#hs-foam", { x: 0, y: 0 }, { x: -20, y: 6, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+      tl.fromTo("#hook span", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 1.0 }, 0.35);
+      tl.fromTo("#until", { opacity: 0, scale: 0.9, transformOrigin: "0% 50%" }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, 3.4);
+      tl.to(["#hook", "#until"], { opacity: 0, y: -24, duration: 0.4, ease: "power2.in" }, 4.4);
+
+      // ---------- Transition: the sea sinks, the sun parks in the top-right corner ----------
+      tl.to("#scape", { y: 560, duration: 0.8, ease: "power3.in" }, 4.4);
+      tl.fromTo("#night", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.inOut" }, 4.5);
+      tl.to("#glow", { opacity: 0, duration: 0.6 }, 4.5);
+      tl.to("#sun-wrap", { x: 640, y: -560, scale: 1.25, duration: 1.0, ease: "power3.inOut" }, 4.4);
+
+      // ---------- Scene 2: headline ----------
+      tl.fromTo("#s2-logo .badge", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.2)" }, 5.0);
+      tl.fromTo("#s2-logo .word", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 5.15);
+      tl.fromTo("#s2-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 5.3);
+      tl.fromTo("#s2-title .line", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.8, ease: "power4.out", stagger: 0.16 }, 5.35);
+      tl.fromTo("#search", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 5.8);
+      const q = "Ask about Boracay: fees, drones, algae…";
+      const qEl = document.getElementById("search-text");
+      const qp = { n: 0 };
+      tl.fromTo(qp, { n: 0 }, { n: q.length, duration: 1.4, ease: "none", onUpdate: () => { qEl.textContent = q.slice(0, Math.round(qp.n)); } }, 6.1);
+      tl.fromTo("#caret", { opacity: 1 }, { opacity: 0, duration: 0.25, repeat: 7, yoyo: true, ease: "steps(1)" }, 6.1);
+      tl.fromTo("#s2-nav span", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.08 }, 7.4);
+      tl.to(["#s2-logo", "#s2-eyebrow", "#s2-title", "#search", "#s2-nav"], { opacity: 0, duration: 0.3 }, 8.3);
+
+      // ---------- Scene 3: boarding pass ----------
+      tl.fromTo("#sand-bg", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.5, ease: "power3.inOut" }, 8.6);
+      tl.fromTo("#s3-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 9.0);
+      tl.fromTo("#s3-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 9.05);
+      tl.fromTo("#pass", { opacity: 0, x: -140, rotation: -4 }, { opacity: 1, x: 0, rotation: 0, duration: 0.7, ease: "power3.out" }, 9.2);
+      [1, 2, 3, 4].forEach((n, i) => {
+        const t = 10.0 + i * 1.0;
+        tl.fromTo(`#c${n} .fill`, { scale: 0 }, { scale: 1, duration: 0.25, ease: "back.out(2)" }, t);
+        tl.fromTo(`#c${n} path`, { strokeDasharray: 30, strokeDashoffset: 30 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, t + 0.1);
+        tl.fromTo(`#h${n}`, { opacity: 0, x: -160, scale: 0.94 }, { opacity: 1, x: 0, scale: 1, duration: 0.55, ease: "power3.out" }, t + 0.12);
+        tl.fromTo(`#h${n} .chip`, { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, t + 0.55);
+      });
+      tl.to("#s3-inner", { opacity: 0, duration: 0.3 }, 14.3);
+
+      // ---------- Scene 4: map tiles cascade ----------
+      tl.fromTo("#s4-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 14.65);
+      tl.fromTo("#s4-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 14.7);
+      tl.fromTo("#s4 .tile", { opacity: 0, y: 80, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.4)", stagger: 0.14 }, 14.95);
+      tl.fromTo("#s4 .ring", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "power3.out", stagger: 0.14 }, 15.2);
+      tl.fromTo("#pills-label", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 16.3);
+      tl.fromTo("#pills .pill", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.09 }, 16.4);
+      tl.to("#s4-inner", { opacity: 0, duration: 0.3 }, 18.5);
+
+      // ---------- Scene 5: phone → home screen → offline ----------
+      tl.fromTo("#s5-bg", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 18.8);
+      tl.fromTo("#phone", { opacity: 0, y: 160, rotation: 4 }, { opacity: 1, y: 0, rotation: 0, duration: 0.7, ease: "power3.out" }, 18.85);
+      tl.fromTo("#s5-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 19.05);
+      tl.fromTo("#s5-l1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 19.1);
+      tl.fromTo("#ph-dim", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 19.6);
+      tl.fromTo("#ph-sheet", { y: 340 }, { y: 0, duration: 0.45, ease: "power3.out" }, 19.6);
+      tl.fromTo("#ph-add .hl", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 20.2);
+      tl.fromTo("#rip1", { scale: 0.2, opacity: 0.9 }, { scale: 3, opacity: 0, duration: 0.5, ease: "power2.out" }, 20.2);
+      tl.to("#ph-sheet", { y: 340, duration: 0.35, ease: "power2.in" }, 20.45);
+      tl.to("#ph-dim", { opacity: 0, duration: 0.3 }, 20.5);
+      tl.fromTo("#ph-toast", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)" }, 20.55);
+      tl.to("#ph-toast", { opacity: 0, y: -20, duration: 0.25 }, 21.05);
+      // signal drops
+      tl.fromTo("#sig", { opacity: 1 }, { opacity: 0, duration: 0.3 }, 21.15);
+      tl.fromTo("#sig-off", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 21.15);
+      tl.fromTo("#wifi", { opacity: 1 }, { opacity: 0.15, duration: 0.3 }, 21.15);
+      tl.fromTo("#ph-nosig", { y: 50 }, { y: 0, duration: 0.35, ease: "power3.out" }, 21.25);
+      tl.to("#s5-l1", { opacity: 0.35, duration: 0.3 }, 21.25);
+      tl.fromTo("#s5-l2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 21.3);
+      // the page keeps working: scroll, tap a guide, it opens
+      tl.fromTo("#ph-content", { y: 0 }, { y: -300, duration: 0.7, ease: "power2.inOut" }, 21.6);
+      tl.fromTo("#ph-row1 .hl", { opacity: 0 }, { opacity: 1, duration: 0.12 }, 22.35);
+      tl.fromTo("#rip2", { y: 0, scale: 0.2, opacity: 0.9 }, { y: 0, scale: 3, opacity: 0, duration: 0.45, ease: "power2.out" }, 22.35);
+      tl.fromTo("#ph-article", { x: 400 }, { x: 0, duration: 0.45, ease: "power3.out" }, 22.5);
+      tl.fromTo("#ph-article .ph-offline", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 22.95);
+      tl.fromTo("#s5-sub", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 22.7);
+      tl.to("#s5-inner", { opacity: 0, duration: 0.3 }, 23.7);
+
+      // ---------- Scene 6: site scroll ----------
+      tl.fromTo("#browser", { opacity: 0, y: 80, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 24.0);
+      tl.fromTo("#site-img", { y: 0 }, { y: -436, duration: 2.0, ease: "power2.inOut" }, 24.6);
+      tl.to("#browser", { opacity: 0, scale: 0.96, duration: 0.3 }, 26.7);
+
+      // ---------- Scene 7: end card ----------
+      tl.fromTo("#end-sky", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 27.0);
+      tl.fromTo("#end-scape", { y: 200 }, { y: 0, duration: 0.8, ease: "power3.out" }, 27.0);
+      tl.fromTo("#end-sun", { y: 140, opacity: 0, scale: 0.6 }, { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" }, 27.05);
+      tl.fromTo("#end-rays", { rotation: 0 }, { rotation: 30, duration: 3, ease: "none" }, 27.0);
+      tl.fromTo("#es-glit", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 27.3);
+      tl.fromTo("#end-logo .badge", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.2)" }, 27.25);
+      tl.fromTo("#end-logo .word", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 27.35);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 27.65);
+      tl.fromTo("#end-mono", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 27.95);
+      tl.fromTo("#webhaus", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 28.6);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
