@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>webhaus — Good homes for good domains</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Jost"; src: url("assets/fonts/jost.woff2") format("woff2"); font-weight: 300 800; }
+      @font-face { font-family: "Schibsted Grotesk"; src: url("assets/fonts/schibsted-grotesk-700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Barlow Semi Condensed"; src: url("assets/fonts/barlow-semi-condensed-700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Open Sans"; src: url("assets/fonts/open-sans-300.woff2") format("woff2"); font-weight: 300; }
+      @font-face { font-family: "UnifrakturCook"; src: url("assets/fonts/unifrakturcook-700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Source Serif 4"; src: url("assets/fonts/source-serif-4-600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Nunito"; src: url("assets/fonts/nunito-900.woff2") format("woff2"); font-weight: 900; }
+      @font-face { font-family: "Palatino WH"; src: url("assets/fonts/palab.ttf") format("truetype"); font-weight: 700; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/plex-mono-500.woff2") format("woff2"); font-weight: 500; }
+      :root { --bg: #e9ebee; --card: #ffffff; --ink: #14161a; --dim: #555b66; --soft: #cfd3d9; --red: #d8352a; --blue: #1d4fa3; --yellow: #f2b90f;
+              --frame-bar: #dfe2e7; --frame-dot: #a9aeb8; --frame-url: #3f4550; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; overflow: hidden; background: var(--bg); }
+      svg { overflow: visible; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Jost", sans-serif; color: var(--ink); background: var(--bg); }
+      .clip { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+      .mask { overflow: hidden; display: block; }
+      .mask > span { display: block; }
+      .rule { position: absolute; height: 3px; background: var(--ink); transform-origin: left center; }
+      .mark { display: block; flex: none; }
+      .chip { border: 1.5px solid rgba(255,255,255,0.85); color: #fff; font-weight: 500; white-space: nowrap; }
+      .frame { position: absolute; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,0.28); }
+      .frame .bar { background: var(--frame-bar); display: flex; align-items: center; gap: 8px; padding: 0 16px; }
+      .frame .bar i { display: block; width: 11px; height: 11px; border-radius: 50%; background: var(--frame-dot); }
+      .frame .bar b { font-family: "IBM Plex Mono", monospace; font-weight: 500; color: var(--frame-url); margin-left: 12px; }
+      .frame .screen { background: #0e1012; }
+      video.win { position: absolute; object-fit: cover; }
+      html, body { width: 1920px; height: 1080px; }
+      #hero-words { left: 140px; top: 300px; }
+      .stamp { font-size: 108px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; }
+      #wordmark { left: 132px; top: 130px; font-size: 240px; font-weight: 700; letter-spacing: -0.045em; line-height: 0.8; }
+      #hero-sub { left: 140px; top: 600px; width: 720px; font-size: 38px; font-weight: 400; line-height: 1.42; }
+      #header { left: 0; top: 0; width: 1920px; height: 96px; }
+      #header .logo { position: absolute; left: 140px; top: 28px; display: flex; align-items: center; gap: 14px; font-size: 32px; font-weight: 600; }
+      #header .nav { position: absolute; right: 140px; top: 34px; display: flex; gap: 34px; font-size: 22px; font-weight: 500; }
+      #shelf-title { left: 140px; top: 112px; font-size: 64px; font-weight: 700; letter-spacing: -0.03em; }
+      #shelf-sub { right: 140px; top: 142px; font-size: 25px; color: var(--dim); }
+      #rack { position: absolute; left: 140px; top: 210px; width: 1640px; height: 760px; display: flex; gap: 8px; }
+      .spine { position: relative; flex: none; width: 74px; height: 100%; overflow: hidden; }
+      .sp-head { position: absolute; left: 0; width: 74px; top: 30px; display: flex; justify-content: center; }
+      .sp-name { position: absolute; left: 0; width: 74px; top: 74px; writing-mode: vertical-rl; display: flex; align-items: center; }
+      .pc { position: absolute; left: 100px; top: 44px; width: 920px; height: 716px; }
+      .pc-name { position: absolute; left: 0; top: 0; }
+      .pc-tag { position: absolute; left: 0; top: 92px; width: 900px; font-size: 30px; font-weight: 500; color: #fff; line-height: 1.25; }
+      .pc-chips { position: absolute; left: 0; top: 146px; display: flex; gap: 12px; }
+      .pc-chips .chip { font-size: 19px; padding: 7px 14px; }
+      #cta-tri { left: 140px; top: 400px; }
+      #cta-text { left: 330px; top: 372px; width: 1400px; font-size: 76px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.12; }
+      #cta-mail { position: relative; display: inline-block; }
+      #cta-line { position: absolute; left: 0; right: 0; bottom: 2px; height: 5px; background: var(--ink); transform-origin: left center; }
+      #end-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #end-name { font-size: 176px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; margin-top: 30px; }
+      #end-tag { font-size: 48px; font-weight: 500; margin-top: 22px; letter-spacing: -0.01em; }
+      #end-url { font-size: 30px; color: var(--dim); margin-top: 26px; }
+      #end-meta { left: 0; width: 1920px; top: 968px; text-align: center; font-size: 21px; color: var(--dim); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+
+      <!-- Sound effects -->
+      <audio id="sfx-1" src="assets/sfx/pop.mp3" data-start="0.95" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-2" src="assets/sfx/pop.mp3" data-start="1.75" data-duration="0.72" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-3" src="assets/sfx/riser.mp3" data-start="3.4" data-duration="3.4" data-volume="0.3" data-track-index="10"></audio>
+      <audio id="sfx-4" src="assets/sfx/whoosh-short.mp3" data-start="4.4" data-duration="0.57" data-volume="0.3" data-track-index="11"></audio>
+      <audio id="sfx-5" src="assets/sfx/click-soft.mp3" data-start="4.85" data-duration="0.37" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-6" src="assets/sfx/impact-bass-1.mp3" data-start="4.95" data-duration="2.12" data-volume="0.45" data-track-index="13"></audio>
+      <audio id="sfx-7" src="assets/sfx/pop.mp3" data-start="5.75" data-duration="0.72" data-volume="0.4" data-track-index="11"></audio>
+      <audio id="sfx-8" src="assets/sfx/whoosh-short.mp3" data-start="5.95" data-duration="0.57" data-volume="0.22" data-track-index="12"></audio>
+      <audio id="sfx-9" src="assets/sfx/impact-bass-1.mp3" data-start="6.15" data-duration="2.12" data-volume="0.55" data-track-index="14"></audio>
+      <audio id="sfx-10" src="assets/sfx/whoosh.mp3" data-start="8.95" data-duration="0.57" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-11" src="assets/sfx/click-soft.mp3" data-start="9.65" data-duration="0.37" data-volume="0.25" data-track-index="10"></audio>
+      <audio id="sfx-12" src="assets/sfx/click-soft.mp3" data-start="9.95" data-duration="0.37" data-volume="0.22" data-track-index="11"></audio>
+      <audio id="sfx-13" src="assets/sfx/click-soft.mp3" data-start="10.25" data-duration="0.37" data-volume="0.2" data-track-index="10"></audio>
+      <audio id="sfx-14" src="assets/sfx/whoosh-short.mp3" data-start="10.9" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-15" src="assets/sfx/whoosh-short.mp3" data-start="12.2" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-16" src="assets/sfx/whoosh-short.mp3" data-start="13.5" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-17" src="assets/sfx/whoosh-short.mp3" data-start="14.8" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-18" src="assets/sfx/whoosh-short.mp3" data-start="16.1" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-19" src="assets/sfx/whoosh-short.mp3" data-start="17.4" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-20" src="assets/sfx/whoosh-short.mp3" data-start="18.7" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-21" src="assets/sfx/whoosh-short.mp3" data-start="20" data-duration="0.57" data-volume="0.28" data-track-index="10"></audio>
+      <audio id="sfx-22" src="assets/sfx/whoosh.mp3" data-start="21.05" data-duration="0.57" data-volume="0.38" data-track-index="10"></audio>
+      <audio id="sfx-23" src="assets/sfx/pop.mp3" data-start="21.85" data-duration="0.72" data-volume="0.4" data-track-index="10"></audio>
+      <audio id="sfx-24" src="assets/sfx/click.mp3" data-start="23" data-duration="0.37" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-25" src="assets/sfx/whoosh.mp3" data-start="25.45" data-duration="0.57" data-volume="0.35" data-track-index="10"></audio>
+      <audio id="sfx-26" src="assets/sfx/impact-bass-1.mp3" data-start="25.95" data-duration="2.12" data-volume="0.45" data-track-index="11"></audio>
+      <audio id="sfx-27" src="assets/sfx/chime.mp3" data-start="26.7" data-duration="2.5" data-volume="0.45" data-track-index="10"></audio>
+
+      <!-- 1–2: vacant lot, then the house builds and the wordmark lands -->
+      <section id="s-hero" class="clip" data-start="0" data-duration="9.7" data-track-index="0">
+        <div id="hero-inner" class="abs" style="inset:0">
+          
+        <svg id="h" class="abs" style="left:1180px;top:250px" width="600" height="471" viewBox="0 0 420 330">
+          <g id="h-outline" fill="none" stroke="#a9aeb8" stroke-width="3" stroke-dasharray="12 9">
+            <rect x="60" y="150" width="200" height="180"/><polygon points="30,150 160,20 290,150"/></g>
+          <rect id="h-body" x="60" y="150" width="200" height="180" fill="#1d4fa3"/>
+          <rect id="h-door" x="135" y="230" width="50" height="100" fill="#e9ebee"/>
+          <polygon id="h-roof" points="30,150 160,20 290,150" fill="#f2b90f"/>
+          <circle id="h-sun" cx="350" cy="70" r="56" fill="#d8352a"/>
+          <rect id="h-ground" x="290" y="318" width="130" height="12" fill="#14161a"/>
+        </svg>
+          <div id="hero-words" class="abs" data-layout-allow-overlap data-layout-allow-overflow>
+            <div class="mask" data-layout-allow-overflow><span class="stamp" id="w1">Undeveloped.</span></div>
+            <div class="mask" data-layout-allow-overflow><span class="stamp" id="w2" style="color:var(--red)">Underperforming.</span></div>
+          </div>
+          <div id="wordmark" class="abs" data-layout-allow-overlap data-layout-allow-overflow><div class="mask" data-layout-allow-overflow><span id="wm1">web</span></div><div class="mask" data-layout-allow-overflow><span id="wm2">haus</span></div></div>
+          <div id="hero-sub" class="abs">We give undeveloped and underperforming web addresses a home, and fill it with a real purpose.</div>
+        </div>
+      </section>
+
+      <!-- Site header (persists from the wordmark through the shelf) -->
+      <section id="s-header" class="clip" data-start="7.6" data-duration="13.9" data-track-index="1">
+        <div id="header" class="abs">
+          <div class="logo"><svg width="34" height="34" viewBox="0 0 30 30"><rect x="3" y="14" width="16" height="14" fill="#1d4fa3"/><polygon points="1,14 11,3 21,14" fill="#f2b90f"/><circle cx="24.5" cy="6.5" r="4.5" fill="#d8352a"/></svg><span>webhaus</span></div>
+          <div class="nav"><span>Addresses</span><span>Press</span><span>Contact</span></div>
+          <div class="rule" id="hdr-rule" style="left:140px;top:92px;width:1640px"></div>
+        </div>
+      </section>
+
+      <!-- 3: pick a spine -->
+      <section id="s-shelf" class="clip" data-start="9.3" data-duration="12.2" data-track-index="2">
+        <div id="shelf-inner" class="abs" style="inset:0">
+          <div id="shelf-title" class="abs">addresses</div>
+          <div id="shelf-sub" class="abs">8 live sites · pick a spine</div>
+          <div id="rack">
+          <div class="spine" id="sp0" style="background:#14261f">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#8fbf9d"/></svg></div>
+            <div class="sp-name" style="font-family:'Schibsted Grotesk';font-weight:700;font-size:30px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">sequoia.info</div>
+            <div class="pc" id="pc0">
+              <div class="pc-name" style="font-family:'Schibsted Grotesk';font-weight:700;font-size:68px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">sequoia.info</div>
+              <div class="pc-tag">Everything about the biggest trees on Earth and where to see them.</div>
+              <div class="pc-chips"><span class="chip">169 articles</span><span class="chip">The parks and the trees</span><span class="chip">Every fact cited</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">sequoia.info</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/01-sequoia.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp1" style="background:#173f8f">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><rect width="10" height="10" fill="#ffcd00"/></svg></div>
+            <div class="sp-name" style="font-family:'Barlow Semi Condensed';font-weight:700;font-size:32px;letter-spacing:0.03em;white-space:nowrap;line-height:1;color:#fff">PARIS TOURIST</div>
+            <div class="pc" id="pc1">
+              <div class="pc-name" style="font-family:'Barlow Semi Condensed';font-weight:700;font-size:71px;letter-spacing:0.03em;white-space:nowrap;line-height:1;color:#fff">PARIS TOURIST</div>
+              <div class="pc-tag">Straight answers about Paris, with sources.</div>
+              <div class="pc-chips"><span class="chip">48 answers, one question per page</span><span class="chip">1,879 tours listed</span><span class="chip">An interactive map of the city</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">paristourist.info</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/02-paristourist.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp2" style="background:#2b2e33">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><polygon points="5,0 10,10 0,10" fill="#2ab4c6"/></svg></div>
+            <div class="sp-name" style="font-family:'Open Sans';font-weight:300;font-size:28px;letter-spacing:0.12em;white-space:nowrap;line-height:1;color:#fff">ANAHEIM<span style="color:#2ab4c6">.INFO</span></div>
+            <div class="pc" id="pc2">
+              <div class="pc-name" style="font-family:'Open Sans';font-weight:300;font-size:63px;letter-spacing:0.12em;white-space:nowrap;line-height:1;color:#fff">ANAHEIM<span style="color:#2ab4c6">.INFO</span></div>
+              <div class="pc-tag">Anaheim, the practical guide.</div>
+              <div class="pc-chips"><span class="chip">72 guides at launch</span><span class="chip">A map of 62 hotels with walking minutes</span><span class="chip">A new post every Thursday</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">anaheim.info</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/03-anaheim.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp3" style="background:#2f5fa8">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#f0c668"/></svg></div>
+            <div class="sp-name" style="font-family:'UnifrakturCook';font-weight:700;font-size:28px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">Bavarian Bistro</div>
+            <div class="pc" id="pc3">
+              <div class="pc-name" style="font-family:'UnifrakturCook';font-weight:700;font-size:63px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">Bavarian Bistro</div>
+              <div class="pc-tag">Bavaria, explained. Served warm.</div>
+              <div class="pc-chips"><span class="chip">195 guides</span><span class="chip">Food, beer, Oktoberfest, Munich</span><span class="chip">Written under the pen name Resi Zauber</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">bavarianbistro.com</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/04-bavarianbistro.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp4" style="background:#1b3a5c">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><rect width="10" height="10" fill="#2ec4b6"/></svg></div>
+            <div class="sp-name" style="font-family:'Source Serif 4';font-weight:600;font-size:30px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">LongBeach<span style="color:#2ec4b6">.biz</span></div>
+            <div class="pc" id="pc4">
+              <div class="pc-name" style="font-family:'Source Serif 4';font-weight:600;font-size:68px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">LongBeach<span style="color:#2ec4b6">.biz</span></div>
+              <div class="pc-tag">The business intelligence desk for Long Beach, CA.</div>
+              <div class="pc-chips"><span class="chip">88 guides</span><span class="chip">Data pages built from the city's open data</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">longbeach.biz</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/05-longbeach.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp5" style="background:#0b7a8a">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><polygon points="5,0 10,10 0,10" fill="#ffd9a8"/></svg></div>
+            <div class="sp-name" style="font-family:system-ui;font-weight:800;font-size:30px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">boracay<span style="color:#ffd9a8">.biz</span></div>
+            <div class="pc" id="pc5">
+              <div class="pc-name" style="font-family:system-ui;font-weight:800;font-size:68px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">boracay<span style="color:#ffd9a8">.biz</span></div>
+              <div class="pc-tag">The practical, current, cited guide to Boracay.</div>
+              <div class="pc-chips"><span class="chip">50 guides</span><span class="chip">6 maps, one layer each</span><span class="chip">Built for the phone first</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">boracay.biz</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/06-boracay.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp6" style="background:#581b87">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ffd9c7"/></svg></div>
+            <div class="sp-name" style="font-family:'Nunito';font-weight:900;font-size:30px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">plush dogs</div>
+            <div class="pc" id="pc6">
+              <div class="pc-name" style="font-family:'Nunito';font-weight:900;font-size:68px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">plush dogs</div>
+              <div class="pc-tag">Stuffed dogs that look real.</div>
+              <div class="pc-chips"><span class="chip">49 guides</span><span class="chip">22 breeds, 8 makers, prices dated</span><span class="chip">A plush of your own dog</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">plush-dogs.com</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/07-plushdogs.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          <div class="spine" id="sp7" style="background:#5f2230">
+            <div class="sp-head"><svg class="mark" width="18" height="18" viewBox="0 0 10 10"><rect width="10" height="10" fill="#e0c9b0"/></svg></div>
+            <div class="sp-name" style="font-family:'Palatino WH';font-weight:700;font-size:28px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">Family Law Riverside</div>
+            <div class="pc" id="pc7">
+              <div class="pc-name" style="font-family:'Palatino WH';font-weight:700;font-size:63px;letter-spacing:0;white-space:nowrap;line-height:1;color:#fff">Family Law Riverside</div>
+              <div class="pc-tag">The Riverside County family court, explained.</div>
+              <div class="pc-chips"><span class="chip">26 guides, 10 of them in Spanish</span><span class="chip">Cited to the court and the Family Code</span></div>
+              <div class="frame" style="left:0;top:206px;width:760px;height:464px">
+                <div class="bar" style="height:36px"><i></i><i></i><i></i><b style="font-size:15px">familylawriverside.com</b></div>
+                <div class="screen" style="height:428px;background:#0e1012 url(assets/posters/08-familylawriverside.jpg) center/cover no-repeat"></div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Clips from each site's launch video, playing inside the open spine's browser frame -->
+      <video id="v0" class="clip win" src="assets/clips/01-sequoia.mp4" muted playsinline data-start="11.45" data-duration="0.78" data-media-start="0.15" data-track-index="3"
+        style="inset:auto;left:240px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v1" class="clip win" src="assets/clips/02-paristourist.mp4" muted playsinline data-start="12.75" data-duration="0.78" data-media-start="0.15" data-track-index="4"
+        style="inset:auto;left:322px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v2" class="clip win" src="assets/clips/03-anaheim.mp4" muted playsinline data-start="14.05" data-duration="0.78" data-media-start="0.15" data-track-index="3"
+        style="inset:auto;left:404px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v3" class="clip win" src="assets/clips/04-bavarianbistro.mp4" muted playsinline data-start="15.35" data-duration="0.78" data-media-start="0.15" data-track-index="4"
+        style="inset:auto;left:486px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v4" class="clip win" src="assets/clips/05-longbeach.mp4" muted playsinline data-start="16.65" data-duration="0.78" data-media-start="0.15" data-track-index="3"
+        style="inset:auto;left:568px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v5" class="clip win" src="assets/clips/06-boracay.mp4" muted playsinline data-start="17.95" data-duration="0.78" data-media-start="0.15" data-track-index="4"
+        style="inset:auto;left:650px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v6" class="clip win" src="assets/clips/07-plushdogs.mp4" muted playsinline data-start="19.25" data-duration="0.78" data-media-start="0.15" data-track-index="3"
+        style="inset:auto;left:732px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+      <video id="v7" class="clip win" src="assets/clips/08-familylawriverside.mp4" muted playsinline data-start="20.55" data-duration="0.98" data-media-start="0.15" data-track-index="4"
+        style="inset:auto;left:814px;top:496px;width:760px;height:428px;border-radius:0 0 10px 10px"></video>
+
+      <!-- 4: the ask -->
+      <section id="s-cta" class="clip" data-start="21.5" data-duration="4.4" data-track-index="2">
+        <div id="cta-inner" class="abs" style="inset:0">
+          <div class="rule" id="cta-r1" style="left:140px;top:300px;width:1640px"></div>
+          <svg id="cta-tri" class="abs" width="150" height="130" viewBox="0 0 150 130"><polygon points="75,0 150,130 0,130" fill="#f2b90f"/></svg>
+          <div id="cta-text" class="abs">
+            <div class="mask" data-layout-allow-overflow><span id="cta-l1">Own a web address that deserves</span></div>
+            <div class="mask" data-layout-allow-overflow><span id="cta-l2">a better home? Write to</span></div>
+            <div class="mask" data-layout-allow-overflow><span id="cta-l3"><span id="cta-mail">hello@webhaus.info<i id="cta-line"></i></span>.</span></div>
+          </div>
+          <div class="rule" id="cta-r2" style="left:140px;top:770px;width:1640px"></div>
+        </div>
+      </section>
+
+      <!-- 5: end card -->
+      <section id="s-end" class="clip" data-start="25.9" data-duration="4.1" data-track-index="2">
+        <div id="end-wrap">
+          
+        <svg id="e" style="position:relative" width="230" height="181" viewBox="0 0 420 330">
+          
+          <rect id="e-body" x="60" y="150" width="200" height="180" fill="#1d4fa3"/>
+          <rect id="e-door" x="135" y="230" width="50" height="100" fill="#e9ebee"/>
+          <polygon id="e-roof" points="30,150 160,20 290,150" fill="#f2b90f"/>
+          <circle id="e-sun" cx="350" cy="70" r="56" fill="#d8352a"/>
+          <rect id="e-ground" x="290" y="318" width="130" height="12" fill="#14161a"/>
+        </svg>
+          <div id="end-name">webhaus</div>
+          <div id="end-tag">Good homes for good domains.</div>
+          <div id="end-url">webhaus.info</div>
+        </div>
+        <div id="end-meta" class="abs">Webhaus LLC · An independent publisher · Sacramento, California</div>
+      </section>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // 1. vacant lot
+      tl.fromTo("#h-outline", { opacity: 0, scale: 0.94, transformOrigin: "50% 100%" }, { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" }, 0.2);
+      gsap.set(["#h-body", "#h-door", "#h-roof", "#h-sun", "#h-ground"], { opacity: 0 });
+      tl.set(["#h-body", "#h-door", "#h-roof", "#h-sun", "#h-ground"], { opacity: 1 }, 4.45);
+      tl.fromTo("#w1", { yPercent: 105 }, { yPercent: 0, duration: 0.55, ease: "power4.out" }, 0.9);
+      tl.fromTo("#w2", { yPercent: 105 }, { yPercent: 0, duration: 0.55, ease: "power4.out" }, 1.7);
+      tl.to(["#w1", "#w2"], { yPercent: -140, opacity: 0, duration: 0.45, ease: "power3.in", stagger: 0.08 }, 4.1);
+
+      // 2. the house builds, then the wordmark
+
+      tl.fromTo("#h-body", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.45, ease: "back.out(1.6)" }, 4.45);
+      tl.fromTo("#h-door", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.3, ease: "power3.out" }, 4.9);
+      tl.fromTo("#h-roof", { y: -420, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "bounce.out" }, 5.15);
+      tl.fromTo("#h-sun", { scale: 0, transformOrigin: "50% 50%", x: 160 }, { scale: 1, x: 0, duration: 0.5, ease: "back.out(2.2)" }, 5.7);
+      tl.fromTo("#h-ground", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 5.95);
+      tl.to("#h-outline", { opacity: 0, duration: 0.4 }, 5.3);
+      tl.fromTo("#wm1", { yPercent: 105 }, { yPercent: 0, duration: 0.6, ease: "power4.out" }, 6.35);
+      tl.fromTo("#wm2", { yPercent: 105 }, { yPercent: 0, duration: 0.6, ease: "power4.out" }, 6.55);
+      tl.fromTo("#hero-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 7.15);
+      tl.fromTo("#header .logo, #header .nav", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.1 }, 7.6);
+      tl.fromTo("#hdr-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.inOut" }, 7.7);
+      tl.to("#hero-inner", { y: -700, opacity: 0, duration: 0.7, ease: "power3.in" }, 9.0);
+
+      // 3. pick a spine
+      tl.fromTo("#shelf-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 9.45);
+      tl.fromTo("#shelf-sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 9.65);
+      tl.fromTo(".spine", { y: 820 }, { y: 0, duration: 0.6, ease: "power3.out", stagger: 0.07 }, 9.55);
+      gsap.set(".pc", { opacity: 0 });
+      tl.to("#sp0", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 10.95);
+      tl.fromTo("#sp0 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 10.95);
+      tl.fromTo("#pc0", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 11.17);
+      tl.fromTo("#v0", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 11.45);
+      tl.to("#sp1", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 12.25);
+      tl.to("#sp0", { width: 74, duration: 0.5, ease: "power3.inOut" }, 12.25);
+      tl.to("#pc0", { opacity: 0, duration: 0.18 }, 12.25);
+      tl.fromTo("#sp1 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 12.25);
+      tl.to("#sp0 .sp-name", { opacity: 1, duration: 0.3 }, 12.55);
+      tl.fromTo("#pc1", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 12.47);
+      tl.fromTo("#v1", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 12.75);
+      tl.to("#sp2", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 13.55);
+      tl.to("#sp1", { width: 74, duration: 0.5, ease: "power3.inOut" }, 13.55);
+      tl.to("#pc1", { opacity: 0, duration: 0.18 }, 13.55);
+      tl.fromTo("#sp2 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 13.55);
+      tl.to("#sp1 .sp-name", { opacity: 1, duration: 0.3 }, 13.85);
+      tl.fromTo("#pc2", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 13.77);
+      tl.fromTo("#v2", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 14.05);
+      tl.to("#sp3", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 14.85);
+      tl.to("#sp2", { width: 74, duration: 0.5, ease: "power3.inOut" }, 14.85);
+      tl.to("#pc2", { opacity: 0, duration: 0.18 }, 14.85);
+      tl.fromTo("#sp3 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 14.85);
+      tl.to("#sp2 .sp-name", { opacity: 1, duration: 0.3 }, 15.15);
+      tl.fromTo("#pc3", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 15.07);
+      tl.fromTo("#v3", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 15.35);
+      tl.to("#sp4", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 16.15);
+      tl.to("#sp3", { width: 74, duration: 0.5, ease: "power3.inOut" }, 16.15);
+      tl.to("#pc3", { opacity: 0, duration: 0.18 }, 16.15);
+      tl.fromTo("#sp4 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 16.15);
+      tl.to("#sp3 .sp-name", { opacity: 1, duration: 0.3 }, 16.45);
+      tl.fromTo("#pc4", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 16.37);
+      tl.fromTo("#v4", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 16.65);
+      tl.to("#sp5", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 17.45);
+      tl.to("#sp4", { width: 74, duration: 0.5, ease: "power3.inOut" }, 17.45);
+      tl.to("#pc4", { opacity: 0, duration: 0.18 }, 17.45);
+      tl.fromTo("#sp5 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 17.45);
+      tl.to("#sp4 .sp-name", { opacity: 1, duration: 0.3 }, 17.75);
+      tl.fromTo("#pc5", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 17.67);
+      tl.fromTo("#v5", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 17.95);
+      tl.to("#sp6", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 18.75);
+      tl.to("#sp5", { width: 74, duration: 0.5, ease: "power3.inOut" }, 18.75);
+      tl.to("#pc5", { opacity: 0, duration: 0.18 }, 18.75);
+      tl.fromTo("#sp6 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 18.75);
+      tl.to("#sp5 .sp-name", { opacity: 1, duration: 0.3 }, 19.05);
+      tl.fromTo("#pc6", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 18.97);
+      tl.fromTo("#v6", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 19.25);
+      tl.to("#sp7", { width: 1066, duration: 0.5, ease: "power3.inOut" }, 20.05);
+      tl.to("#sp6", { width: 74, duration: 0.5, ease: "power3.inOut" }, 20.05);
+      tl.to("#pc6", { opacity: 0, duration: 0.18 }, 20.05);
+      tl.fromTo("#sp7 .sp-name", { opacity: 1 }, { opacity: 0, duration: 0.2 }, 20.05);
+      tl.to("#sp6 .sp-name", { opacity: 1, duration: 0.3 }, 20.35);
+      tl.fromTo("#pc7", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 20.27);
+      tl.fromTo("#v7", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 20.55);
+      tl.to("#shelf-inner", { y: -80, opacity: 0, duration: 0.4, ease: "power2.in" }, 21.1);
+      tl.to("#v7", { opacity: 0, duration: 0.4 }, 21.1);
+      tl.to("#header", { opacity: 0, duration: 0.4 }, 21.1);
+
+      // 4. the ask
+      tl.fromTo("#cta-r1", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, 21.55);
+      tl.fromTo("#cta-tri", { scale: 0, rotation: -90, transformOrigin: "50% 70%" }, { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(2)" }, 21.8);
+      tl.fromTo(["#cta-l1", "#cta-l2", "#cta-l3"], { yPercent: 105 }, { yPercent: 0, duration: 0.55, ease: "power4.out", stagger: 0.16 }, 22.0);
+      tl.fromTo("#cta-line", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 23.0);
+      tl.fromTo("#cta-r2", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, 22.6);
+      tl.to("#cta-inner", { opacity: 0, duration: 0.35 }, 25.5);
+
+      // 5. end card
+
+      tl.fromTo("#e-body", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.27, ease: "back.out(1.6)" }, 25.95);
+      tl.fromTo("#e-door", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.18, ease: "power3.out" }, 26.22);
+      tl.fromTo("#e-roof", { y: -420, opacity: 0 }, { y: 0, opacity: 1, duration: 0.252, ease: "bounce.out" }, 26.37);
+      tl.fromTo("#e-sun", { scale: 0, transformOrigin: "50% 50%", x: 160 }, { scale: 1, x: 0, duration: 0.3, ease: "back.out(2.2)" }, 26.7);
+      tl.fromTo("#e-ground", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.21, ease: "power3.out" }, 26.849999999999998);
+      tl.fromTo("#end-name", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 26.75);
+      tl.fromTo("#end-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 27.05);
+      tl.fromTo("#end-url", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 27.35);
+      tl.fromTo("#end-meta", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 27.8);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

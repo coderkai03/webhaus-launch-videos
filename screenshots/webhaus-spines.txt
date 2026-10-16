@@ -1,0 +1,8 @@
+sequoia.info  ~  rgb(20, 38, 31)  ~  rgb(143, 191, 157)  ~  circle  ~  Everything about the biggest trees on Earth and where to see them.  ~  169 articles | The parks and the trees | Every fact cited
+Paris Tourist  ~  rgb(23, 63, 143)  ~  rgb(255, 205, 0)  ~  square  ~  Straight answers about Paris, with sources.  ~  48 answers, one question per page | 1,879 tours listed | An interactive map of the city
+Anaheim.info  ~  rgb(43, 46, 51)  ~  rgb(42, 180, 198)  ~  triangle  ~  Anaheim, the practical guide.  ~  72 guides at launch | A map of 62 hotels with walking minutes | A new post every Thursday
+Bavarian Bistro  ~  rgb(47, 95, 168)  ~  rgb(240, 198, 104)  ~  circle  ~  Bavaria, explained. Served warm.  ~  195 guides | Food, beer, Oktoberfest, Munich | Written under the pen name Resi Zauber
+LongBeach.biz  ~  rgb(27, 58, 92)  ~  rgb(46, 196, 182)  ~  square  ~  The business intelligence desk for Long Beach, CA.  ~  88 guides | Data pages built from the city's open data | A map and a figure in most articles
+boracay.biz  ~  rgb(11, 122, 138)  ~  rgb(255, 217, 168)  ~  triangle  ~  The practical, current, cited guide to Boracay.  ~  50 guides | 6 maps, one layer each | Built for the phone first
+plush dogs  ~  rgb(88, 27, 135)  ~  rgb(255, 217, 199)  ~  circle  ~  Stuffed dogs that look real.  ~  49 guides | 22 breeds, 8 makers, prices dated | A plush of your own dog
+Family Law Riverside  ~  rgb(95, 34, 48)  ~  rgb(224, 201, 176)  ~  square  ~  The Riverside County family court, explained.  ~  26 guides, 10 of them in Spanish | Cited to the court and the Family Code | Legal information, not a law firm
