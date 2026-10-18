@@ -9,3 +9,4 @@ videos/*/snaps*/
 videos/*/check*.jpg
 videos/review-*.jpg
 *.log
+.vercel

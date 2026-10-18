@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webhaus Launch Films</title>
+<meta name="description" content="Launch films for webhaus.info and its eight sites, each in 16:9 and 9:16.">
+<meta property="og:title" content="Webhaus Launch Films">
+<meta property="og:description" content="Good homes for good domains. Launch films for webhaus.info and its eight sites.">
+<meta property="og:image" content="p/00-webhaus-16x9.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect x='3' y='14' width='16' height='14' fill='%231d4fa3'/%3E%3Cpolygon points='1,14 11,3 21,14' fill='%23f2b90f'/%3E%3Ccircle cx='24.5' cy='6.5' r='4.5' fill='%23d8352a'/%3E%3C/svg%3E">
+<style>
+  @font-face { font-family: "Jost"; src: url(fonts/jost.woff2) format("woff2"); font-weight: 300 800; font-display: swap; }
+  @font-face { font-family: "Schibsted Grotesk"; src: url(fonts/schibsted-grotesk-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+  @font-face { font-family: "Barlow Semi Condensed"; src: url(fonts/barlow-semi-condensed-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+  @font-face { font-family: "Open Sans"; src: url(fonts/open-sans-300.woff2) format("woff2"); font-weight: 300; font-display: swap; }
+  @font-face { font-family: "UnifrakturCook"; src: url(fonts/unifrakturcook-700.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+  @font-face { font-family: "Source Serif 4"; src: url(fonts/source-serif-4-600.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+  @font-face { font-family: "Nunito"; src: url(fonts/nunito-900.woff2) format("woff2"); font-weight: 900; font-display: swap; }
+
+  :root {
+    --bg: #e9ebee; --card: #ffffff; --ink: #14161a; --dim: #555b66; --soft: #cfd3d9;
+    --red: #d8352a; --blue: #1d4fa3; --yellow: #f2b90f;
+    --gutter: clamp(16px, 5vw, 72px);
+    --max: 1320px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Jost", "Century Gothic", "Helvetica Neue", Arial, sans-serif; font-size: 18px; line-height: 1.5; }
+  a { color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* header */
+  header { padding-top: 26px; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 3px solid var(--ink); }
+  .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 24px; text-decoration: none; letter-spacing: -0.01em; }
+  .bar nav { display: flex; gap: 26px; font-weight: 500; font-size: 16px; }
+  .bar nav a { text-decoration: none; }
+  .bar nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 72px); align-items: end; padding: clamp(40px, 7vw, 96px) 0 clamp(36px, 5vw, 64px); }
+  .hero h1 { margin: 0; font-weight: 700; font-size: clamp(64px, 11vw, 168px); line-height: 0.82; letter-spacing: -0.05em; }
+  .hero h1 span { display: block; }
+  .hero h1 .shapes { display: inline-flex; gap: 0.08em; vertical-align: 0.12em; margin-left: 0.12em; }
+  .shapes i { display: block; width: 0.32em; height: 0.32em; }
+  .shapes .c { border-radius: 50%; background: var(--red); }
+  .shapes .s { background: var(--blue); }
+  .shapes .t { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .lede { margin: 28px 0 0; max-width: 30ch; font-size: clamp(19px, 1.7vw, 23px); line-height: 1.45; }
+  .meta { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { border: 1.5px solid var(--ink); padding: 4px 12px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+
+  /* players */
+  .player { position: relative; }
+  .stage { position: relative; background: #0e1012; overflow: hidden; }
+  .stage video { display: block; width: 100%; height: 100%; object-fit: contain; background: #0e1012; }
+  .stage.landscape { aspect-ratio: 16 / 9; }
+  .stage.portrait { aspect-ratio: 9 / 16; max-height: 78vh; margin: 0 auto; }
+  .frame { background: #fff; box-shadow: 0 24px 60px rgba(20, 22, 26, 0.18); }
+  .frame-bar { height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #dfe2e7; }
+  .frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: #a9aeb8; }
+  .frame-bar b { margin-left: 10px; font: 500 13px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #3f4550; }
+
+  .toggle { display: inline-flex; border: 1.5px solid currentColor; }
+  .toggle button { appearance: none; border: 0; background: transparent; color: inherit; font: 500 14px/1 "Jost", sans-serif; padding: 9px 14px; cursor: pointer; letter-spacing: 0.02em; }
+  .toggle button + button { border-left: 1.5px solid currentColor; }
+  .toggle button[aria-pressed="true"] { background: currentColor; }
+  .toggle button[aria-pressed="true"] span { color: var(--on, #fff); }
+  .toggle button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+
+  .hero-ctl { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; color: var(--ink); --on: var(--bg); }
+  .hero-ctl small { color: var(--dim); font-size: 15px; }
+
+  /* shelf */
+  .shelf-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-top: 3px solid var(--ink); padding-top: 22px; margin-top: 8px; }
+  .shelf-head h2 { margin: 0; font-size: clamp(36px, 4vw, 52px); font-weight: 700; letter-spacing: -0.03em; }
+  .shelf-head p { margin: 0; color: var(--dim); font-size: 16px; }
+  .shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 26px 0 80px; }
+
+  .vol { display: grid; grid-template-columns: 64px minmax(0, 1fr); background: var(--spine); color: #fff; min-width: 0; --on: var(--spine); }
+  .spine { position: relative; display: flex; flex-direction: column; align-items: center; padding: 22px 0; gap: 18px; border-right: 1px solid rgba(255,255,255,0.14); }
+  .spine .mk { width: 14px; height: 14px; background: var(--mark); flex: none; }
+  .mk.circle { border-radius: 50%; }
+  .mk.triangle { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .spine .nm { writing-mode: vertical-rl; font-size: 23px; line-height: 1; white-space: nowrap; }
+  .body { padding: 22px 22px 24px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .body h3 { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.8; }
+  .body .tagline { margin: 2px 0 0; font-size: 22px; font-weight: 500; line-height: 1.25; }
+  .body .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .visit { font-size: 15px; font-weight: 500; text-decoration: none; border-bottom: 1.5px solid rgba(255,255,255,0.6); padding-bottom: 1px; white-space: nowrap; }
+  .visit:hover { border-bottom-color: #fff; }
+  .vol .stage { outline: 1px solid rgba(255,255,255,0.12); }
+  .vol .stage.portrait { width: min(100%, 340px); }
+
+  footer { border-top: 3px solid var(--ink); padding: 26px 0 48px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 15px; color: var(--dim); }
+  footer a { color: var(--ink); }
+
+  /* load-in */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise { opacity: 0; transform: translateY(18px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+    .d1 { animation-delay: .05s } .d2 { animation-delay: .15s } .d3 { animation-delay: .25s } .d4 { animation-delay: .35s }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+
+  @media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; align-items: start; }
+    .shelf { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 17px; }
+    .bar nav { gap: 16px; font-size: 15px; }
+    .bar nav .opt { display: none; }
+    .vol { grid-template-columns: 48px minmax(0, 1fr); }
+    .spine .nm { font-size: 19px; }
+    .body { padding: 18px 16px 20px; }
+    .body .tagline { font-size: 19px; }
+    .hero-ctl small { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="bar">
+    <a class="logo" href="https://webhaus.info" aria-label="webhaus.info">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="14" width="16" height="14" fill="#1d4fa3"/><polygon points="1,14 11,3 21,14" fill="#f2b90f"/><circle cx="24.5" cy="6.5" r="4.5" fill="#d8352a"/></svg>
+      webhaus
+    </a>
+    <nav><a href="#films">Films</a><a class="opt" href="https://webhaus.info">webhaus.info</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1 class="rise d1"><span>launch</span><span>films<span class="shapes" aria-hidden="true"><i class="t"></i><i class="s"></i><i class="c"></i></span></span></h1>
+      <p class="lede rise d2">Good homes for good domains. One film for Webhaus, and one for each of the eight addresses it has given a home.</p>
+      <div class="meta rise d3"><span class="tag">9 films</span><span class="tag">16:9 and 9:16</span><span class="tag">Made with HyperFrames</span></div>
+    </div>
+    <div class="player rise d4" data-id="00-webhaus" data-url="webhaus.info">
+      <div class="frame">
+        <div class="frame-bar"><i></i><i></i><i></i><b>webhaus.info</b></div>
+        <div class="stage landscape"><video controls playsinline preload="none"></video></div>
+      </div>
+      <div class="hero-ctl">
+        <div class="toggle" role="group" aria-label="Format"><button type="button" data-f="16x9"><span>16:9</span></button><button type="button" data-f="9x16"><span>9:16</span></button></div>
+        <small>30s master · 15s vertical cut</small>
+      </div>
+    </div>
+  </section>
+
+  <section id="films">
+    <div class="shelf-head"><h2>addresses</h2><p>8 sites · pick a spine</p></div>
+    <div class="shelf" id="shelf"></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>Webhaus LLC · An independent publisher · Sacramento, California</span>
+  <span>Own a web address that deserves a better home? <a href="mailto:hello@webhaus.info">hello@webhaus.info</a></span>
+</footer>
+
+<script>
+  const SITES = [
+    { id: "01-sequoia", name: "sequoia.info", url: "https://sequoia.info", font: "'Schibsted Grotesk'", w: 700, bg: "#14261f", mark: "#8fbf9d", shape: "circle", tag: "Everything about the biggest trees on Earth and where to see them." },
+    { id: "02-paristourist", name: "PARIS TOURIST", url: "https://paristourist.info", font: "'Barlow Semi Condensed'", w: 700, ls: ".03em", bg: "#173f8f", mark: "#ffcd00", shape: "square", tag: "Straight answers about Paris, with sources." },
+    { id: "03-anaheim", name: "ANAHEIM", sfx: ".INFO", sfxc: "#2ab4c6", url: "https://anaheim.info", font: "'Open Sans'", w: 300, ls: ".12em", bg: "#2b2e33", mark: "#2ab4c6", shape: "triangle", tag: "Anaheim, the practical guide." },
+    { id: "04-bavarianbistro", name: "Bavarian Bistro", url: "https://bavarianbistro.com", font: "'UnifrakturCook'", w: 700, bg: "#2f5fa8", mark: "#f0c668", shape: "circle", tag: "Bavaria, explained. Served warm." },
+    { id: "05-longbeach", name: "LongBeach", sfx: ".biz", sfxc: "#2ec4b6", url: "https://longbeach.biz", font: "'Source Serif 4'", w: 600, bg: "#1b3a5c", mark: "#2ec4b6", shape: "square", tag: "The business intelligence desk for Long Beach, CA." },
+    { id: "06-boracay", name: "boracay", sfx: ".biz", sfxc: "#ffd9a8", url: "https://boracay.biz", font: "system-ui, -apple-system, 'Segoe UI', sans-serif", w: 800, bg: "#0b7a8a", mark: "#ffd9a8", shape: "triangle", tag: "The practical, current, cited guide to Boracay." },
+    { id: "07-plushdogs", name: "plush dogs", url: "https://plush-dogs.com", font: "'Nunito'", w: 900, bg: "#581b87", mark: "#ffd9c7", shape: "circle", tag: "Stuffed dogs that look real." },
+    { id: "08-familylawriverside", name: "Family Law Riverside", url: "https://familylawriverside.com", font: "'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif", w: 700, bg: "#5f2230", mark: "#e0c9b0", shape: "square", tag: "The Riverside County family court, explained." },
+  ];
+  const narrow = matchMedia("(max-width: 560px)").matches;
+  const host = (u) => u.replace(/^https?:\/\//, "");
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  document.getElementById("shelf").innerHTML = SITES.map((s) => `
+    <article class="vol player" data-id="${s.id}" style="--spine:${s.bg};--mark:${s.mark}">
+      <div class="spine" aria-hidden="true">
+        <span class="mk ${s.shape}"></span>
+        <span class="nm" style="font-family:${s.font};font-weight:${s.w};letter-spacing:${s.ls || 0}">${esc(s.name)}${s.sfx ? `<span style="color:${s.sfxc}">${s.sfx}</span>` : ""}</span>
+      </div>
+      <div class="body">
+        <div><h3>${esc(host(s.url))}</h3><p class="tagline">${esc(s.tag)}</p></div>
+        <div class="stage landscape"><video controls playsinline preload="none" aria-label="${esc(host(s.url))} launch film"></video></div>
+        <div class="row">
+          <div class="toggle" role="group" aria-label="Format"><button type="button" data-f="16x9"><span>16:9</span></button><button type="button" data-f="9x16"><span>9:16</span></button></div>
+          <a class="visit" href="${s.url}" target="_blank" rel="noopener">Visit ${esc(host(s.url))} ↗</a>
+        </div>
+      </div>
+    </article>`).join("");
+
+  function setFormat(player, f) {
+    const v = player.querySelector("video");
+    const stage = player.querySelector(".stage");
+    const wasPlaying = !v.paused;
+    v.pause();
+    v.poster = `p/${player.dataset.id}-${f}.jpg`;
+    v.src = `v/${player.dataset.id}-${f}.mp4`;
+    stage.classList.toggle("landscape", f === "16x9");
+    stage.classList.toggle("portrait", f === "9x16");
+    player.querySelectorAll(".toggle button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.f === f)));
+    if (wasPlaying) v.play().catch(() => {});
+  }
+
+  document.querySelectorAll(".player").forEach((p) => {
+    setFormat(p, narrow && p.classList.contains("vol") ? "9x16" : "16x9");
+    p.querySelectorAll(".toggle button").forEach((b) => b.addEventListener("click", () => setFormat(p, b.dataset.f)));
+  });
+
+  // Only one film plays at a time.
+  document.addEventListener("play", (e) => {
+    document.querySelectorAll("video").forEach((v) => { if (v !== e.target) v.pause(); });
+  }, true);
+</script>
+</body>
+</html>
